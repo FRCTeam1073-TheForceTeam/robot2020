@@ -1,4 +1,4 @@
 ReadMe
 
-2020 Robot Repository for the INFINATE RECHARGE season.
-**update at a later date**
+2020 Robot Repository for the INFINITE RECHARGE season.
+**Update at a later date**
