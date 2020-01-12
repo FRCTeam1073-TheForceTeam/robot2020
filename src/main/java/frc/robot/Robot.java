@@ -7,16 +7,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveControls;
 import frc.robot.subsystems.Drivetrain;
-import edu.wpi.first.wpilibj.smartdashboard.*;
-import java.util.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -51,40 +45,6 @@ public class Robot extends TimedRobot {
     System.out.println(subsystem == null);
     subsystem.register();
     CommandScheduler.getInstance().setDefaultCommand(subsystem, command);
-    // Map<String,Object> map = new HashMap<String,Object>();
-    // map.put("Min",0);
-    // map.put("Max",5);
-    // value_P = Shuffleboard.getTab("Drive")
-    //                     .add("value_P", 0)
-    //                     .withWidget(BuiltInWidgets.kNumberSlider)
-    //                     .withSize(4,1)
-    //                     .withProperties(map)
-    //                     .getEntry();
-    // //value_P.clearPersistent();
-
-    // value_I = Shuffleboard.getTab("Drive")
-    //                     .add("value_I", 0)
-    //                     .withWidget(BuiltInWidgets.kNumberSlider)
-    //                     .withSize(4,1)
-    //                     .withProperties(map)
-    //                     .getEntry();
-
-    // value_D = Shuffleboard.getTab("Drive")
-    //                     .add("value_D", 0)
-    //                     .withWidget(BuiltInWidgets.kNumberSlider)
-    //                     .withSize(4,1)
-    //                     .withProperties(map)
-    //                     .getEntry();
-    
-    
-    //  update = Shuffleboard.getTab("Drive")
-    //                      .add("update", 0)
-    //                      .withWidget(BuiltInWidgets.kToggleSwitch)
-    //                      .getEntry();
-    
-    
-
-    
   }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
@@ -95,17 +55,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //System.out.println(value_P.getDouble(-1));
-    /*if (update.getBoolean(false)){
-      SmartDashboard.putBoolean("update",false);
-      Shuffleboard.getTab("Drive").add("[Testing]",0);
-      System.out.println("Switch_off");
-    }*/
   }
 
   /**
@@ -124,10 +74,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
   }
 
   /**
@@ -139,15 +85,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.cancel();
-    // }
-
   }
 
   /**
