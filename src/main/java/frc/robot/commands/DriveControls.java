@@ -9,15 +9,17 @@ package frc.robot.commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.OI;
-import frc.robot.subsystems.Drivetrain;;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Add your docs here.
  */
 public class DriveControls extends CommandBase {
     Drivetrain subsystem;
+    DifferentialDriveOdometry odometry;
 
     public DriveControls(Drivetrain subsystem_) {
         subsystem = subsystem_;
