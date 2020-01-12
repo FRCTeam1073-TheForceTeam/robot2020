@@ -32,7 +32,8 @@ public class TestCommand extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        subsystem.left.set(ControlMode.Velocity,OI.driverController.getRawAxis(1)*1);
+        subsystem.left.set(ControlMode.Velocity,OI.driverController.getRawAxis(1)*1500);
+        System.out.println("A:"+subsystem.left.getClosedLoopError()+","+subsystem.left.getMotorOutputPercent());
         // subsystem.right.set(subsystem.pidRight.calculate(subsystem.left.getSelectedSensorVelocity(),OI.driverController.getRawAxis(1)));
         System.out.println("Hello cruel world");
     }
