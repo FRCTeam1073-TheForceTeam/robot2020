@@ -53,12 +53,16 @@ public class RobotContainer {
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         leftMotorLeader.setSensorPhase(true);
-        leftMotorLeader.config_kP(0,2);
-        rightMotorLeader.config_kP(0,2);
-        leftMotorLeader.config_kI(0,0.01);
-        rightMotorLeader.config_kI(0,0.01);
-        leftMotorLeader.config_kD(0,130);
-        rightMotorLeader.config_kD(0,130);
+        rightMotorLeader.setSensorPhase(true);
+        double P = 1.5;
+        double I = 0;
+        double D = 0;
+        leftMotorLeader.config_kP(0, P);
+        rightMotorLeader.config_kP(0, P);
+        leftMotorLeader.config_kI(0, I);
+        rightMotorLeader.config_kI(0, I);
+        leftMotorLeader.config_kD(0, D);
+        rightMotorLeader.config_kD(0, D);
 
         leftMotorFollower.follow(leftMotorLeader);
         leftMotorFollower2.follow(leftMotorLeader);

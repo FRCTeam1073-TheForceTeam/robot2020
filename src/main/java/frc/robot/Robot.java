@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.TestCommand;
 import frc.robot.subsystems.TestSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.*;
-import java.util.HashMap;
+import java.util.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -29,12 +29,14 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+  
   public static TestCommand command;
   public static TestSubsystem subsystem;
-  public NetworkTableEntry value_P;
-  public NetworkTableEntry value_I;
-  public NetworkTableEntry value_D;
-  public NetworkTableEntry update;
+  // public NetworkTableEntry value_P;
+  // public NetworkTableEntry value_I;
+  // public NetworkTableEntry value_D;
+  // public NetworkTableEntry update;
 
 
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -49,42 +51,42 @@ public class Robot extends TimedRobot {
     System.out.println(subsystem == null);
     subsystem.register();
     CommandScheduler.getInstance().setDefaultCommand(subsystem, command);
-    /*HashMap map=new HashMap<String,Object>();
-    map.put("Min",0);
-    map.put("Max",5);
-    value_P = Shuffleboard.getTab("Drive")
-                        .add("value_P", 0)
-                        .withWidget(BuiltInWidgets.kNumberSlider)
-                        .withSize(4,1)
-                        .withProperties(map)
-                        .getEntry();
-    
-    value_I = Shuffleboard.getTab("Drive")
-                        .add("value_I", 0)
-                        .withWidget(BuiltInWidgets.kNumberSlider)
-                        .withSize(4,1)
-                        .withProperties(map)
-                        .getEntry();
-
-    value_D = Shuffleboard.getTab("Drive")
-                        .add("value_D", 0)
-                        .withWidget(BuiltInWidgets.kNumberSlider)
-                        .withSize(4,1)
-                        .withProperties(map)
-                        .getEntry();*/
-    
-    
-    // update = Shuffleboard.getTab("Drive")
-    //                     .add("update", 0)
-    //                     .withWidget(BuiltInWidgets.kToggleSwitch)
+    // Map<String,Object> map = new HashMap<String,Object>();
+    // map.put("Min",0);
+    // map.put("Max",5);
+    // value_P = Shuffleboard.getTab("Drive")
+    //                     .add("value_P", 0)
+    //                     .withWidget(BuiltInWidgets.kNumberSlider)
+    //                     .withSize(4,1)
+    //                     .withProperties(map)
     //                     .getEntry();
+    // //value_P.clearPersistent();
+
+    // value_I = Shuffleboard.getTab("Drive")
+    //                     .add("value_I", 0)
+    //                     .withWidget(BuiltInWidgets.kNumberSlider)
+    //                     .withSize(4,1)
+    //                     .withProperties(map)
+    //                     .getEntry();
+
+    // value_D = Shuffleboard.getTab("Drive")
+    //                     .add("value_D", 0)
+    //                     .withWidget(BuiltInWidgets.kNumberSlider)
+    //                     .withSize(4,1)
+    //                     .withProperties(map)
+    //                     .getEntry();
+    
+    
+    //  update = Shuffleboard.getTab("Drive")
+    //                      .add("update", 0)
+    //                      .withWidget(BuiltInWidgets.kToggleSwitch)
+    //                      .getEntry();
     
     
 
     
   }
-
-  /**
+  /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
    *

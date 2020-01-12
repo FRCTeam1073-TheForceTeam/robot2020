@@ -12,16 +12,18 @@ import java.util.Set;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.OI;
-import frc.robot.subsystems.TestSubsystem;
+import frc.robot.subsystems.Drivetrain;;
 
 /**
  * Add your docs here.
  */
-public class TestCommand extends CommandBase {
-    TestSubsystem subsystem;
-    public TestCommand(TestSubsystem subsystem_) {
-        subsystem=subsystem_;
+public class DriveControls extends CommandBase {
+    Drivetrain subsystem;
+
+    public TestCommand(Drivetrain subsystem_) {
+        subsystem = subsystem_;
         addRequirements(subsystem);
     }
 
@@ -32,7 +34,10 @@ public class TestCommand extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        subsystem.left.set(ControlMode.Velocity,OI.driverController.getRawAxis(1)*1500);
+        double left = OI.driverController.getRawAxis(1);
+        double right = OI.driverController.getRawAxis(5);
+        subsystem.left.set(ControlMode.Velocity, left * 1500);
+        subsystem.right.set(ControlMode.Velocity, right * 1500);
         System.out.println("A:"+subsystem.left.getClosedLoopError()+","+subsystem.left.getMotorOutputPercent());
         // subsystem.right.set(subsystem.pidRight.calculate(subsystem.left.getSelectedSensorVelocity(),OI.driverController.getRawAxis(1)));
         System.out.println("Hello cruel world");
