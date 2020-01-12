@@ -22,7 +22,7 @@ import frc.robot.subsystems.Drivetrain;;
 public class DriveControls extends CommandBase {
     Drivetrain subsystem;
 
-    public DriveControls(Drivetrain subsystem_) {
+    public TestCommand(Drivetrain subsystem_) {
         subsystem = subsystem_;
         addRequirements(subsystem);
     }

@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DriveControls;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.TestCommand;
+import frc.robot.subsystems.TestSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import java.util.*;
 /**
@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
    */
 
   
-  public static DriveControls command;
-  public static Drivetrain subsystem;
+  public static TestCommand command;
+  public static TestSubsystem subsystem;
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
@@ -45,8 +45,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     RobotContainer.init();
     OI.init();
-    subsystem = new Drivetrain();
-    command = new DriveControls(subsystem);
+    subsystem = new TestSubsystem();
+    command = new TestCommand(subsystem);
     System.out.println(command == null);
     System.out.println(subsystem == null);
     subsystem.register();

@@ -10,7 +10,7 @@ public class Drivetrain extends SubsystemBase {
     public WPI_TalonSRX right = RobotContainer.rightMotorLeader;
     public PIDController pidLeft;
     public PIDController pidRight;
-    public Drivetrain() {
+    public TestSubsystem() {
         pidLeft = new PIDController(0.1, 0, 0);
         pidRight = new PIDController(0.1, 0, 0);
     }
