@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.util.Units;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -21,8 +22,8 @@ public class Drivetrain extends SubsystemBase {
 
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6477);
     private double wheelDiameter = 0.15;
-    private double ticksPerWheelRotation = 7942.8;
-    private double ticksPerMeter = ticksPerWheelRotation / (Math.PI * wheelDiameter);
+//    private double ticksPerWheelRotation = ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
+    private double ticksPerMeter = ((52352 + 56574 + 54036 + 56452 + 53588 + 57594)/6.0)/Units.feetToMeters(10);//ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonSRX leftMotorLeader;
     private static WPI_TalonSRX rightMotorLeader;
     private static WPI_TalonSRX leftMotorFollower;
@@ -120,8 +121,10 @@ public class Drivetrain extends SubsystemBase {
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
-        System.out.println(robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY() + "," + getAngleRadians());
-        System.out.println("Periodic!");
+        System.out.println("Meters: "+robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY() + "," + getAngleRadians());
+        System.out.println("Feet: " +
+            Units.metersToFeet(robotPose.getTranslation().getX()) + "," + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
+        System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
     }
 
     public Pose2d getRobotPose() {
@@ -134,7 +137,11 @@ public class Drivetrain extends SubsystemBase {
     public void resetRobotOdometry() {
         odometry.resetPosition(new Pose2d(), getAngleRadians());
         robotPose = new Pose2d();
+        leftMotorLeader.setSelectedSensorPosition(0);
+        rightMotorLeader.setSelectedSensorPosition(0);
+        gyro.reset();
     }
+
 
     public void setPower(double left, double right) {
         leftMotorLeader.set(ControlMode.PercentOutput, left);

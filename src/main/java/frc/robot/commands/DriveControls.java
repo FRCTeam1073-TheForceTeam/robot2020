@@ -30,10 +30,13 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        double amt = OI.driverController.getRawAxis(2);
-        double left = OI.driverController.getRawAxis(1)*amt;
-        double right = OI.driverController.getRawAxis(5) * amt;
-        drivetrain.setPower(left, right);
+        double amt = 1-OI.driverController.getRawAxis(2);
+        double fwd = OI.driverController.getRawAxis(1) * amt;
+        double rot = OI.driverController.getRawAxis(4) * amt;
+        drivetrain.setPower(fwd+rot, fwd-rot);
+        if (OI.driverController.getAButtonPressed()) {
+            drivetrain.resetRobotOdometry();
+        }
     }
 
     // ends the actions from execute when returned true
