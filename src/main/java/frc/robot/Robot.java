@@ -37,7 +37,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-    RobotContainer.init();
     OI.init();
     subsystem = new Drivetrain();
     command = new DriveControls(subsystem);
