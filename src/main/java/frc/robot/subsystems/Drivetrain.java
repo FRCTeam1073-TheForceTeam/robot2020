@@ -18,7 +18,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 public class Drivetrain extends SubsystemBase {
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
-    private double L = 0;
 
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6477);
     private double wheelDiameter = 0.15;
@@ -31,7 +30,10 @@ public class Drivetrain extends SubsystemBase {
     private static WPI_TalonSRX leftMotorFollower2;
     private static WPI_TalonSRX rightMotorFollower2;
 
+    private Pose2d robotPose = new Pose2d();
+
     public Drivetrain() {
+        //Setting up motors
         // FUn Fact: It's pronounced "ph-WHE-nix"
 
         leftMotorLeader = new WPI_TalonSRX(12);
@@ -94,9 +96,11 @@ public class Drivetrain extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(getAngleRadians());
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
-        L = leftMotorLeader.getSelectedSensorPosition();
 
     }
+
+    /**Returns the gyro feedback in degrees instead of radians so that humans 
+    reading SmartDashboard feel at ease */
 
     public double getAngleDegrees() {
         // Rotrwation?
@@ -114,16 +118,33 @@ public class Drivetrain extends SubsystemBase {
         //This method will be called once per sceduler run
         // new DifferentialDriveWheelSpeeds()
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
-        Pose2d pose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
-        System.out.println(pose.getTranslation().getX() + "," + pose.getTranslation().getY() + "," + getAngleRadians());
+        robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
+                wheelSpeeds.rightMetersPerSecond);
+        System.out.println(robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY() + "," + getAngleRadians());
         System.out.println("Periodic!");
     }
-    
+
+    public Pose2d getRobotPose() {
+        return robotPose;
+    }
+
+    /**Warning: resetting robot odometry will mean the robot will have
+     * ABSOLUTELY NO IDEA where it is. Use with care.
+     */
+    public void resetRobotOdometry() {
+        odometry.resetPosition(new Pose2d(), getAngleRadians());
+        robotPose = new Pose2d();
+    }
+
     public void setPower(double left, double right) {
         leftMotorLeader.set(ControlMode.PercentOutput, left);
         rightMotorLeader.set(ControlMode.PercentOutput, right);
     }
 
+    /**
+     * Returns linear wheel speeds.
+     * @return Speed of left and right sides of the robot in meters per second.
+     */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftMotorLeader.getSelectedSensorPosition() / ticksPerMeter,
                 rightMotorLeader.getSelectedSensorPosition() / ticksPerMeter);
@@ -136,6 +157,10 @@ public class Drivetrain extends SubsystemBase {
     public double getRightEncoder() {
         return rightMotorLeader.getSelectedSensorPosition();
     }
+
+    /**
+    *Sets PID configurations
+    */
 
     public void setPID(double P, double I, double D) {
         leftMotorLeader.config_kP(0, P);
