@@ -1,29 +1,32 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6477);
-    private double wheelDiameter = 0.15;
-//    private double ticksPerWheelRotation = ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
-    private double ticksPerMeter = ((52352 + 56574 + 54036 + 56452 + 53588 + 57594)/6.0)/Units.feetToMeters(10);//ticksPerWheelRotation / (Math.PI * wheelDiameter);
+   //private double wheelDiameter = 0.15;
+    // private double ticksPerWheelRotation =
+    // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
+    private double ticksPerMeter = ((52352 + 56574 + 54036 + 56452 + 53588 + 57594) / 6.0) / Units.feetToMeters(10);
+    // ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonSRX leftMotorLeader;
     private static WPI_TalonSRX rightMotorLeader;
     private static WPI_TalonSRX leftMotorFollower;
@@ -34,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
     private Pose2d robotPose = new Pose2d();
 
     public Drivetrain() {
-        //Setting up motors
+        // Setting up motors
         // FUn Fact: It's pronounced "ph-WHE-nix"
 
         leftMotorLeader = new WPI_TalonSRX(12);
@@ -100,8 +103,10 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    /**Returns the gyro feedback in degrees instead of radians so that humans 
-    reading SmartDashboard feel at ease */
+    /**
+     * Returns the gyro feedback in degrees instead of radians so that humans
+     * reading SmartDashboard feel at ease
+     */
 
     public double getAngleDegrees() {
         // Rotrwation?
@@ -109,21 +114,22 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Rotation2d getAngleRadians() {
-        //Rotrwation?
+        // Rotrwation?
         return Rotation2d.fromDegrees(-gyro.getAngle());
     }
 
-    /**It's a function! */
+    /** It's a function! */
     @Override
     public void periodic() {
-        //This method will be called once per sceduler run
+        // This method will be called once per sceduler run
         // new DifferentialDriveWheelSpeeds()
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
-        System.out.println("Meters: "+robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY() + "," + getAngleRadians());
-        System.out.println("Feet: " +
-            Units.metersToFeet(robotPose.getTranslation().getX()) + "," + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
+        System.out.println("Meters: " + robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY()
+                + "," + getAngleRadians());
+        System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
+                + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
         System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
     }
 
@@ -131,8 +137,9 @@ public class Drivetrain extends SubsystemBase {
         return robotPose;
     }
 
-    /**Warning: resetting robot odometry will mean the robot will have
-     * ABSOLUTELY NO IDEA where it is. Use with care.
+    /**
+     * Warning: resetting robot odometry will mean the robot will have ABSOLUTELY NO
+     * IDEA where it is. Use with care.
      */
     public void resetRobotOdometry() {
         odometry.resetPosition(new Pose2d(), getAngleRadians());
@@ -142,7 +149,6 @@ public class Drivetrain extends SubsystemBase {
         gyro.reset();
     }
 
-
     public void setPower(double left, double right) {
         leftMotorLeader.set(ControlMode.PercentOutput, left);
         rightMotorLeader.set(ControlMode.PercentOutput, right);
@@ -150,6 +156,7 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Returns linear wheel speeds.
+     * 
      * @return Speed of left and right sides of the robot in meters per second.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -166,8 +173,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-    *Sets PID configurations
-    */
+     * Sets PID configurations
+     */
 
     public void setPID(double P, double I, double D) {
         leftMotorLeader.config_kP(0, P);

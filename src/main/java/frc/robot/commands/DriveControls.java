@@ -9,19 +9,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.OI;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
 /**
  * Add your docs here.
  */
 public class DriveControls extends CommandBase {
-    Drivetrain drivetrain;
-    double L = 0;
+    DrivetrainInterface drivetrain;
 
-    public DriveControls(Drivetrain drivetrain_) {
+    public DriveControls(DrivetrainInterface drivetrain_) {
         drivetrain = drivetrain_;
-        addRequirements(drivetrain);
+        addRequirements((SubsystemBase)drivetrain);
     }
+
 
     // starts the robot
     public void initialize() {
