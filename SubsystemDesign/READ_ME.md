@@ -6,10 +6,13 @@
     Turn(gyroLocation)
 
 **Shooter**
+    1 motor
+    1 encoder
     Shoot(speed)
 
 **Turret**
-
+    1 motor
+    1 encoder
     toPosition(position)
 
     positionToZero()
@@ -24,7 +27,7 @@
     lock()
 
 **Magazine**
-    powerCells
+    int powerCells
 
     run(speed)
         Runs mechanism to send power cells to shooter
