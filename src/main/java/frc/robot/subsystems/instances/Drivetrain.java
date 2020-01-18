@@ -152,6 +152,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
     public void setPower(double left, double right) {
         leftMotorLeader.set(ControlMode.PercentOutput, left);
         rightMotorLeader.set(ControlMode.PercentOutput, right);
+        System.out.println("x");
     }
 
     /**
