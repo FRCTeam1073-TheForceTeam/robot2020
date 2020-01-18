@@ -35,6 +35,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
     private static WPI_TalonSRX rightMotorFollower2;
 
     private Pose2d robotPose = new Pose2d();
+    private double gyroAngle = 0;
 
     public Drivetrain() {
         // Setting up motors
@@ -110,12 +111,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
 
     public double getAngleDegrees() {
         // Rotrwation?
-        return -gyro.getAngle();
+        return -gyroAngle;
     }
 
     public Rotation2d getAngleRadians() {
         // Rotrwation?
-        return Rotation2d.fromDegrees(-gyro.getAngle());
+        return Rotation2d.fromDegrees(-gyroAngle);
     }
 
     /** It's a function! */
@@ -123,6 +124,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
     public void periodic() {
         // This method will be called once per sceduler run
         // new DifferentialDriveWheelSpeeds()
+        if (true) {//(Math.abs(leftMotorLeader.getSelectedSensorVelocity()) < 0.1 && Math.abs(rightMotorLeader.getSelectedSensorVelocity()) < 0.1 && leftPower==0 && rightPower==0) {
+            gyroAngle = gyro.getAngle();
+        }
+        
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
@@ -147,11 +152,16 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
         gyro.reset();
+        gyroAngle = 0;
     }
+
+    private double leftPower = 0, rightPower = 0;
 
     public void setPower(double left, double right) {
         leftMotorLeader.set(ControlMode.PercentOutput, left);
         rightMotorLeader.set(ControlMode.PercentOutput, right);
+        leftPower = left;
+        rightPower = right;
         System.out.println("x");
     }
 
