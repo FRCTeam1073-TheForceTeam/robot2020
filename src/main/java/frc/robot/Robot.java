@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   
   public static DriveControls command;
   public static DrivetrainInterface subsystem;
+  public static Bling bling;
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
     OI.init();
     subsystem = new Drivetrain();
     command = new DriveControls(subsystem);
+    bling = new Bling();
     System.out.println(command == null);
     System.out.println(subsystem == null);
     ((SubsystemBase) subsystem).register();
