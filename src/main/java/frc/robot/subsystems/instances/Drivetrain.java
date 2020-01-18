@@ -126,11 +126,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
-        System.out.println("Meters: " + robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY()
-                + "," + getAngleRadians());
-        System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
-                + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
-        System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
+        // System.out.println("Meters: " + robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY()
+        //         + "," + getAngleRadians());
+        // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
+        //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
+        // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
     }
 
     public Pose2d getRobotPose() {

@@ -30,24 +30,24 @@ public class BlingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (OI.driverController.getAButtonPressed()){
+    System.out.println("BlingControls.");
+    if (OI.driverController.getStartButtonPressed()){
       // If a was pressed
       // set color red
       Robot.bling.setPatternRGBAll(255, 0, 0);
     } else if (OI.driverController.getBButtonPressed()){
       // If b was pressed
       // set color teal
-      Robot.bling.setPatternRGBAll(0, 128, 128);
+      Robot.bling.setPatternRGBAll(255, 42, 0);
     } else if (OI.driverController.getXButtonPressed()){
       // If x was pressed
-      // set color pink
-      Robot.bling.setPatternRGBAll(254, 127, 156);
+      // set color blue
+      Robot.bling.setPatternRGBAll(0, 0, 255);
     } else if (OI.driverController.getYButtonPressed()){
       // If y was pressed
       // turn the light off
       Robot.bling.setPatternRGBAll(0, 0, 0);
-    }    
-    //m_led.setData(m_ledBuffer);
+    }
   }
 
   // Called once the command ends or is interrupted.

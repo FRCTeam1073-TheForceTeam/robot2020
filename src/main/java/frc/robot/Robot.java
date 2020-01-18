@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.BlingControls;
 import frc.robot.commands.DriveControls;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
@@ -47,7 +48,9 @@ public class Robot extends TimedRobot {
     System.out.println(command == null);
     System.out.println(subsystem == null);
     ((SubsystemBase) subsystem).register();
+    bling.register();
     CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) subsystem, command);
+    CommandScheduler.getInstance().setDefaultCommand(bling, new BlingControls());
   }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
