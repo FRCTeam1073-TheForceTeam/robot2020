@@ -7,24 +7,21 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.OI;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
 /**
  * Add your docs here.
  */
 public class DriveControls extends CommandBase {
-    Drivetrain subsystem;
-    DifferentialDriveOdometry odometry;
+    DrivetrainInterface drivetrain;
 
-    public DriveControls(Drivetrain subsystem_) {
-        subsystem = subsystem_;
-        addRequirements(subsystem);
+    public DriveControls(DrivetrainInterface drivetrain_) {
+        drivetrain = drivetrain_;
+        addRequirements((SubsystemBase)drivetrain);
     }
+
 
     // starts the robot
     public void initialize() {
@@ -33,13 +30,13 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        double left = OI.driverController.getRawAxis(1);
-        double right = OI.driverController.getRawAxis(5);
-        subsystem.left.set(ControlMode.Velocity, left * 1500);
-        subsystem.right.set(ControlMode.Velocity, right * 1500);
-        System.out.println("A:"+subsystem.left.getClosedLoopError()+","+subsystem.left.getMotorOutputPercent());
-        // subsystem.right.set(subsystem.pidRight.calculate(subsystem.left.getSelectedSensorVelocity(),OI.driverController.getRawAxis(1)));
-        System.out.println("Hello cruel world");
+        double amt = 1-OI.driverController.getRawAxis(2);
+        double fwd = OI.driverController.getRawAxis(1) * amt;
+        double rot = OI.driverController.getRawAxis(4) * amt;
+        drivetrain.setPower(fwd+rot, fwd-rot);
+        if (OI.driverController.getAButtonPressed()) {
+            drivetrain.resetRobotOdometry();
+        }
     }
 
     // ends the actions from execute when returned true
