@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -81,9 +82,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 1.5;
+        double P = 2;
         double I = 0;
-        double D = 0;
+        double D = 6;
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
@@ -102,6 +103,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
 
+        SmartDashboard.putNumber("P", P);
+        SmartDashboard.putNumber("I", I);
+        SmartDashboard.putNumber("D", D);
     }
 
     /**
@@ -119,23 +123,50 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         return Rotation2d.fromDegrees(-gyroAngle);
     }
 
+    boolean hasRobotStopped = false;
+    double gyroDriftValue = 0;
+    double lastGyroValue = 0;
+    double totalGyroDrift = 0;
+
     /** It's a function! */
     @Override
     public void periodic() {
         // This method will be called once per sceduler run
         // new DifferentialDriveWheelSpeeds()
-        if (true) {//(Math.abs(leftMotorLeader.getSelectedSensorVelocity()) < 0.1 && Math.abs(rightMotorLeader.getSelectedSensorVelocity()) < 0.1 && leftPower==0 && rightPower==0) {
-            gyroAngle = gyro.getAngle();
+        double rawGyroAngle = gyro.getAngle();
+        if (leftPower == 0 && rightPower == 0 && !hasRobotStopped) {
+            hasRobotStopped = true;
+            lastGyroValue = rawGyroAngle;
         }
+        if ((leftPower != 0 || rightPower != 0) && hasRobotStopped) {
+            totalGyroDrift += gyroDriftValue;
+            hasRobotStopped = false;
+            gyroAngle = 0;
+        }
+        if (hasRobotStopped) {
+            gyroDriftValue = rawGyroAngle - lastGyroValue;
+        }
+        gyroAngle = rawGyroAngle - gyroDriftValue - totalGyroDrift;
         
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
-        System.out.println("Meters: " + robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY()
-                + "," + getAngleRadians());
-        System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
-                + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
-        System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
+        // System.out.println("Meters: " + robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY()
+        //         + "," + getAngleRadians());
+        // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
+        //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
+        // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
+        SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
+        SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
+        SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
+        SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
+        SmartDashboard.putNumber("lastGyroValue", lastGyroValue);
+        SmartDashboard.putNumber("gyroAngle", gyroAngle);
+        SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
+        SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
+        SmartDashboard.putNumber("Rotation", getAngleDegrees());
+        SmartDashboard.putNumber("leftPower", leftPower);
+        SmartDashboard.putNumber("rightPower", rightPower);
     }
 
     public Pose2d getRobotPose() {
@@ -153,9 +184,21 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         rightMotorLeader.setSelectedSensorPosition(0);
         gyro.reset();
         gyroAngle = 0;
+        gyroDriftValue = 0;
+        totalGyroDrift = 0;
+        lastGyroValue = 0;
     }
 
     private double leftPower = 0, rightPower = 0;
+
+    public void setVelocity(double left, double right) {
+        leftMotorLeader.set(ControlMode.Velocity, left*3500);
+        rightMotorLeader.set(ControlMode.Velocity, right*3500);
+        leftPower = left;
+        rightPower = right;
+        System.out.println("x");
+    }
+
 
     public void setPower(double left, double right) {
         leftMotorLeader.set(ControlMode.PercentOutput, left);
