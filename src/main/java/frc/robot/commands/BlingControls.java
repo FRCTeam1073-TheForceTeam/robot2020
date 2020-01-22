@@ -34,11 +34,11 @@ public class BlingControls extends CommandBase {
     if (OI.driverController.getStartButtonPressed()){
       // If a was pressed
       // set color red
-      Robot.bling.setPatternRGBAll(255, 0, 0);
+      Robot.bling.setPatternRGBAll(255, 42, 0);
     } else if (OI.driverController.getBButtonPressed()){
       // If b was pressed
       // set color teal
-      Robot.bling.setPatternRGBAll(255, 42, 0);
+      Robot.bling.alternateRGB(255, 0, 0, 0, 0, 255);
     } else if (OI.driverController.getXButtonPressed()){
       // If x was pressed
       // set color blue
