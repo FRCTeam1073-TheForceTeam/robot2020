@@ -8,11 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DriveControls;
+import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -27,8 +28,8 @@ public class Robot extends TimedRobot {
    */
 
   
-  public static DriveControls command;
-  public static DrivetrainInterface subsystem;
+  public static DriveControls driveControls;
+  public static DrivetrainInterface driveInterface;
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
@@ -40,12 +41,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     OI.init();
-    subsystem = new Drivetrain();
-    command = new DriveControls(subsystem);
-    System.out.println(command == null);
-    System.out.println(subsystem == null);
-    ((SubsystemBase) subsystem).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) subsystem, command);
+    driveInterface = new Drivetrain();
+    driveControls = new DriveControls(driveInterface);
+    subsystemRegister((SubsystemBase)driveInterface, driveControls);
+    }
+
+  public void subsystemRegister(SubsystemBase subsystem, CommandBase controls) {
+    subsystem.register();
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, controls);
   }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
