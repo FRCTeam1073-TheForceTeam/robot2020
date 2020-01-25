@@ -33,14 +33,14 @@ public class DriveControls extends CommandBase {
         double amt = 1 - OI.driverController.getRawAxis(2);
         double fwd = deadzone(OI.driverController.getRawAxis(1) * amt);
         double rot = deadzone(OI.driverController.getRawAxis(4) * amt);
-        drivetrain.setPower(fwd + rot, fwd - rot);
+        drivetrain.setVelocity(fwd + rot, fwd - rot);
         if (OI.driverController.getAButtonPressed()) {
             drivetrain.resetRobotOdometry();
         }
     }
     
     public double deadzone(double val) {
-        double zone = 0.2;
+        double zone = 0.1;
         if (Math.abs(val) < zone) {
             return 0;
         } else {
