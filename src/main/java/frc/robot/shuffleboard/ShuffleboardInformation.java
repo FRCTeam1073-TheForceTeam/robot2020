@@ -35,6 +35,7 @@ public class ShuffleboardInformation extends SubsystemBase {
     }
   
     public void sensorInputs() {
+
       // Drivetrain Data INCOMPLETE
       rightEncoderValue = Robot.subsystem.getRightEncoder();
       leftEncoderValue = Robot.subsystem.getLeftEncoder();
@@ -48,20 +49,14 @@ public class ShuffleboardInformation extends SubsystemBase {
 
       // Turret Data MISSING
 
-      // Shooter Data
+      // Shooter Data MISSING
 
       // Magazine Data MISSING
 
+      // Climbing Data MISSING
 
+      // Wheel of Fortune Data MISSING
 
-    }
-    /*  public double getLeftEncoderValue(){
-      return left.getSelectedSensorPosition();
-    }
-  
-    public double getRightEncoderValue(){
-      return right.getSelectedSensorPosition();
-    } */
-  
-
+    } 
+    
 }
