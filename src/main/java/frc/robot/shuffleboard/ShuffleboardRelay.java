@@ -5,15 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.smartdashboard;
+package frc.robot.shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Add your docs here.
  */
-public class DashboardRelay extends SubsystemBase {
+public class ShuffleboardRelay extends SubsystemBase {
 
-    public DashboardRelay() {
+    public ShuffleboardRelay() {
 
     }
 

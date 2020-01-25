@@ -5,17 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.smartdashboard;
+package frc.robot.shuffleboard;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 //import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class DashboardInformation extends SubsystemBase {
+public class ShuffleboardInformation extends SubsystemBase {
     double leftEncoderValue;
     double rightEncoderValue;
+    double gyroAngleDegrees;
+    double robotX;
+    double robotY;
+    double robotRotation;
+    double P;
+    double I;
+    double D;
+    double drivetrainVelocity;
 
-    public DashboardInformation() {
+    public ShuffleboardInformation() {
 
     }
   
@@ -25,8 +35,25 @@ public class DashboardInformation extends SubsystemBase {
     }
   
     public void sensorInputs() {
-      //rightEncoderValue = Robot.subsystem.getRightEncoderValue();
-      //leftEncoderValue = Robot.subsystem.getLeftEncoderValue();
+      // Drivetrain Data INCOMPLETE
+      rightEncoderValue = Robot.subsystem.getRightEncoder();
+      leftEncoderValue = Robot.subsystem.getLeftEncoder();
+
+      // Gyro Datas
+      gyroAngleDegrees = Robot.subsystem.getAngleDegrees();
+      Pose2d pose = Robot.subsystem.getRobotPose();
+      robotX = pose.getTranslation().getX();
+      robotY = pose.getTranslation().getY();
+      robotRotation = pose.getRotation().getDegrees();
+
+      // Turret Data MISSING
+
+      // Shooter Data
+
+      // Magazine Data MISSING
+
+
+
     }
     /*  public double getLeftEncoderValue(){
       return left.getSelectedSensorPosition();
