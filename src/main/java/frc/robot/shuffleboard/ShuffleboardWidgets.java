@@ -7,7 +7,11 @@
 
 package frc.robot.shuffleboard;
 
+import java.util.Map;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,30 +22,55 @@ import frc.robot.Robot;
  * Add your docs here.
  */
 public class ShuffleboardWidgets extends SubsystemBase {
+
     ShuffleboardTab tab;
+
     double leftEncoderValue = 0.0;
     double rightEncoderValue = 0.0;
+
     double gyroAngleDegrees = 0.0;
     double robotX = 0.0;
     double robotY = 0.0;
     double robotRotation = 0.0;
-    //double P = 0.0;
-    //double I = 0.0;
-    //double D = 0.0;
+
     double drivetrainVelocity = 0.0;
+
+    private NetworkTableEntry P_testing;
+    private NetworkTableEntry I_testing;
+    private NetworkTableEntry D_testing;
+    double P_Value;
+    double I_Value;
+    double D_Value;
 
     public ShuffleboardWidgets() {
 
       tab = Shuffleboard.getTab("Telemetry");
 
+      P_testing = tab
+      .add("P", 1)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", 0, "max", 10))
+      .getEntry();
+
+      I_testing = tab
+      .add("I", 0.01)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", 0, "max", 0.1))
+      .getEntry();
+
+      D_testing = tab
+      .add("D", 10)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", 0, "max", 100))
+      .getEntry();
+
     }
   
-
-
   @Override
     public void periodic() {
       ShuffleboardInformation();
       ShuffleboardView();
+      PID_testing();
     }
   
     private void ShuffleboardInformation() {
@@ -50,7 +79,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       leftEncoderValue = Robot.subsystem.getLeftEncoder();
       rightEncoderValue = Robot.subsystem.getRightEncoder();
       
-      // Gyro Datas
+      // Gyro Datas COMPLETE
       gyroAngleDegrees = Robot.subsystem.getAngleDegrees();
       Pose2d pose = Robot.subsystem.getRobotPose();
       robotX = pose.getTranslation().getX();
@@ -79,6 +108,16 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("y-coordinate",robotY);
       tab.add("rotation",robotRotation);
       
+    }
+
+    private void PID_testing() {
+
+      P_Value = P_testing.getDouble(1.0);
+      I_Value = I_testing.getDouble(0.01);
+      D_Value = D_testing.getDouble(10.0);
+
+      //missing set values "setPID"
+
     }
 
 }
