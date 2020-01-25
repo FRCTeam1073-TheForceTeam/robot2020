@@ -26,19 +26,16 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   @Override
   public void setPosition(double angle) {
-    // TODO Auto-generated method stub
     
   }
 
   @Override
   public void setPID(double P, double I, double D) {
-    // TODO Auto-generated method stub
     
   }
 
   @Override
   public double getPosition() {
-    // TODO Auto-generated method stub
     return 0;
   }
   

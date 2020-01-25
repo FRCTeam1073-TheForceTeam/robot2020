@@ -62,21 +62,18 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
 
   @Override
   public void setSpeed(double speed) {
-    // TODO This method is extremely basic, but SHOULD work
     shooterFlywheel1.set(speed);
     shooterFlywheel2.set(speed);
   }
 
   @Override
   public void increaseSpeed(double speed) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void decreaseSpeed(double speed) {
-    // TODO Auto-generated method stub
-
+    
   }
 
   @Override
@@ -86,7 +83,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
 
   @Override
   public double getSpeed() {
-    // TODO Auto-generated method stub
     return 0;
   }
 }

@@ -25,25 +25,21 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   @Override
   public void run(double speed) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public int getCellCount() {
-    // TODO Auto-generated method stub
     return 0;
   }
 
   @Override
   public void addCell() {
-    // TODO Auto-generated method stub
-
+  
   }
 
   @Override
   public void subtractCell() {
-    // TODO Auto-generated method stub
-
+    
   }
 }

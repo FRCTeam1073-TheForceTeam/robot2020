@@ -25,13 +25,11 @@ public class Hook extends SubsystemBase implements HookInterface {
 
   @Override
   public void crawl(double speed, String direction) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void lock() {
-    // TODO Auto-generated method stub
 
   }
 }

@@ -8,13 +8,13 @@
 package frc.robot.subsystems.instances;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.interfaces.CollectInterface;
+import frc.robot.subsystems.interfaces.CollectorInterface;
 
-public class Collect extends SubsystemBase implements CollectInterface {
+public class Collector extends SubsystemBase implements CollectorInterface {
   /**
    * Creates a new Collect.
    */
-  public Collect() {
+  public Collector() {
 
   }
 
@@ -25,13 +25,11 @@ public class Collect extends SubsystemBase implements CollectInterface {
 
   @Override
   public void run(double speed, String direction) {
-    // TODO Auto-generated method stub
-
+ 
   }
 
   @Override
   public void lockIntake() {
-    // TODO Auto-generated method stub
 
   }
 }

@@ -25,7 +25,6 @@ public class Lift extends SubsystemBase implements LiftInterface {
 
   @Override
   public void toPosition() {
-    // TODO Auto-generated method stub
 
   }
 }

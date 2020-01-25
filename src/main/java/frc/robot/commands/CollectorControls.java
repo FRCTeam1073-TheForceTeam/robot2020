@@ -9,14 +9,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.interfaces.CollectInterface;
+import frc.robot.subsystems.interfaces.CollectorInterface;
 
-public class CollectControls extends CommandBase {
-  CollectInterface collect;
+public class CollectorControls extends CommandBase {
+  CollectorInterface collect;
   /**
    * Creates a new CollectControls.
    */
-  public CollectControls(CollectInterface collect_) {
+  public CollectorControls(CollectorInterface collect_) {
     collect = collect_;
     addRequirements((SubsystemBase)collect);
   }

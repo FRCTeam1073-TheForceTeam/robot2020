@@ -10,7 +10,7 @@ package frc.robot.subsystems.interfaces;
 /**
  * Add your docs here.
  */
-public interface CollectInterface {
+public interface CollectorInterface {
 
     void run(double speed, String direction);
 
