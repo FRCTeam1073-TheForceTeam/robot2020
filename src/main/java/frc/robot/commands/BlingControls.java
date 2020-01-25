@@ -23,14 +23,6 @@ public class BlingControls extends CommandBase {
   int minLEDsDriver;
   int numberLEDsDriver;
   int maxLEDsDriver;
-  int time;
-  int minLEDsBlink;
-  int numberLEDsBlink;
-  int maxLEDsBlink;
-  int minLEDsMove;
-  int numberLEDsMove;
-  int maxLEDsMove;
-  int move;
   /**
    * Creates a new BlingControls.
    */
@@ -53,15 +45,6 @@ public class BlingControls extends CommandBase {
     minLEDsDriver = 8;
     numberLEDsDriver = 4;
     maxLEDsDriver = minLEDsDriver + numberLEDsDriver - 1;
-    time = 0;
-    minLEDsBlink = 14;
-    numberLEDsBlink = 3;
-    maxLEDsBlink = minLEDsBlink + numberLEDsBlink - 1;
-    move = 0;
-    minLEDsMove = 19;
-    numberLEDsMove = 7;
-    maxLEDsMove = minLEDsMove + numberLEDsMove - 1;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,20 +52,6 @@ public class BlingControls extends CommandBase {
   public void execute() {
     batteryBling();
     driverControlledLEDs();
-    blinkyLights();
-    movingLEDs();
-  }
-
-  public void blinkyLights() {
-    if (time < 20) {
-      Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
-      time = time + 1;
-    } else if (time < 40) {
-      time = time + 1;
-      Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 255, 255, 255);
-    } else {
-      time = 0;
-    }
   }
 
   public void batteryBling() {
@@ -105,17 +74,6 @@ public class BlingControls extends CommandBase {
     }
   }
 
-  public void movingLEDs() {
-    if (move < numberLEDsMove - 1) {
-      move = move + 1;
-    } else {
-      move = 0;
-    }
-    int set = minLEDsMove + move;
-    Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
-    Robot.bling.m_ledBuffer.setRGB(set, 255, 0, 0);
-  }
-
 
   public void driverControlledLEDs(){
     if (OI.driverController.getStartButtonPressed()){
@@ -125,7 +83,7 @@ public class BlingControls extends CommandBase {
     } else if (OI.driverController.getBButtonPressed()){
       // If b was pressed
       // set colors to have alternating orange and blue
-      Robot.bling.alternateRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0, 0, 0, 255);
+      Robot.bling.alternateRGB(minLEDsDriver, numberLEDsDriver, 255, 0, 0, 0, 0, 255);
     } else if (OI.driverController.getXButtonPressed()){
       // If x was pressed
       // set color
