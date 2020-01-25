@@ -106,6 +106,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         SmartDashboard.putNumber("P", P);
         SmartDashboard.putNumber("I", I);
         SmartDashboard.putNumber("D", D);
+        SmartDashboard.clearPersistent("P");
+        SmartDashboard.clearPersistent("I");
+        SmartDashboard.clearPersistent("D");
     }
 
     /**
