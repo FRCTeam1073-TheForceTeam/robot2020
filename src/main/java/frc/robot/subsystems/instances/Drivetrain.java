@@ -26,7 +26,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
     // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
-    private double ticksPerMeter = ((52352 + 56574 + 54036 + 56452 + 53588 + 57594) / 6.0) / Units.feetToMeters(10);
+    private double ticksPerMeter = 1712;
+    //((52352 + 56574 + 54036 + 56452 + 53588 + 57594) / 6.0) / Units.feetToMeters(10);
+    
     // ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonSRX leftMotorLeader;
     private static WPI_TalonSRX rightMotorLeader;
@@ -37,6 +39,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
 
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
+
+    double P = 1;
+    double I = 0;
+    double D = 2;
 
     public Drivetrain() {
         // Setting up motors
@@ -82,15 +88,19 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 2;
-        double I = 0;
-        double D = 6;
+
+        leftMotorLeader.setSelectedSensorPosition(0);
+        rightMotorLeader.setSelectedSensorPosition(0);
+
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
         rightMotorLeader.config_kI(0, I);
         leftMotorLeader.config_kD(0, D);
         rightMotorLeader.config_kD(0, D);
+
+        leftMotorLeader.setIntegralAccumulator(0);
+        rightMotorLeader.setIntegralAccumulator(0);
 
         leftMotorFollower.follow(leftMotorLeader);
         leftMotorFollower2.follow(leftMotorLeader);
@@ -103,12 +113,14 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
 
+        SmartDashboard.putNumber("setP", P);
+        SmartDashboard.putNumber("setI", I);
+        SmartDashboard.putNumber("setD", D);
+        SmartDashboard.putString("sendPID", "0");
+
         SmartDashboard.putNumber("P", P);
         SmartDashboard.putNumber("I", I);
         SmartDashboard.putNumber("D", D);
-        SmartDashboard.clearPersistent("P");
-        SmartDashboard.clearPersistent("I");
-        SmartDashboard.clearPersistent("D");
     }
 
     /**
@@ -170,6 +182,24 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         SmartDashboard.putNumber("Rotation", getAngleDegrees());
         SmartDashboard.putNumber("leftPower", leftPower);
         SmartDashboard.putNumber("rightPower", rightPower);
+        SmartDashboard.putNumber("leftErrorP", leftMotorLeader.getClosedLoopError());
+        SmartDashboard.putNumber("rightErrorP", rightMotorLeader.getClosedLoopError());
+        SmartDashboard.putNumber("leftErrorI", leftMotorLeader.getIntegralAccumulator());
+        SmartDashboard.putNumber("rightErrorI", rightMotorLeader.getIntegralAccumulator());
+        SmartDashboard.putNumber("leftErrorD", leftMotorLeader.getErrorDerivative());
+        SmartDashboard.putNumber("rightErrorD", rightMotorLeader.getErrorDerivative());
+        SmartDashboard.putNumber("leftMotorVelocity", leftMotorLeader.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("rightMotorVelocity", rightMotorLeader.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("leftMotorPosition", leftMotorLeader.getSelectedSensorPosition());
+        SmartDashboard.putNumber("rightMotorPosition", rightMotorLeader.getSelectedSensorPosition());
+
+        if (!SmartDashboard.getString("sendPID", "0").equals("0")) {
+            setPID(SmartDashboard.getNumber("setP", 2), SmartDashboard.getNumber("setI", 0),
+                    SmartDashboard.getNumber("setD", 0));
+            SmartDashboard.putString("sendPID", "0");
+        }
+
+
     }
 
     public Pose2d getRobotPose() {
@@ -195,11 +225,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
     private double leftPower = 0, rightPower = 0;
 
     public void setVelocity(double left, double right) {
-        leftMotorLeader.set(ControlMode.Velocity, left*3500);
-        rightMotorLeader.set(ControlMode.Velocity, right*3500);
+        leftMotorLeader.set(ControlMode.Velocity, left*2500);
+        rightMotorLeader.set(ControlMode.Velocity, right*2500);
         leftPower = left;
         rightPower = right;
-        System.out.println("x");
     }
 
 
@@ -208,7 +237,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         rightMotorLeader.set(ControlMode.PercentOutput, right);
         leftPower = left;
         rightPower = right;
-        System.out.println("x");
     }
 
     /**
@@ -233,13 +261,23 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
      * Sets PID configurations
      */
 
-    public void setPID(double P, double I, double D) {
+    public void setPID(double P_, double I_, double D_) {
+        P = P_;
+        I = I_;
+        D = D_;
+        SmartDashboard.putNumber("P", P);
+        SmartDashboard.putNumber("I", I);
+        SmartDashboard.putNumber("D", D);
+        System.out.println("P" + P + ":" + P_);
+
         leftMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
         leftMotorLeader.config_kD(0, D);
         rightMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kI(0, I);
         rightMotorLeader.config_kD(0, D);
+        leftMotorLeader.setIntegralAccumulator(0);
+        rightMotorLeader.setIntegralAccumulator(0);
     }
 
     public ChassisSpeeds getDrivetrainVelocity() {
