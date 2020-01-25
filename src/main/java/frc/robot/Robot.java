@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveControls;
+import frc.robot.shuffleboard.ShuffleboardWidgets;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 /**
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
   
   public static DriveControls command;
   public static DrivetrainInterface subsystem;
+  public static ShuffleboardWidgets widgets;
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
@@ -46,6 +48,8 @@ public class Robot extends TimedRobot {
     System.out.println(subsystem == null);
     ((SubsystemBase) subsystem).register();
     CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) subsystem, command);
+    widgets = new ShuffleboardWidgets();
+    widgets.register();
   }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
