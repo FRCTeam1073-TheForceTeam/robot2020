@@ -13,33 +13,71 @@ import edu.wpi.first.wpilibj.CAN;
 
 public class OpenMVBase extends SubsystemBase {
   private CAN openmv;
-  private CANData data;
+  private CANdata empty; 
+  private CANdata data;
 
   /**
    * Creates a new OpenMV.
    */
-  public OpenMVBase(int deviceId, int deviceType) {
-    openmv = new CAN(deviceId, 170, deviceType);
-    data = new CANData();
+  public OpenMVBase(int deviceId) {
+    openmv = new CAN(deviceId, 173, 10);
+    empty = new CANdata();
+    data = new CANdata();
   }
 
   public void write(int APIIndex, byte[] data) {
-    Integer len = data.length;
-    if(len <= 8)
+    if(data.length <= 8)
       openmv.writePacket(data, 8);
   }
 
-  public String read() {
-    boolean canCam = openmv.readPacketNew(4, data);
-    if(canCam == true) {
-      String outstr = new String(data.data);
-      return outstr;
+  public int apiIndex(int apiClass, int index){
+      return (apiClass&0x03f<<4)|(index&0x0f);
     }
-    return "";
+
+  public boolean read(int APIIndex, CANdata data) {
+    return openmv.readPacketNew(APIIndex, data);
+    }
+
+  public void setMode(byte mode){
+    byte[] message = new byte[1];
+    message[0] = mode;
+     write(apiIndex(1, 1), message);
+  }
+
+  public int[] readHeartbeat(){
+    if(read(apiIndex(1, 2), data) == true){
+      int[] heartbeat = new int[2];
+      heartbeat[0] = data.data[0];
+      heartbeat[1] = data.data[1] << 8 | data.data[2];
+      return heartbeat;
+    }
+    return new int[0];
+  }
+  //creates a 
+  public int[] readConfig(){
+    if(read(apiIndex(1,0), data) == true){
+      int[] config = new int[8];
+      config[0] = data.data[0];//mode
+      config[1] = data.data[1];
+      config[2] = data.data[2];//simple target tracking
+      config[3] = data.data[3];//Line Segment tracking
+      config[4] = data.data[4];//color detection
+      config[4] = data.data[5];//advanced target tracking
+      config[4] = data.data[6];
+      config[4] = data.data[7];
+      return config;
+    }
+    return new int[0];
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(readHeartbeat().length != 0){
+      System.out.println(readHeartbeat());
+    }
+    if(readConfig().length != 0){
+      System.out.println(readConfig());
+    }
   }
 }
