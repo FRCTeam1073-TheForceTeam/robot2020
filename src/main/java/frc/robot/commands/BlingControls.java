@@ -9,10 +9,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.commands.BlingControls;
+
 
 public class BlingControls extends CommandBase {
-  
+  int minLEDsVolts;
+  int maxLEDsVolts;
+  int numberLEDsVolts;
+  double max_volts;
+  double min_volts;
+  int minLEDsDriver;
+  int numberLEDsDriver;
+  int maxLEDsDriver;
   /**
    * Creates a new BlingControls.
    */
@@ -25,60 +35,64 @@ public class BlingControls extends CommandBase {
   @Override
   public void initialize() {
     
+    // These variables determine the minimum and maximum LED values that are used
+    // First port is 0
+    minLEDsVolts = 0;
+    numberLEDsVolts = 6;
+    maxLEDsVolts = minLEDsVolts + numberLEDsVolts - 1;
+    max_volts = 12.5;
+    min_volts = 8;
+    minLEDsDriver = 8;
+    numberLEDsDriver = 4;
+    maxLEDsDriver = minLEDsDriver + numberLEDsDriver - 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    batteryBling();
+    driverControlledLEDs();
+  }
+
+  public void batteryBling() {
     double volts = RobotController.getBatteryVoltage();
 
-    /*
-    if (11.5 < volts) {
-      Robot.bling.numberRGB(8, 0, 255, 0);
-    } else if (11 < volts && 11.5 > volts) {
-      Robot.bling.numberRGB(7, 0, 255, 0);
-    } else if (10.5 < volts && 11 > volts) {
-      Robot.bling.numberRGB(6, 0, 255, 0);
-    } else if (10 < volts && 10.5 > volts) {
-      Robot.bling.numberRGB(5, 255, 255, 0);
-    } else if (9.5 < volts && 10 > volts) {
-      Robot.bling.numberRGB(4, 255, 255, 0);
-    } else if (9 < volts && 9.5 > volts) {
-      Robot.bling.numberRGB(3, 255, 255, 0);
-    } else if (8.5 < volts && 9 > volts) {
-      Robot.bling.numberRGB(2, 255, 0, 0);
-    } else if (8 < volts && 8.5 > volts) {
-      Robot.bling.numberRGB(1, 255, 0, 0);
-    } else if (8 > volts) {
-      Robot.bling.setPatternRGBAll(255, 0, 0);
+    // First, it calculates the percentage of leds that will turn on.
+    // amount above the minimum voltage / range of volts
+    // the -1 and +1 account for the one that is always on.
+    int num = (int) (Math.round(((volts - min_volts) / (max_volts - min_volts)) * (numberLEDsVolts - 1)) + 1);
+
+    // If less than 1/3 of the leds are lit up, the light is red.
+    // If between 1/3 and 2/3 of the leds are lit up, the light is yellow.
+    // If more than 2/3 of the leds are lit up, the light is green.
+    if (num <= (numberLEDsVolts / 3)) {
+      Robot.bling.rangeRGB(minLEDsVolts, num, 255, 0, 0);
+    } else if (num > (numberLEDsVolts / 3) && num <= (2 * (numberLEDsVolts / 3))) {
+      Robot.bling.rangeRGB(minLEDsVolts, num, 255, 255, 0);
+    } else if (num > (2 * (numberLEDsVolts / 3))) {
+      Robot.bling.rangeRGB(minLEDsVolts, num, 0, 255, 0);
     }
-    */
+  }
 
-    // Between 13 and 8
 
-    int num = (int) (1 + Math.round(((volts - 8) / 5) * (8 /* m_ledBuffer.getLength() */ - 1)));
-    Robot.bling.numberRGB(num, 255, 0, 0);
-
-    /*
-    //System.out.println("BlingControls.");
+  public void driverControlledLEDs(){
     if (OI.driverController.getStartButtonPressed()){
-      // If a was pressed
-      // set color red
-      Robot.bling.setPatternRGBAll(255, 42, 0);
+      // If start was pressed
+      // set color
+      Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0);
     } else if (OI.driverController.getBButtonPressed()){
       // If b was pressed
-      // set color teal
-      Robot.bling.alternateRGB(255, 0, 0, 0, 0, 255);
+      // set colors to have alternating orange and blue
+      Robot.bling.alternateRGB(minLEDsDriver, numberLEDsDriver, 255, 0, 0, 0, 0, 255);
     } else if (OI.driverController.getXButtonPressed()){
       // If x was pressed
-      // set color blue
-      Robot.bling.setPatternRGBAll(0, 0, 255);
+      // set color
+      Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 255);
     } else if (OI.driverController.getYButtonPressed()){
       // If y was pressed
       // turn the light off
-      Robot.bling.setPatternRGBAll(0, 0, 0);
+      Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 0);
     }
-    */
   }
 
   // Called once the command ends or is interrupted.
