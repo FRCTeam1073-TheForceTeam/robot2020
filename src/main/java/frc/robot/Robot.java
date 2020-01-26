@@ -55,34 +55,37 @@ public class Robot extends TimedRobot {
     OI.init();
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
-    ((SubsystemBase) drivetrain).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) drivetrain, driveControls);
+    registerSubsystem((SubsystemBase) drivetrain, driveControls);
+
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
-    ((SubsystemBase) collector).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) collector, collectorControls);
+    registerSubsystem((SubsystemBase) collector, collectorControls);
+
     hook = new Hook();
     hookControls = new HookControls(hook);
-    ((SubsystemBase) hook).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) hook, hookControls);
+    registerSubsystem((SubsystemBase) hook, hookControls);
+
     lift = new Lift();
     liftControls = new LiftControls(lift);
-    ((SubsystemBase) lift).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) lift, liftControls);
+    registerSubsystem((SubsystemBase) lift, liftControls);
+
     magazine = new Magazine();
     magazineControls = new MagazineControls(magazine);
-    ((SubsystemBase) lift).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) magazine, magazineControls);
+    registerSubsystem((SubsystemBase) magazine, magazineControls);
+
     shooter = new Shooter();
     shooterControls = new ShooterControls(shooter);
-    ((SubsystemBase) shooter).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) shooter, shooterControls);
+    registerSubsystem((SubsystemBase) shooter, shooterControls);
+
     turret = new Turret();
     turretControls = new TurretControls(turret);
-    ((SubsystemBase) turret).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) turret, turretControls);
+    registerSubsystem((SubsystemBase)turret, turretControls);
   }
 
+  public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
+    subsystem.register();
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);    
+  }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
