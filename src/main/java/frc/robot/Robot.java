@@ -29,7 +29,19 @@ public class Robot extends TimedRobot {
 
   
   public static DriveControls driveControls;
-  public static DrivetrainInterface driveInterface;
+  public static DrivetrainInterface drivetrain;
+  public static CollectorControls collectorControls;
+  public static CollectorInterface collector;
+  public static HookControls hookControls;
+  public static HookInterface hook;
+  public static LiftControls liftControls;
+  public static LiftInterface lift;
+  public static MagazineControls magazineControls;
+  public static MagazineInterface magazine;
+  public static ShooterControls shooterControls;
+  public static ShooterInterface shooter;
+  public static TurretControls turretControls;
+  public static TurretInterface turret;
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
@@ -41,15 +53,36 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     OI.init();
-    driveInterface = new Drivetrain();
-    driveControls = new DriveControls(driveInterface);
-    subsystemRegister((SubsystemBase)driveInterface, driveControls);
-    }
-
-  public void subsystemRegister(SubsystemBase subsystem, CommandBase controls) {
-    subsystem.register();
-    CommandScheduler.getInstance().setDefaultCommand(subsystem, controls);
+    drivetrain = new Drivetrain();
+    driveControls = new DriveControls(drivetrain);
+    ((SubsystemBase) drivetrain).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) drivetrain, driveControls);
+    collector = new Collector();
+    collectorControls = new CollectorControls(collector);
+    ((SubsystemBase) collector).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) collector, collectorControls);
+    hook = new Hook();
+    hookControls = new HookControls(hook);
+    ((SubsystemBase) hook).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) hook, hookControls);
+    lift = new Lift();
+    liftControls = new LiftControls(lift);
+    ((SubsystemBase) lift).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) lift, liftControls);
+    magazine = new Magazine();
+    magazineControls = new MagazineControls(magazine);
+    ((SubsystemBase) lift).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) magazine, magazineControls);
+    shooter = new Shooter();
+    shooterControls = new ShooterControls(shooter);
+    ((SubsystemBase) shooter).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) shooter, shooterControls);
+    turret = new Turret();
+    turretControls = new TurretControls(turret);
+    ((SubsystemBase) turret).register();
+    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) turret, turretControls);
   }
+
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
