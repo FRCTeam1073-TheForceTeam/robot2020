@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.subsystems.instances.Drivetrain;
+import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
 //import frc.robot.Robot;
 /**
@@ -24,26 +24,26 @@ import frc.robot.subsystems.instances.Drivetrain;
  */
 public class ShuffleboardWidgets extends SubsystemBase {
 
-    ShuffleboardTab tab;
+  ShuffleboardTab tab;
 
-    double leftEncoderValue = 0.0;
-    double rightEncoderValue = 0.0;
+  double leftEncoderValue = 0.0;
+  double rightEncoderValue = 0.0;
 
-    double gyroAngleDegrees = 0.0;
-    double robotX = 0.0;
-    double robotY = 0.0;
-    double robotRotation = 0.0;
+  double gyroAngleDegrees = 0.0;
+  double robotX = 0.0;
+  double robotY = 0.0;
+  double robotRotation = 0.0;
 
-    double drivetrainVelocity = 0.0;
+  double drivetrainVelocity = 0.0;
 
-    private NetworkTableEntry P_testing;
-    private NetworkTableEntry I_testing;
-    private NetworkTableEntry D_testing;
-    double P_Value;
-    double I_Value;
-    double D_Value;
+  private NetworkTableEntry P_testing;
+  private NetworkTableEntry I_testing;
+  private NetworkTableEntry D_testing;
+  double P_Value;
+  double I_Value;
+  double D_Value;
 
-    Drivetrain drivetrain;
+  DrivetrainInterface drivetrain;
 
     public ShuffleboardWidgets() {
 
@@ -80,12 +80,12 @@ public class ShuffleboardWidgets extends SubsystemBase {
     private void ShuffleboardInformation() {
 
       // Drivetrain Data INCOMPLETE
-      leftEncoderValue = Robot.subsystem.getLeftEncoder();
-      rightEncoderValue = Robot.subsystem.getRightEncoder();
+      leftEncoderValue = drivetrain.getLeftEncoder();
+      rightEncoderValue = drivetrain.getRightEncoder();
       
       // Gyro Datas COMPLETE
-      gyroAngleDegrees = Robot.subsystem.getAngleDegrees();
-      Pose2d pose = Robot.subsystem.getRobotPose();
+      gyroAngleDegrees = drivetrain.getAngleDegrees();
+      Pose2d pose = drivetrain.getRobotPose();
       robotX = pose.getTranslation().getX();
       robotY = pose.getTranslation().getY();
       robotRotation = pose.getRotation().getDegrees();
@@ -121,7 +121,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
       D_Value = D_testing.getDouble(10.0);
 
       //missing set values "setPID"
-      
       drivetrain.setPID(P_Value, I_Value, D_Value);
 
 
