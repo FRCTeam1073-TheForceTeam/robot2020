@@ -130,7 +130,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       I_Value = I_testing.getDouble(0.01);
       D_Value = D_testing.getDouble(10.0);
 
-      //sets PID values
+      //sets PID values as soon as PID tuning is complete the following line of code should be commented out until next year
       drivetrain.setPID(P_Value, I_Value, D_Value);
 
       //prints the PID Values from Shuffleboard
