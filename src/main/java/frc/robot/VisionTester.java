@@ -8,15 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.BlingControls;
 import frc.robot.commands.DriveControls;
-import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.interfaces.*;
-import frc.robot.shuffleboard.ShuffleboardWidgets;
+import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.instances.OpenMVBase;
+import frc.robot.subsystems.instances.OMVPortTracker;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,33 +22,13 @@ import frc.robot.shuffleboard.ShuffleboardWidgets;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class VisionTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-
-  public static DriveControls driveControls;
-  public static DrivetrainInterface drivetrain;
-  public static CollectorControls collectorControls;
-  public static CollectorInterface collector;
-  public static HookControls hookControls;
-  public static HookInterface hook;
-  public static LiftControls liftControls;
-  public static LiftInterface lift;
-  public static MagazineControls magazineControls;
-  public static MagazineInterface magazine;
-  public static ShooterControls shooterControls;
-  public static ShooterInterface shooter;
-  public static TurretControls turretControls;
-  public static TurretInterface turret;
-  public static ShuffleboardWidgets widgets;
-  public static Bling bling;
-  // public NetworkTableEntry value_P;
-  // public NetworkTableEntry value_I;
-  // public NetworkTableEntry value_D;
-  // public NetworkTableEntry update;
+  public static OpenMVBase camera;
 
 
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -58,46 +36,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     OI.init();
-    bling = new Bling();
-    bling.register();
-    CommandScheduler.getInstance().setDefaultCommand(bling, new BlingControls());
-
-    drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain);
-    registerSubsystem((SubsystemBase) drivetrain, driveControls);
-
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
-
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
-
-    lift = new Lift();
-    liftControls = new LiftControls(lift);
-    registerSubsystem((SubsystemBase) lift, liftControls);
-
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
-
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
-
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase)turret, turretControls);
-
-    widgets = new ShuffleboardWidgets();
-    widgets.register();
+    //OpenMVBase camera = new OpenMVBase(1);
+    OpenMVBase camera = new OMVPortTracker(1);
+    camera.register();
+    System.out.println("VisionTester Init");
   }
 
-  public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
-    subsystem.register();
-    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);    
-  }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.

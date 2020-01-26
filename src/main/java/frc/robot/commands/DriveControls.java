@@ -30,12 +30,21 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        double amt = 1-OI.driverController.getRawAxis(2);
-        double fwd = OI.driverController.getRawAxis(1) * amt;
-        double rot = OI.driverController.getRawAxis(4) * amt;
-        drivetrain.setPower(fwd+rot, fwd-rot);
+        double amt = 1 - OI.driverController.getRawAxis(2);
+        double fwd = deadzone(OI.driverController.getRawAxis(1) * amt);
+        double rot = deadzone(OI.driverController.getRawAxis(4) * amt);
+        drivetrain.setVelocity(fwd + rot, fwd - rot);
         if (OI.driverController.getAButtonPressed()) {
             drivetrain.resetRobotOdometry();
+        }
+    }
+    
+    public double deadzone(double val) {
+        double zone = 0.1;
+        if (Math.abs(val) < zone) {
+            return 0;
+        } else {
+            return val;
         }
     }
 

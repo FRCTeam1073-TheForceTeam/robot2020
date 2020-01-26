@@ -44,9 +44,6 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_led.setData(m_ledBuffer);
   }
 
-
-
-
   public void setPatternHSVAll(int h, int s, int v) {
     for (var i = 0; i < (m_ledBuffer.getLength()); i++) {
       m_ledBuffer.setHSV(i, h, s, v);
