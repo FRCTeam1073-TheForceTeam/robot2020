@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveControls;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.instances.OpenMVBase;
+import frc.robot.subsystems.instances.OMVPortTracker;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -25,15 +28,7 @@ public class VisionTester extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-
-  
-  public static DriveControls command;
-  public static DrivetrainInterface subsystem;
   public static OpenMVBase camera;
-  // public NetworkTableEntry value_P;
-  // public NetworkTableEntry value_I;
-  // public NetworkTableEntry value_D;
-  // public NetworkTableEntry update;
 
 
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -41,13 +36,12 @@ public class VisionTester extends TimedRobot {
   @Override
   public void robotInit() {
     OI.init();
-    camera = new camera(1);
-    System.out.println(command == null);
-    System.out.println(subsystem == null);
-    ((SubsystemBase) subsystem).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) camera);
-    
+    //OpenMVBase camera = new OpenMVBase(1);
+    OpenMVBase camera = new OMVPortTracker(1);
+    camera.register();
+    System.out.println("VisionTester Init");
   }
+
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
