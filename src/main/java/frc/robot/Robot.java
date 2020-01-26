@@ -15,6 +15,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
 import frc.robot.shuffleboard.ShuffleboardWidgets;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -28,7 +29,6 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
 
-  
   public static DriveControls driveControls;
   public static DrivetrainInterface drivetrain;
   public static CollectorControls collectorControls;
@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
   // public NetworkTableEntry update;
-
 
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
