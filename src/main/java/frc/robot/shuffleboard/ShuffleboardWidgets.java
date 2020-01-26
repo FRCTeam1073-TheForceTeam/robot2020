@@ -68,13 +68,15 @@ public class ShuffleboardWidgets extends SubsystemBase {
       .getEntry();
 
       drivetrain = Robot.drivetrain;
-      
+
+      ShuffleboardView();
+
     }
   
   @Override
     public void periodic() {
       ShuffleboardInformation();
-      ShuffleboardView();
+      Shuffleboard.update();
       PID_testing();
 
     }
@@ -122,7 +124,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       I_Value = I_testing.getDouble(0.01);
       D_Value = D_testing.getDouble(10.0);
 
-      //set values
+      //sets PID values
       drivetrain.setPID(P_Value, I_Value, D_Value);
 
     }
