@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.instances.Drivetrain;
 
 //import frc.robot.Robot;
 /**
@@ -42,6 +43,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
     double I_Value;
     double D_Value;
 
+    Drivetrain drivetrain;
+
     public ShuffleboardWidgets() {
 
       tab = Shuffleboard.getTab("Telemetry");
@@ -64,6 +67,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       .withProperties(Map.of("min", 0, "max", 100))
       .getEntry();
 
+      drivetrain = Robot.drivetrain;
     }
   
   @Override
@@ -110,13 +114,16 @@ public class ShuffleboardWidgets extends SubsystemBase {
       
     }
 
-    private void PID_testing() {
+    public void PID_testing() {
 
       P_Value = P_testing.getDouble(1.0);
       I_Value = I_testing.getDouble(0.01);
       D_Value = D_testing.getDouble(10.0);
 
       //missing set values "setPID"
+      
+      drivetrain.setPID(P_Value, I_Value, D_Value);
+
 
     }
 
