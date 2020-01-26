@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
+import frc.robot.shuffleboard.ShuffleboardWidgets;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -27,7 +29,6 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
 
-  
   public static DriveControls driveControls;
   public static DrivetrainInterface drivetrain;
   public static CollectorControls collectorControls;
@@ -42,17 +43,14 @@ public class Robot extends TimedRobot {
   public static ShooterInterface shooter;
   public static TurretControls turretControls;
   public static TurretInterface turret;
-  // public NetworkTableEntry value_P;
-  // public NetworkTableEntry value_I;
-  // public NetworkTableEntry value_D;
-  // public NetworkTableEntry update;
-
-
+  public static ShuffleboardWidgets widgets;
+  
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
+
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
@@ -80,6 +78,9 @@ public class Robot extends TimedRobot {
     turret = new Turret();
     turretControls = new TurretControls(turret);
     registerSubsystem((SubsystemBase)turret, turretControls);
+
+    widgets = new ShuffleboardWidgets();
+    widgets.register();
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
