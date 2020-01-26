@@ -50,6 +50,7 @@
     Array of objects: [x, y, height, boundaryZone] for each object
 
     FindCoordinates()
+    
 
     DistanceToObject()
 

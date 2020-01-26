@@ -24,6 +24,8 @@ public interface DrivetrainInterface {
    
     public void resetRobotOdometry();
 
+    public void setVelocity(double left, double right);
+
     public void setPower(double left, double right);
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds();
