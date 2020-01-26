@@ -33,9 +33,9 @@ public class BlingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //if (done == 0) {
-    burst(Robot.bling.m_ledBuffer.getLength());
-    //} else {
+    if (done == 0) {
+      burst(Robot.bling.m_ledBuffer.getLength(), 0, 0);
+    }
 
     
     // batteryBling(0, 6, 8, 12.5);
@@ -45,44 +45,48 @@ public class BlingControls extends CommandBase {
     // blinkyLightsTwoColors();
 }
 
-  public int burst(int length) {
-    //int done;
+  public int burst(int length, int first, int time) {
+    int done;
     int middle1;
-    //int middle2;
-    //if (length%2 == 1) {
-      //middle1 = (int) (Math.round((length / 2) - 1.5));
-      //middle2 = (int) (Math.round((length / 2) - 0.5));
-    //} else {
-    middle1 = (length / 2) - 1;
-      //middle2 = middle1;
-    //}
-    Robot.bling.m_ledBuffer.setRGB(middle1, 255, 255, 255);
-    //Robot.bling.m_ledBuffer.setRGB(middle2, 255, 255, 255);
+    int middle2;
+    int i1 = 0;
+    int i2 = 0;
+    if (first == 0) {
+      middle1 = 0;
+      middle2 = 0;
+      if (length%2 == 1) {
+        middle1 = (length / 2);
+        middle2 = middle1;
+      } else {
+        middle1 = (int) (Math.round((length / 2) - 0.5));
+        middle2 = (int) (Math.round((length / 2) + 0.5));
+      }
 
+      i1 = middle1;
+      i2 = middle2;
+      time = 0;
+      first = first + 1;
+    }
+    
 
-    /*
-
-    int move2 = 0;
-    if (move2 < length) {
-      move2 = move2 + 1;
+    
+    if (time <= 50) {
+      time = time + 1;
     } else {
-      move2 = 0;
+      time = 0;
+      i1 = i1 - 1;
+      i2 = i2 + 1;
     }
-    int set = minLEDsMove + move;
-    Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
-    Robot.bling.m_ledBuffer.setRGB(set, 255, 0, 0);
+    Robot.bling.setPatternRGBAll(0, 0, 0);
+    Robot.bling.setLED(i1, 255, 255, 255);
+    Robot.bling.setLED(i2, 255, 255, 255);
 
-
-    for (int i1 = middle1; i1 >= 0;  i1--) {
-
+    if (i2 == length) {
+      done = 1;
+      return done;
+    } else {
+      return 0;
     }
-    for (int i2 = middle2; i2 <= length; i2++) {
-
-    }
-    */
-
-    done = 1;
-    return done; 
   }
 
   public void blinkyLightsTwoColors() {
