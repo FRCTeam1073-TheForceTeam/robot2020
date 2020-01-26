@@ -8,12 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DriveControls;
-import frc.robot.shuffleboard.ShuffleboardWidgets;
+import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.*;
+import frc.robot.shuffleboard.ShuffleboardWidgets;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -28,8 +29,20 @@ public class Robot extends TimedRobot {
    */
 
   
-  public static DriveControls command;
-  public static DrivetrainInterface subsystem;
+  public static DriveControls driveControls;
+  public static DrivetrainInterface drivetrain;
+  public static CollectorControls collectorControls;
+  public static CollectorInterface collector;
+  public static HookControls hookControls;
+  public static HookInterface hook;
+  public static LiftControls liftControls;
+  public static LiftInterface lift;
+  public static MagazineControls magazineControls;
+  public static MagazineInterface magazine;
+  public static ShooterControls shooterControls;
+  public static ShooterInterface shooter;
+  public static TurretControls turretControls;
+  public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
@@ -42,14 +55,42 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     OI.init();
-    subsystem = new Drivetrain();
-    command = new DriveControls(subsystem);
-    System.out.println(command == null);
-    System.out.println(subsystem == null);
-    ((SubsystemBase) subsystem).register();
-    CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) subsystem, command);
+
+    drivetrain = new Drivetrain();
+    driveControls = new DriveControls(drivetrain);
+    registerSubsystem((SubsystemBase) drivetrain, driveControls);
+
+    collector = new Collector();
+    collectorControls = new CollectorControls(collector);
+    registerSubsystem((SubsystemBase) collector, collectorControls);
+
+    hook = new Hook();
+    hookControls = new HookControls(hook);
+    registerSubsystem((SubsystemBase) hook, hookControls);
+
+    lift = new Lift();
+    liftControls = new LiftControls(lift);
+    registerSubsystem((SubsystemBase) lift, liftControls);
+
+    magazine = new Magazine();
+    magazineControls = new MagazineControls(magazine);
+    registerSubsystem((SubsystemBase) magazine, magazineControls);
+
+    shooter = new Shooter();
+    shooterControls = new ShooterControls(shooter);
+    registerSubsystem((SubsystemBase) shooter, shooterControls);
+
+    turret = new Turret();
+    turretControls = new TurretControls(turret);
+    registerSubsystem((SubsystemBase)turret, turretControls);
+
     widgets = new ShuffleboardWidgets();
     widgets.register();
+  }
+
+  public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
+    subsystem.register();
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);    
   }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
