@@ -46,7 +46,6 @@ public class Robot extends TimedRobot {
     System.out.println(subsystem == null);
     ((SubsystemBase) subsystem).register();
     CommandScheduler.getInstance().setDefaultCommand((SubsystemBase) subsystem, command);
-    
   }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like

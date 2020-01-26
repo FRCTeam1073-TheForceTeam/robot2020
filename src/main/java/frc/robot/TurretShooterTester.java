@@ -19,7 +19,7 @@ import frc.robot.subsystems.interfaces.DrivetrainInterface;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class TurretShooterTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -29,7 +29,6 @@ public class Robot extends TimedRobot {
   
   public static DriveControls command;
   public static DrivetrainInterface subsystem;
-  public static 
   // public NetworkTableEntry value_P;
   // public NetworkTableEntry value_I;
   // public NetworkTableEntry value_D;
