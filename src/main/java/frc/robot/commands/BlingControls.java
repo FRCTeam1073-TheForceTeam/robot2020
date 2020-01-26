@@ -15,22 +15,7 @@ import frc.robot.commands.BlingControls;
 
 
 public class BlingControls extends CommandBase {
-  int minLEDsVolts;
-  int maxLEDsVolts;
-  int numberLEDsVolts;
-  double max_volts;
-  double min_volts;
-  int minLEDsDriver;
-  int numberLEDsDriver;
-  int maxLEDsDriver;
-  int time;
-  int minLEDsBlink;
-  int numberLEDsBlink;
-  int maxLEDsBlink;
-  int minLEDsMove;
-  int numberLEDsMove;
-  int maxLEDsMove;
-  int move;
+  int done;
   /**
    * Creates a new BlingControls.
    */
@@ -42,38 +27,81 @@ public class BlingControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    // These variables determine the minimum and maximum LED values that are used
-    // First port is 0
-    minLEDsVolts = 0;
-    numberLEDsVolts = 6;
-    maxLEDsVolts = minLEDsVolts + numberLEDsVolts - 1;
-    max_volts = 12.5;
-    min_volts = 8;
-    minLEDsDriver = 8;
-    numberLEDsDriver = 4;
-    maxLEDsDriver = minLEDsDriver + numberLEDsDriver - 1;
-    time = 0;
-    minLEDsBlink = 14;
-    numberLEDsBlink = 3;
-    maxLEDsBlink = minLEDsBlink + numberLEDsBlink - 1;
-    move = 0;
-    minLEDsMove = 19;
-    numberLEDsMove = 7;
-    maxLEDsMove = minLEDsMove + numberLEDsMove - 1;
-
+    done = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    batteryBling();
-    driverControlledLEDs();
-    blinkyLights();
-    movingLEDs();
+    //if (done == 0) {
+    burst(Robot.bling.m_ledBuffer.getLength());
+    //} else {
+
+    
+    // batteryBling(0, 6, 8, 12.5);
+    // driverControlledLEDs(8, 4);
+    // blinkyLights(14, 3);
+    // movingLEDs(19, 7);
+    // blinkyLightsTwoColors();
+}
+
+  public int burst(int length) {
+    //int done;
+    int middle1;
+    //int middle2;
+    //if (length%2 == 1) {
+      //middle1 = (int) (Math.round((length / 2) - 1.5));
+      //middle2 = (int) (Math.round((length / 2) - 0.5));
+    //} else {
+    middle1 = (length / 2) - 1;
+      //middle2 = middle1;
+    //}
+    Robot.bling.m_ledBuffer.setRGB(middle1, 255, 255, 255);
+    //Robot.bling.m_ledBuffer.setRGB(middle2, 255, 255, 255);
+
+
+    /*
+
+    int move2 = 0;
+    if (move2 < length) {
+      move2 = move2 + 1;
+    } else {
+      move2 = 0;
+    }
+    int set = minLEDsMove + move;
+    Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
+    Robot.bling.m_ledBuffer.setRGB(set, 255, 0, 0);
+
+
+    for (int i1 = middle1; i1 >= 0;  i1--) {
+
+    }
+    for (int i2 = middle2; i2 <= length; i2++) {
+
+    }
+    */
+
+    done = 1;
+    return done; 
   }
 
-  public void blinkyLights() {
+  public void blinkyLightsTwoColors() {
+    int time2 = 0;
+    if (time2 < 50) {
+      Robot.bling.setPatternHSVAll(240, 50, 50);
+      time2 = time2 + 1;
+    } else if (time2 < 100) {
+      Robot.bling.setPatternRGBAll(255, 42, 0);
+      time2 = time2 + 1;
+    } else {
+      time2 = 0;
+    }
+  }
+
+
+  
+  public void blinkyLights(int minLEDsBlink, int numberLEDsBlink) {
+    int time = 0;
     if (time < 20) {
       Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
       time = time + 1;
@@ -85,7 +113,7 @@ public class BlingControls extends CommandBase {
     }
   }
 
-  public void batteryBling() {
+  public void batteryBling(int minLEDsVolts, int numberLEDsVolts, double min_volts, double max_volts) {
     double volts = RobotController.getBatteryVoltage();
 
     // First, it calculates the percentage of leds that will turn on.
@@ -105,7 +133,8 @@ public class BlingControls extends CommandBase {
     }
   }
 
-  public void movingLEDs() {
+  public void movingLEDs(int minLEDsMove, int numberLEDsMove) {
+    int move = 0;
     if (move < numberLEDsMove - 1) {
       move = move + 1;
     } else {
@@ -117,7 +146,7 @@ public class BlingControls extends CommandBase {
   }
 
 
-  public void driverControlledLEDs(){
+  public void driverControlledLEDs(int minLEDsDriver, int numberLEDsDriver){
     if (OI.driverController.getStartButtonPressed()){
       // If start was pressed
       // set color
