@@ -52,24 +52,24 @@ public class ShuffleboardWidgets extends SubsystemBase {
       P_testing = tab
       .add("P", 1)
       .withWidget(BuiltInWidgets.kNumberSlider)
-      .withSize(5, 1)
-      .withPosition(2, 0)
+      .withSize(10, 1)
+      .withPosition(0, 1)
       .withProperties(Map.of("min", 0, "max", 10))
       .getEntry();
 
       I_testing = tab
       .add("I", 0.01)
       .withWidget(BuiltInWidgets.kNumberSlider)
-      .withSize(5, 1)
-      .withPosition(3, 0)
+      .withSize(10, 1)
+      .withPosition(0, 2)
       .withProperties(Map.of("min", 0, "max", 0.1))
       .getEntry();
 
       D_testing = tab
       .add("D", 10)
       .withWidget(BuiltInWidgets.kNumberSlider)
-      .withSize(5, 1)
-      .withPosition(4, 0)
+      .withSize(10, 1)
+      .withPosition(0, 3)
       .withProperties(Map.of("min", 0, "max", 100))
       .getEntry();
 
@@ -132,6 +132,11 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
       //sets PID values
       drivetrain.setPID(P_Value, I_Value, D_Value);
+
+      //prints the PID Values from Shuffleboard
+      System.out.println(P_Value);
+      System.out.println(I_Value);
+      System.out.println(D_Value);
 
     }
 
