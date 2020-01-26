@@ -52,22 +52,25 @@ public class ShuffleboardWidgets extends SubsystemBase {
       P_testing = tab
       .add("P", 1)
       .withWidget(BuiltInWidgets.kNumberSlider)
+      .withSize(5, 1)
+      .withPosition(2, 0)
       .withProperties(Map.of("min", 0, "max", 10))
-      .withSize(1, 5)
       .getEntry();
 
       I_testing = tab
       .add("I", 0.01)
       .withWidget(BuiltInWidgets.kNumberSlider)
+      .withSize(5, 1)
+      .withPosition(3, 0)
       .withProperties(Map.of("min", 0, "max", 0.1))
-      .withSize(1, 5)
       .getEntry();
 
       D_testing = tab
       .add("D", 10)
       .withWidget(BuiltInWidgets.kNumberSlider)
+      .withSize(5, 1)
+      .withPosition(4, 0)
       .withProperties(Map.of("min", 0, "max", 100))
-      .withSize(1, 5)
       .getEntry();
 
       drivetrain = Robot.drivetrain;
