@@ -8,17 +8,22 @@
 package frc.robot.subsystems.instances;
 
 import frc.robot.subsystems.interfaces.BallTrackerInterface;
+import frc.robot.subsystems.interfaces.LineTrackerInterface;
 
-public class OMVBallTracker extends OpenMVBase implements BallTrackerInterface{
+// Implementation for floor tracking cameras which track balls and line segments on floor,
+public class OMVFloorTracker extends OpenMVBase implements BallTrackerInterface{
   /**
    * Creates a new OMVBallTracker.
    */
-  public OMVBallTracker(int deviceId, int deviceType) {
-    super(deviceId, deviceType);
+  public OMVFloorTracker(int deviceId) {
+    super(deviceId);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // Call base class method
+    super.periodic();
+    
   }
 }

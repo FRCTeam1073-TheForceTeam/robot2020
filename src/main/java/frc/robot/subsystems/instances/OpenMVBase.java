@@ -13,16 +13,31 @@ import edu.wpi.first.wpilibj.CAN;
 
 public class OpenMVBase extends SubsystemBase {
   private CAN openmv;
-  private CANdata empty; 
-  private CANdata data;
+  private CANData recvData;
+  /// Mode of the OpenMV
+  private int mode = 0;
+
+  /// Heartbeat frame counter of the OpenMV
+  private int frameCounter = 0;
+  private int missedHeartbeats = 0;
+  private long lastHeartbeat = 0; // Timestamp of last heartbeat.
+
+  /// Configuration of the OpenMV
+  private int simpleTargetTracking = 0;
+  private int lineSegmentTracking = 0;
+  private int colorDetection = 0;
+  private int advancedTargetTracking = 0;
+
+  /// Counter of configuration updates
+  private int configurationUpdates = 0;
+
 
   /**
    * Creates a new OpenMV.
    */
   public OpenMVBase(int deviceId) {
     openmv = new CAN(deviceId, 173, 10);
-    empty = new CANdata();
-    data = new CANdata();
+    recvData = new CANData();
   }
 
   public void write(int APIIndex, byte[] data) {
@@ -31,10 +46,10 @@ public class OpenMVBase extends SubsystemBase {
   }
 
   public int apiIndex(int apiClass, int index){
-      return (apiClass&0x03f<<4)|(index&0x0f);
+      return ((apiClass & 0x03f) <<4) |(index & 0x0f);
     }
 
-  public boolean read(int APIIndex, CANdata data) {
+  public boolean read(int APIIndex, CANData data) {
     return openmv.readPacketNew(APIIndex, data);
     }
 
@@ -44,40 +59,99 @@ public class OpenMVBase extends SubsystemBase {
      write(apiIndex(1, 1), message);
   }
 
-  public int[] readHeartbeat(){
-    if(read(apiIndex(1, 2), data) == true){
-      int[] heartbeat = new int[2];
-      heartbeat[0] = data.data[0];
-      heartbeat[1] = data.data[1] << 8 | data.data[2];
-      return heartbeat;
-    }
-    return new int[0];
+  public int getMode() {
+    return mode;
   }
-  //creates a 
-  public int[] readConfig(){
-    if(read(apiIndex(1,0), data) == true){
-      int[] config = new int[8];
-      config[0] = data.data[0];//mode
-      config[1] = data.data[1];
-      config[2] = data.data[2];//simple target tracking
-      config[3] = data.data[3];//Line Segment tracking
-      config[4] = data.data[4];//color detection
-      config[4] = data.data[5];//advanced target tracking
-      config[4] = data.data[6];
-      config[4] = data.data[7];
-      return config;
-    }
-    return new int[0];
+
+  public int getFrameCounter() {
+    return frameCounter;
   }
+
+  public long getLastHeartbeat() {
+    return lastHeartbeat;
+  }
+
+  public boolean readHeartbeat(){
+    if(read(apiIndex(1, 2), recvData) == true && recvData.length == 3) {
+      mode = recvData.data[0];
+      frameCounter = (recvData.data[1] << 8) | recvData.data[2];
+      lastHeartbeat = recvData.timestamp;
+      return true;
+    }
+    return false;
+  }
+
+  // Updates our config and mode:
+  public boolean readConfig(){
+    if(read(apiIndex(1,0), recvData) == true && recvData.length == 8) {
+      mode = recvData.data[0];//mode
+      // config[1] = recvData.data[1];
+      simpleTargetTracking = recvData.data[2];//simple target tracking
+      lineSegmentTracking = recvData.data[3];//Line Segment tracking
+      colorDetection = recvData.data[4];//color detection
+      advancedTargetTracking = recvData.data[5];//advanced target tracking
+      // config[4] = recvData.data[6];
+      // config[4] = recvData.data[7];
+      configurationUpdates++; // Count this configuration update.
+      return true;
+    }
+    return false;
+  }
+
+  // Get config fields:
+  public int getSimpleTargetTracking() {
+    if (configurationUpdates > 0)
+      return simpleTargetTracking;
+    else
+      return -1;
+  }
+
+  public int getLineSegmentTracking() {
+    if (configurationUpdates > 0)
+      return lineSegmentTracking;
+    else
+      return -1;
+  }
+
+  public int getColorDetection() {
+    if (configurationUpdates > 0)
+      return colorDetection;
+    else
+      return -1;
+  }
+
+  public int getAdvancedTargetTracking() {
+    if (configurationUpdates > 0)
+      return advancedTargetTracking;
+    else
+      return -1;
+  }
+
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(readHeartbeat().length != 0){
-      System.out.println(readHeartbeat());
+    // System.out.println("OMV Base...");
+    // See if we got a heartbeat and update data.
+    if (readHeartbeat()) {
+      System.out.println("OpenMV Heartbeat");
+      System.out.println(frameCounter);
+      System.out.println(lastHeartbeat);
+      missedHeartbeats = 0;
+    } else {
+      missedHeartbeats++;
+
+      // If we miss too many:
+      if (missedHeartbeats > 250) {
+        System.out.println("OpenMV Missing heartbeat.");
+        missedHeartbeats = 0;
+      }
+
     }
-    if(readConfig().length != 0){
-      System.out.println(readConfig());
+
+    // See if we got a config message and update data
+    if (readConfig()){
+      System.out.println("OpenMV Configuration Received");
     }
   }
 }
