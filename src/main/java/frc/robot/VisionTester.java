@@ -9,10 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DriveControls;
-import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.instances.OpenMVBase;
 import frc.robot.subsystems.instances.OMVPortTracker;
 
@@ -24,21 +20,20 @@ import frc.robot.subsystems.instances.OMVPortTracker;
  */
 public class VisionTester extends TimedRobot {
 
+
+  public static OpenMVBase portTrackerCamera;
+
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  public static OpenMVBase camera;
-
-
-  // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
-    //OpenMVBase camera = new OpenMVBase(1);
-    OpenMVBase camera = new OMVPortTracker(1);
-    camera.register();
+    // OpenMVBase camera = new OpenMVBase(1);
+    OpenMVBase portTrackerCamera = new OMVPortTracker(1);
+    portTrackerCamera.register();
     System.out.println("VisionTester Init");
   }
 
