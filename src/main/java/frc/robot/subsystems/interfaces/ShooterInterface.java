@@ -59,7 +59,7 @@ public interface ShooterInterface {
     * Disable the hood axis control so that it is "limp". Setting a new hood angle will
     * re-enable the hood axis control.
     */
-    void disableHood();
+    public void disableHood();
 
    /**
     * Return the current hood angle in radians.

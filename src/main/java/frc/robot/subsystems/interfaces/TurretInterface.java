@@ -19,10 +19,10 @@ public interface TurretInterface {
      * Set the target pointing angle of the turret. It will move continuously toward this angle.
      * This command only works if the turret has been indexed and isIndexed returns true.
      * 
-     * @param angle in radians.
+     * @param azimuth angle in radians.
      * @return True if position is set, false if turret has not been indexed.
      */
-    public boolean setPosition(double angle);
+    public boolean setPosition(double azimuth);
 
     /**
      * Return the maximum turret angle in radians.

@@ -25,18 +25,76 @@ public class Turret extends SubsystemBase implements TurretInterface {
   }
 
   @Override
-  public void setPosition(double angle) {
-    
+  public boolean setPosition(double azimuth) {
+    return false;
   }
 
+  /**
+   * Return the maximum turret angle in radians.
+   * @return Maximum turret angle in radians.
+   */
   @Override
-  public void setPID(double P, double I, double D) {
-    
+  public double getMaxPosition() {
+    return 1.0;
   }
 
+  /**
+   * Return the minimum turret angle in radians.
+   * @return Minimum turret angle in radians.
+   */
+  @Override
+  public double getMinPosition() {
+    return -1.0;
+  }
+
+  /**
+   * Set the turret rotation to a closed loop velocity given in radians/second. This command
+   * works even if the turret has not been indexed.
+   * 
+   * @param angular_rate is rotation speed in radians/second.
+   * @return True if turret is indexed, false if turret has not been indexed.
+   */
+  @Override
+  public boolean setVelocity(double angular_rate) {
+    return false;
+  }
+
+  /**
+   * Disable the motor controls of the turret so that it will be 'limp'. 
+   * Sending any position or velocity command will re-enable the turret.
+   */
+  @Override
+  public void disable() {
+
+  }
+
+  /**
+   * Return the azimuth angle of the turret in radians. This
+   * value is only meaningful if isIndexed is true.
+   * 
+   * @return angle of the turret in Radians.
+   */
   @Override
   public double getPosition() {
-    return 0;
+    return 0.0;
+  }
+
+  /**
+   * Return the current turret velocity in radians / second.
+   * @return angular rate of the turret in radians/second.
+   */
+  @Override
+  public double getVelocity() {
+    return 0.0;
+  }
+
+  /**
+   * Return true if the turret has been indexed.
+   * @return True if the turret has been indexed, false if it has not been indexed.
+   */
+  @Override
+  public boolean isIndexed() {
+    return false;
   }
   
 }
