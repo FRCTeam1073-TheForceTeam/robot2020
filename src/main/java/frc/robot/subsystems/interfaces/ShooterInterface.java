@@ -8,18 +8,74 @@
 package frc.robot.subsystems.interfaces;
 
 /**
- * Add your docs here.
+ * This interface is implemented by flywheel based shooter subsystems. The Flywheel
+ * shooter provides control over a velocity-based flywheel and a position based hood
+ * axis. It provides feedback on flywheel velocity and hood position and limits.
+ * 
  */
 public interface ShooterInterface {
 
-    void setSpeed(double speed);
+    /**
+     * Set the flywheel speed in radians/second. This sets a closed loop target velocity
+     * for a flywheel and it will accelerate toward the target speed.
+     * The speed will be clamped to the allowable speed limits.
+     * @param speed in radians/second.
+     */
+   public void setFlywheelSpeed(double speed);
 
-    void increaseSpeed(double speed);
+   /**
+    * Return the maximum flywheel speed.
+    * @return Maximum flywheel speed in radians/second.
+    */
+   public double getMaximumFlywheelSpeed();
 
-    void decreaseSpeed(double speed);
+   /**
+    * Disable the motor axis of the flywheel so that it is limp. Sending a new speed command
+    * will re-enable the flywheel.
+    */
+   public void disableFlywheel();
 
-    void setPID(double P, double I, double D);
+   /**
+    * Return the flywheel speed in radians/second.
+    * @return Flywheel speed in radians/second.
+    */
+   public double getFlywheelSpeed();
 
-    double getSpeed();
+   /**
+    * Return the flywheel motor internal temperature.
+    * @return temperature in degrees C.
+    */
+    public double getInternalTemperature();
+
+   /**
+    * Set the target hood angle. The hood will move toward this angle and hold this angle under
+    * closed loop control. This command is only valid if the hood has been indexed.
+    *
+    * @param angle Angular postiion of the hood in radians.
+    */
+   public void setHoodAngle(double angle);
+
+   /**
+    * Disable the hood axis control so that it is "limp". Setting a new hood angle will
+    * re-enable the hood axis control.
+    */
+    public void disableHood();
+
+   /**
+    * Return the current hood angle in radians.
+    */
+   public double getHoodAngle();
+
+   /**
+    * Return the minimum allowed hood angle in radians.
+    * @return
+    */
+   public double getMinHoodAngle();
+
+   /**
+    * Return the maximum allowed hood angle in radians.
+    * @return
+    */
+   public double getMaxHoodAngle();
 
 }

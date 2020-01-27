@@ -30,7 +30,7 @@ public class ShooterControls extends CommandBase {
   @Override
   public void execute() {
     speed = 0;
-    shooter.setSpeed(speed);
+    shooter.setFlywheelSpeed(speed);
   }
 
   // Returns true when the command should end.
