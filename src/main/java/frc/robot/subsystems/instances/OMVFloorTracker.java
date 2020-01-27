@@ -7,16 +7,24 @@
 
 package frc.robot.subsystems.instances;
 
-import frc.robot.subsystems.interfaces.BallTrackerInterface;
+import frc.robot.subsystems.interfaces.SimpleTrackerInterface;
 import frc.robot.subsystems.interfaces.LineTrackerInterface;
 
 // Implementation for floor tracking cameras which track balls and line segments on floor,
-public class OMVFloorTracker extends OpenMVBase implements BallTrackerInterface{
+public class OMVFloorTracker extends OpenMVBase implements SimpleTrackerInterface , LineTrackerInterface {
+
+  private long lastTargetUpdate;
+  private long lastLineUpdate;
+  private SimpleTrackerInterface.TargetData[] targets;
+  private LineTrackerInterface.LineData[] lines;
+
   /**
    * Creates a new OMVBallTracker.
    */
   public OMVFloorTracker(int deviceId) {
     super(deviceId);
+    targets = new SimpleTrackerInterface.TargetData[6];
+    lines = new LineTrackerInterface.LineData[6];
   }
 
   @Override
@@ -25,5 +33,26 @@ public class OMVFloorTracker extends OpenMVBase implements BallTrackerInterface{
     // Call base class method
     super.periodic();
     
+    // TODO: Call read and parsing methods.
+  }
+
+  @Override
+  public SimpleTrackerInterface.TargetData[] getSimpleTargets() {
+    return targets;
+  }
+
+  @Override
+  public long getLastSimpleTargetUpdate() {
+    return lastTargetUpdate;
+  }
+
+  @Override
+  public LineTrackerInterface.LineData[] getLineData() {
+    return lines;
+  }
+
+  @Override
+  public long getLastLineDataUpdate() {
+    return lastLineUpdate;
   }
 }
