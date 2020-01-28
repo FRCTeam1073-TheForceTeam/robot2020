@@ -9,6 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.OI;
+import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class TurretControls extends CommandBase {
@@ -28,8 +30,16 @@ public class TurretControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double position = 0;
-    turret.setPosition(position);
+    // double targetX = 10;
+    // double targetY = 10;
+    // Pose2d pose = Robot.drivetrain.getRobotPose();
+    // double robotX=pose.getTranslation().getX();
+    // double robotY=pose.getTranslation().getY();
+    // double angle = Math.atan2(targetY - robotY, targetX - robotX);
+    double angle = Math.atan2(OI.operatorController.getRawAxis(1), OI.operatorController.getRawAxis(0));
+    // double adjustedAngle = angle - Robot.drivetrain.getAngleRadians().getRadians();
+    System.out.println(angle);
+    turret.setPosition(angle);
   }
 
   // Returns true when the command should end.
