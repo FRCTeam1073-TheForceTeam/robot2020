@@ -58,31 +58,100 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // TODO: Fill in what it needs...
+    // Sample flywheel speed, hood position, flywheel temperature, etc.
   }
 
-  @Override
-  public void setSpeed(double speed) {
-    shooterFlywheel1.set(speed);
-    shooterFlywheel2.set(speed);
-  }
+    /**
+     * Set the flywheel speed in radians/second. This sets a closed loop target velocity
+     * for a flywheel and it will accelerate toward the target speed.
+     * The speed will be clamped to the allowable speed limits.
+     * @param speed in radians/second.
+     */
+    @Override
+    public void setFlywheelSpeed(double speed) {
+      
+    }
 
-  @Override
-  public void increaseSpeed(double speed) {
+    /**
+     * Return the maximum flywheel speed.
+     * @return Maximum flywheel speed in radians/second.
+     */
+    @Override
+    public double getMaximumFlywheelSpeed() {
+      return 11.0;
+    }
+ 
+    /**
+     * Disable the motor axis of the flywheel so that it is limp. Sending a new speed command
+     * will re-enable the flywheel.
+     */
+    @Override
+    public void disableFlywheel() {
 
-  }
+    }
+ 
+    /**
+     * Return the flywheel speed in radians/second.
+     * @return Flywheel speed in radians/second.
+     */
+    @Override
+    public double getFlywheelSpeed() {
+      return 11.0;
+    }
+ 
+    /**
+     * Return the flywheel motor internal temperature.
+     * @return temperature in degrees C.
+     */
+    @Override
+     public double getInternalTemperature() {
+       return 99.9;
+     }
+ 
+    /**
+     * Set the target hood angle. The hood will move toward this angle and hold this angle under
+     * closed loop control. This command is only valid if the hood has been indexed.
+     *
+     * @param angle Angular postiion of the hood in radians.
+     */
+    @Override
+    public void setHoodAngle(double angle) {
 
-  @Override
-  public void decreaseSpeed(double speed) {
-    
-  }
+    }
+ 
+    /**
+     * Disable the hood axis control so that it is "limp". Setting a new hood angle will
+     * re-enable the hood axis control.
+     */
+     @Override
+     public void disableHood() {
 
-  @Override
-  public void setPID(double P, double I, double D){
-
-  }
-
-  @Override
-  public double getSpeed() {
-    return 0;
-  }
+     }
+ 
+    /**
+     * Return the current hood angle in radians.
+     */
+    @Override
+    public double getHoodAngle() {
+      return 0.0;
+    }
+ 
+    /**
+     * Return the minimum allowed hood angle in radians.
+     * @return
+     */
+    @Override
+    public double getMinHoodAngle() {
+      return 0.0;
+    }
+ 
+    /**
+     * Return the maximum allowed hood angle in radians.
+     * @return
+     */
+    @Override
+    public double getMaxHoodAngle() {
+      return 3.14;
+    }
 }
