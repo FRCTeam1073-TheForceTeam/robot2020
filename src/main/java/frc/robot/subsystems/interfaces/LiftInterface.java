@@ -13,4 +13,7 @@ package frc.robot.subsystems.interfaces;
 public interface LiftInterface {
 
     void toPosition();
+    void completeUp();
+    void completeDown();
+    void gearShift();
 }
