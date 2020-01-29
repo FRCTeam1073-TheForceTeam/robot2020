@@ -62,6 +62,16 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     // Sample flywheel speed, hood position, flywheel temperature, etc.
   }
 
+     /**
+    * Return the timestamp of the last hood update.
+    * @return
+    */
+    @Override
+    public long getLastShooterUpdate() {
+      // TODO: Return the last update of shooter state timestmap.
+      return 0;
+    }
+
     /**
      * Set the flywheel speed in radians/second. This sets a closed loop target velocity
      * for a flywheel and it will accelerate toward the target speed.
@@ -105,8 +115,8 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      * @return temperature in degrees C.
      */
     @Override
-     public double getInternalTemperature() {
-       return 99.9;
+     public double[] getInternalTemperature() {
+       return new double[2];
      }
  
     /**
@@ -114,12 +124,23 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      * closed loop control. This command is only valid if the hood has been indexed.
      *
      * @param angle Angular postiion of the hood in radians.
+     * @return True if the hood is indexed and we can set angles. False if the hood is not indexed.
      */
     @Override
-    public void setHoodAngle(double angle) {
-
+    public boolean setHoodAngle(double angle) {
+      return false;
     }
- 
+
+   /**
+    * Set the hood to move in velocity mode which can be done without indexing the hood.
+    * @param angle_rate
+    * @return True if the hood is indexed, 
+    */
+    @Override
+    public boolean setHoodVelocity(double angle_rate) {
+      return false;
+    }
+
     /**
      * Disable the hood axis control so that it is "limp". Setting a new hood angle will
      * re-enable the hood axis control.
@@ -153,5 +174,11 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     @Override
     public double getMaxHoodAngle() {
       return 3.14;
+    }
+
+    @Override
+    public boolean hoodIsIndexed() {
+      // TODO: Return the hood index state.
+      return false;
     }
 }
