@@ -24,6 +24,16 @@ public class Turret extends SubsystemBase implements TurretInterface {
     // This method will be called once per scheduler run
   }
 
+    /**
+     * Return the timestamp of the last turret state update.
+     * @return
+     */
+    @Override
+    public long getLastTurretUpdate() {
+      // TODO: Return last update timestamp for turret state.
+      return 0;
+    }
+
   @Override
   public boolean setPosition(double azimuth) {
     return false;
