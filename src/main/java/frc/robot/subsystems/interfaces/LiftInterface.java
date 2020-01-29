@@ -7,10 +7,28 @@
 
 package frc.robot.subsystems.interfaces;
 
-/**
- * Add your docs here.
- */
 public interface LiftInterface {
 
-    void toPosition();
+    // brake control
+    void setBrakeOn();
+    void setBrakeOff();
+    boolean isBrakeSet();
+
+    // winch engage
+    void engageWinch();
+    void disengageWinch();
+    boolean isWinchEngaged();
+
+    // potentiometer
+    boolean isLiftFullyExtended();
+    boolean isLiftFullyRetracted();
+    double liftPosition();
+
+    // motors
+    void setPower(double power);
+
+    // pin
+    void pinLift();
+    void unpinLift();
+    boolean isPinned();
 }
