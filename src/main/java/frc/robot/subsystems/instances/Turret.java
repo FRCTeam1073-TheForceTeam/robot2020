@@ -9,20 +9,24 @@ package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+//import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+//import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class Turret extends SubsystemBase implements TurretInterface {
   WPI_TalonSRX turretRotator;
-  private final double ticksPerRadian = 2048 / (2 * Math.PI);
+  private final double ticksPerRadian = 1440 / (2 * Math.PI);
   private double range = 350;
-  private double P = 1;
-  private double I = 0;
-  private double D = 0;
+  private double P = 0.2;
+  private double I = 0.001;
+  private double D = 5;
   private boolean disabled = false;
 
   public Turret() {
@@ -34,24 +38,29 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.configPeakOutputReverse(-1);
     turretRotator.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     turretRotator.config_kP(0, P);
-    turretRotator.config_kP(0, I);
-    turretRotator.config_kP(0, D);
+    turretRotator.config_kI(0, I);
+    turretRotator.config_kD(0, D);
     turretRotator.setSelectedSensorPosition(0);
     turretRotator.setIntegralAccumulator(0);
-
+    // turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen);
+    // turretRotator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
   }
 
   @Override
   public void periodic() {
-    turretRotator.set(0.1);
+    SmartDashboard.putNumber("error", turretRotator.getClosedLoopError());
+    System.out.println("error" + turretRotator.getClosedLoopError());
     // This method will be called once per scheduler run
   }
 
   @Override
   public boolean setPosition(double azimuth) {
+    if (!isIndexed()) {
+      return false;
+    }
     if (disabled) {
       disabled = false;
-      turretRotator.setNeutralMode(NeutralMode.Brake);
+      turretRotator.setNeutralMode(NeutralMode.Coast);
     }
     turretRotator.set(ControlMode.Position, azimuth * ticksPerRadian);
     return true;
@@ -59,6 +68,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   /**
    * Return the maximum turret angle in radians.
+   * 
    * @return Maximum turret angle in radians.
    */
   @Override
@@ -68,6 +78,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   /**
    * Return the minimum turret angle in radians.
+   * 
    * @return Minimum turret angle in radians.
    */
   @Override
@@ -76,8 +87,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
   }
 
   /**
-   * Set the turret rotation to a closed loop velocity given in radians/second. This command
-   * works even if the turret has not been indexed.
+   * Set the turret rotation to a closed loop velocity given in radians/second.
+   * This command works even if the turret has not been indexed.
    * 
    * @param angular_rate is rotation speed in radians/second.
    * @return True if turret is indexed, false if turret has not been indexed.
@@ -88,14 +99,14 @@ public class Turret extends SubsystemBase implements TurretInterface {
       disabled = false;
       turretRotator.setNeutralMode(NeutralMode.Brake);
     }
-    //Multiplying speed by 10 because it's ticks/100ms, so 10*ticks/sec
+    // Multiplying speed by 10 because it's ticks/100ms, so 10*ticks/sec
     turretRotator.set(ControlMode.Velocity, angular_rate * ticksPerRadian * 10);
-    return false;
+    return isIndexed();
   }
 
   /**
-   * Disable the motor controls of the turret so that it will be 'limp'. 
-   * Sending any position or velocity command will re-enable the turret.
+   * Disable the motor controls of the turret so that it will be 'limp'. Sending
+   * any position or velocity command will re-enable the turret.
    */
   @Override
   public void disable() {
@@ -104,18 +115,19 @@ public class Turret extends SubsystemBase implements TurretInterface {
   }
 
   /**
-   * Return the azimuth angle of the turret in radians. This
-   * value is only meaningful if isIndexed is true.
+   * Return the azimuth angle of the turret in radians. This value is only
+   * meaningful if isIndexed is true.
    * 
    * @return angle of the turret in Radians.
    */
   @Override
   public double getPosition() {
-    return turretRotator.getSelectedSensorPosition()/ticksPerRadian;
+    return turretRotator.getSelectedSensorPosition() / ticksPerRadian;
   }
 
   /**
    * Return the current turret velocity in radians / second.
+   * 
    * @return angular rate of the turret in radians/second.
    */
   @Override
@@ -125,11 +137,12 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   /**
    * Return true if the turret has been indexed.
-   * @return True if the turret has been indexed, false if it has not been indexed.
+   * 
+   * @return True if the turret has been indexed, false if it has not been
+   *         indexed.
    */
   @Override
   public boolean isIndexed() {
-    return false;
+    return turretRotator.isFwdLimitSwitchClosed() == 1;
   }
-  
 }
