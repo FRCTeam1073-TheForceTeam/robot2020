@@ -130,6 +130,7 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
+*.DS_Store
 
 # Windows shortcuts
 *.lnk
