@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.LiftInterface;
@@ -24,7 +23,6 @@ public class Lift extends SubsystemBase implements LiftInterface {
   private static WPI_TalonSRX rightMotorLeader;
   private static WPI_TalonSRX leftMotorFollower;
   private static WPI_TalonSRX rightMotorFollower;
-  private static Compressor compressor;
   private static Solenoid solenoid;
 
 
@@ -59,8 +57,6 @@ public class Lift extends SubsystemBase implements LiftInterface {
     leftMotorFollower.follow(leftMotorLeader);
     rightMotorFollower.follow(rightMotorLeader);
 
-    compressor = new Compressor(16);
-    compressor.setClosedLoopControl(true);
     solenoid = new Solenoid(17);
   }
 
