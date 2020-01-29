@@ -34,7 +34,7 @@ public class BlingControls extends CommandBase {
   @Override
   public void execute() {
     if (done == 0) {
-      burst(Robot.bling.m_ledBuffer.getLength(), 0, 0);
+      burst(Robot.bling.m_ledBuffer.getLength());
     }
 
     
@@ -45,45 +45,24 @@ public class BlingControls extends CommandBase {
     // blinkyLightsTwoColors();
 }
 
-  public int burst(int length, int first, int time) {
-    int done;
+  public int burst(int length) {
     int middle1;
     int middle2;
     int i1 = 0;
     int i2 = 0;
-    if (first == 0) {
-      middle1 = 0;
-      middle2 = 0;
-      if (length%2 == 1) {
-        middle1 = (length / 2);
-        middle2 = middle1;
-      } else {
-        middle1 = (int) (Math.round((length / 2) - 0.5));
-        middle2 = (int) (Math.round((length / 2) + 0.5));
-      }
-
-      i1 = middle1;
-      i2 = middle2;
-      time = 0;
-      first = first + 1;
-    }
     
-
+    middle1 = (int) (Math.floor((length / 2));
+    middle2 = (int) (Math.ceil((length / 2));
     
-    if (time <= 50) {
-      time = time + 1;
-    } else {
-      time = 0;
-      i1 = i1 - 1;
-      i2 = i2 + 1;
-    }
+    i1 = i1 - 1;
+    i2 = i2 + 1;
+
     Robot.bling.setPatternRGBAll(0, 0, 0);
     Robot.bling.setLED(i1, 255, 255, 255);
     Robot.bling.setLED(i2, 255, 255, 255);
 
     if (i2 == length) {
-      done = 1;
-      return done;
+      return 1;
     } else {
       return 0;
     }
