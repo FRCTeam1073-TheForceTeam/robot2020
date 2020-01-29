@@ -45,7 +45,7 @@ public interface ShooterInterface {
     * Return the flywheel motor internal temperature.
     * @return temperature in degrees C.
     */
-    public double getInternalTemperature();
+    public double[] getInternalTemperature();
 
    /**
     * Set the target hood angle. The hood will move toward this angle and hold this angle under

@@ -9,37 +9,45 @@ package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 
 public class Shooter extends SubsystemBase implements ShooterInterface {
-  private static WPI_TalonSRX shooterFlywheel1;
-  private static WPI_TalonSRX shooterFlywheel2;
+  private static WPI_TalonFX shooterFlywheel1;
+  private static WPI_TalonFX shooterFlywheel2;
+  private static CANSparkMax hood;
 
   /**
    * Creates a new Shooter.
    */
   public Shooter() {
-    shooterFlywheel1 = new WPI_TalonSRX(22);
-    shooterFlywheel2 = new WPI_TalonSRX(23);
+    shooterFlywheel1 = new WPI_TalonFX(22);
+    shooterFlywheel2 = new WPI_TalonFX(23);
+    hood = new CANSparkMax(24, MotorType.kBrushless);
 
     shooterFlywheel1.configFactoryDefault();
     shooterFlywheel2.configFactoryDefault();
+    hood.restoreFactoryDefaults();
 
     shooterFlywheel1.setSafetyEnabled(false);
     shooterFlywheel2.setSafetyEnabled(false);
 
     shooterFlywheel1.setNeutralMode(NeutralMode.Brake);
     shooterFlywheel2.setNeutralMode(NeutralMode.Brake);
+    hood.setIdleMode(IdleMode.kBrake);
 
     shooterFlywheel1.setInverted(false);
     shooterFlywheel2.setInverted(true);
+    hood.setInverted(false);
 
     shooterFlywheel2.follow(shooterFlywheel1);
 
-    shooterFlywheel1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    shooterFlywheel1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     shooterFlywheel1.setSensorPhase(true);
 
@@ -47,9 +55,14 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double I = 0;
     double D = 0;
 
+    double hoodP = 0;
+    double hoodI = 0;
+    double hoodD = 0;
+
     shooterFlywheel1.config_kP(0, P);
     shooterFlywheel1.config_kI(0, I);
     shooterFlywheel1.config_kD(0, D);
+
 
     shooterFlywheel1.setSelectedSensorPosition(0);
 
@@ -78,8 +91,10 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      * @return Maximum flywheel speed in radians/second.
      */
     @Override
-    public double getMaximumFlywheelSpeed() {
-      return 11.0;
+  public double getMaximumFlywheelSpeed() {
+      //Value needs to be determined experimentally
+      //TODO: Test this.
+      return 600.0;
     }
  
     /**
@@ -88,7 +103,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public void disableFlywheel() {
-
+      
     }
  
     /**
@@ -105,9 +120,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      * @return temperature in degrees C.
      */
     @Override
-     public double getInternalTemperature() {
-       return 99.9;
-     }
+    public double[] getInternalTemperature() {
+      return new double[] { shooterFlywheel1.getTemperature(), shooterFlywheel2.getTemperature() };
+    }
  
     /**
      * Set the target hood angle. The hood will move toward this angle and hold this angle under
@@ -152,6 +167,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public double getMaxHoodAngle() {
-      return 3.14;
+      return Math.PI;
     }
 }
