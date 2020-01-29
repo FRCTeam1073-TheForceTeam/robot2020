@@ -70,28 +70,56 @@ public class Lift extends SubsystemBase implements LiftInterface {
     
   }
 
-  @Override
-  public void toPosition() {
+  public void setBrakeOn() {
 
   }
 
-  @Override
-  public void completeUp() {
-
+  public void setBrakeOff() {
+    
   }
 
-  @Override
-  public void completeDown() {
-
-  }
-  /**
-   * 
-   * Changes the solinoid boolean
-   */
-  @Override
-  public void gearShift(){
-    boolean isActive = solenoid.get();
-    solenoid.set(!isActive);
+  public boolean isBrakeSet() {
+    return true;
+    
   }
 
+  public void engageWinch() {
+    
+  }
+
+  public void disengageWinch() {
+    
+  }
+
+  public boolean isWinchEngaged() {
+    return true;
+  }
+
+  public boolean isLiftFullyExtended() {
+    return true;
+  }
+
+  public boolean isLiftFullyRetracted() {
+    return true;
+  }
+
+  public double liftPosition() {
+    return 0;
+  }
+
+  public void setPower(double power)  {
+    
+  }
+
+  public void pinLift() {
+    
+  }
+
+  public void unpinLift() {
+    
+  }
+
+  public boolean isPinned() {
+    return true;
+  }
 }
