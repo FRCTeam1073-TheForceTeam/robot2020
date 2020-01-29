@@ -15,6 +15,12 @@ package frc.robot.subsystems.interfaces;
  */
 public interface ShooterInterface {
 
+   /**
+    * Return the timestamp of the last hood update.
+    * @return
+    */
+    public long getLastShooterUpdate();
+
     /**
      * Set the flywheel speed in radians/second. This sets a closed loop target velocity
      * for a flywheel and it will accelerate toward the target speed.
@@ -42,7 +48,7 @@ public interface ShooterInterface {
    public double getFlywheelSpeed();
 
    /**
-    * Return the flywheel motor internal temperature.
+    * Return the flywheel motor internal temperature(s) as an array of doubles.
     * @return temperature in degrees C.
     */
     public double[] getInternalTemperature();
@@ -50,10 +56,18 @@ public interface ShooterInterface {
    /**
     * Set the target hood angle. The hood will move toward this angle and hold this angle under
     * closed loop control. This command is only valid if the hood has been indexed.
+    * Returns true if the hood is indexed.
     *
     * @param angle Angular postiion of the hood in radians.
     */
-   public void setHoodAngle(double angle);
+   public boolean setHoodAngle(double angle);
+
+   /**
+    * Set the hood to move in velocity mode which can be done without indexing the hood.
+    * @param angle_rate
+    * @return True if the hood is indexed, 
+    */
+   public boolean setHoodVelocity(double angle_rate);
 
    /**
     * Disable the hood axis control so that it is "limp". Setting a new hood angle will
@@ -77,5 +91,12 @@ public interface ShooterInterface {
     * @return
     */
    public double getMaxHoodAngle();
+
+   /**
+    * Return true if the hood is indexed. False if the hood mechanism is not indexed.
+    * Position commands are ignored until the hood is indexed.
+    * @return
+    */
+   public boolean hoodIsIndexed();
 
 }

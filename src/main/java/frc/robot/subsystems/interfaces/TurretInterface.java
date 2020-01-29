@@ -16,6 +16,12 @@ package frc.robot.subsystems.interfaces;
 public interface TurretInterface {
 
     /**
+     * Return the timestamp of the last turret state update.
+     * @return
+     */
+    public long getLastTurretUpdate();
+
+    /**
      * Set the target pointing angle of the turret. It will move continuously toward this angle.
      * This command only works if the turret has been indexed and isIndexed returns true.
      * 
