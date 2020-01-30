@@ -35,37 +35,45 @@ public class BlingControls extends CommandBase {
   public void execute() {
     if (done == 0) {
       burst(Robot.bling.m_ledBuffer.getLength());
+      Robot.bling.setPatternRGBAll(0, 0, 0);
     }
-
-    
-    // batteryBling(0, 6, 8, 12.5);
+    if (done == 1) {
+      blinkyLightsTwoColors();
+    }
+    //batteryBling(0, 6, 8, 12.5);
     // driverControlledLEDs(8, 4);
     // blinkyLights(14, 3);
     // movingLEDs(19, 7);
-    // blinkyLightsTwoColors();
+    
 }
 
   public int burst(int length) {
     int middle1;
     int middle2;
     int i1 = 0;
-    int i2 = 0;
+    int time2 = 0;
     
-    middle1 = (int) (Math.floor((length / 2));
-    middle2 = (int) (Math.ceil((length / 2));
-    
-    i1 = i1 - 1;
-    i2 = i2 + 1;
+    middle1 = (int) (Math.floor((length / 2)));
+    middle2 = (int) (Math.ceil((length / 2)));
+
+    i1 = middle1;
+
+    for (int i2 = middle2; i2 <= length;) {
+      if (time2 < 1000) {
+        time2 = time2 + 1;
+      } else {
+        time2 = 0;
+        i1 = i1 - 1;
+        i2 = i2 + 1;
+        Robot.bling.setPatternRGBAll(0, 0, 0);
+      }
+      Robot.bling.setLED(i1, 255, 255, 255);
+      Robot.bling.setLED(i2, 255, 255, 255);
+    }
 
     Robot.bling.setPatternRGBAll(0, 0, 0);
-    Robot.bling.setLED(i1, 255, 255, 255);
-    Robot.bling.setLED(i2, 255, 255, 255);
-
-    if (i2 == length) {
-      return 1;
-    } else {
-      return 0;
-    }
+    done = 1;
+    return done;
   }
 
   public void blinkyLightsTwoColors() {
