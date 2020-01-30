@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -103,8 +104,9 @@ public class Lift extends SubsystemBase implements LiftInterface {
     return 0;
   }
 
-  public void setPower(double power)  {
-    
+  public void setPower(double powerPercent)  {
+    leftMotorLeader.set(ControlMode.PercentOutput, powerPercent);
+    rightMotorLeader.set(ControlMode.PercentOutput, powerPercent);
   }
 
   public void pinLift() {
