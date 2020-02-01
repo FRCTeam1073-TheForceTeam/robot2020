@@ -36,17 +36,19 @@ public class Lift extends SubsystemBase implements LiftInterface {
 
 
   public Lift() {
+
+    // Enables 2-bit averaging
+    potentiometerValue.setAverageBits(2);
     
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
+    isBrakeSet();
     liftExtension();
-
-    // Enables 2-bit averaging
-    potentiometerValue.setAverageBits(2);
-
+    isPinned();
 
   }
 
@@ -73,9 +75,11 @@ public class Lift extends SubsystemBase implements LiftInterface {
     return true;
   }
 
-  public double liftPosition() {
-    // Returns the current position of the lift
-    return 0;
+  public double liftExtension() {
+
+    // returns in the scale from minLiftExtention to maxLiftExtention
+    return potentiometer.get();
+
   }
 
   public void pinLift() {
@@ -91,11 +95,5 @@ public class Lift extends SubsystemBase implements LiftInterface {
     return true;
   }
 
-  public double liftExtension() {
-
-    // returns in the scale from minLiftExtention to maxLiftExtention
-    return potentiometer.get();
-
-  }
-
+  
 }
