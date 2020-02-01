@@ -187,6 +187,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   public boolean setHoodAngle(double angle) {
     if (isHoodIndexed) {
       return false;
+
     }
     isHoodDisabled = false;
     hood.setIdleMode(IdleMode.kBrake);
@@ -205,6 +206,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   public boolean setHoodVelocity(double angle_rate) {
     if (isHoodDisabled) {
       return false;
+
     }
     hoodController.setReference(angle_rate / (2 * Math.PI) * 60, ControlType.kVelocity);
     return hoodIsIndexed();
@@ -226,6 +228,11 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   @Override
   public double getHoodAngle() {
     return hoodAngle;
+  }
+
+  @Override
+  public double getHoodVelocity() {
+    return 0;
   }
 
   /**
