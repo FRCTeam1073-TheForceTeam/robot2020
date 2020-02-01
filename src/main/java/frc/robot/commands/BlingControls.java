@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
@@ -15,7 +16,12 @@ import frc.robot.commands.BlingControls;
 
 
 public class BlingControls extends CommandBase {
-  int done;
+  int burst_done;
+  int burstCount;
+  int time;
+  int leds_from_middle;
+  double match_time;
+
   /**
    * Creates a new BlingControls.
    */
@@ -27,65 +33,71 @@ public class BlingControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    done = 0;
+    burst_done = 0;
+    time = 0;
+    leds_from_middle = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (done == 0) {
-      burst(Robot.bling.m_ledBuffer.getLength());
+    match_time = DriverStation.getInstance().getMatchTime();
+
+    //if (burst_done == 0) {
+    //  burst(Robot.bling.m_ledBuffer.getLength());
+    //  Robot.bling.setPatternRGBAll(0, 0, 0);
+    //}
+    //if (burst_done == 1) {
+    if (match_time < 30) {
+      blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
+    } else {
       Robot.bling.setPatternRGBAll(0, 0, 0);
     }
-    if (done == 1) {
-      blinkyLightsTwoColors();
-    }
-    //batteryBling(0, 6, 8, 12.5);
+    //}
+    
+
+     
     // driverControlledLEDs(8, 4);
     // blinkyLights(14, 3);
     // movingLEDs(19, 7);
-    
-}
-
-  public int burst(int length) {
-    int middle1;
-    int middle2;
-    int i1 = 0;
-    int time2 = 0;
-    
-    middle1 = (int) (Math.floor((length / 2)));
-    middle2 = (int) (Math.ceil((length / 2)));
-
-    i1 = middle1;
-
-    for (int i2 = middle2; i2 <= length;) {
-      if (time2 < 1000) {
-        time2 = time2 + 1;
-      } else {
-        time2 = 0;
-        i1 = i1 - 1;
-        i2 = i2 + 1;
-        Robot.bling.setPatternRGBAll(0, 0, 0);
-      }
-      Robot.bling.setLED(i1, 255, 255, 255);
-      Robot.bling.setLED(i2, 255, 255, 255);
-    }
-
-    Robot.bling.setPatternRGBAll(0, 0, 0);
-    done = 1;
-    return done;
   }
 
-  public void blinkyLightsTwoColors() {
-    int time2 = 0;
-    if (time2 < 50) {
-      Robot.bling.setPatternHSVAll(240, 50, 50);
-      time2 = time2 + 1;
-    } else if (time2 < 100) {
-      Robot.bling.setPatternRGBAll(255, 42, 0);
-      time2 = time2 + 1;
+
+  public int burst(int length) {    
+    // Calculates the middle led(s) of the led string
+    int middle1 = (int) (Math.floor((length / 2)));
+    int middle2 = (int) (Math.ceil((length / 2)));
+    
+    
+    if ((leds_from_middle + middle2) <= length && time < 50) {
+      // Wait until the 2000th time
+      time = time + 1;
+    } else if ((leds_from_middle + middle2) <= length) {
+      time = 0;
+      leds_from_middle = leds_from_middle + 1;
+      Robot.bling.setPatternRGBAll(0, 0, 0);
+      Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
     } else {
-      time2 = 0;
+      burst_done = 1;
+      Robot.bling.setPatternRGBAll(0, 0, 0);
+      time = 0;
+    }
+
+    Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
+    
+    return burst_done;
+  }
+
+
+  public void blinkyLightsTwoColors(int h, int s, int v, int r, int g, int b) {
+    if (time < 50) {
+      Robot.bling.setPatternHSVAll(h, s, v);
+      time = time + 1;
+    } else if (time < 100) {
+      Robot.bling.setPatternRGBAll(r, g, b);
+      time = time + 1;
+    } else {
+      time = 0;
     }
   }
 

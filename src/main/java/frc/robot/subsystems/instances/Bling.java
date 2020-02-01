@@ -11,6 +11,8 @@ public class Bling extends SubsystemBase implements BlingInterface {
   public AddressableLEDBuffer m_ledBuffer;
   public XboxController driverController;
 
+  int time = 0;
+
   public Bling() {
     m_led = new AddressableLED(7);
     m_ledBuffer = new AddressableLEDBuffer(29);
@@ -70,6 +72,12 @@ public class Bling extends SubsystemBase implements BlingInterface {
   }
   public void setLED(int i, int r, int g, int b) {
     m_ledBuffer.setRGB(i, r, g, b);
+    m_led.setData(m_ledBuffer);
+  }
+
+  public void setLEDs2(int i, int i2, int r, int g, int b) {
+    m_ledBuffer.setRGB(i, r, g, b);
+    m_ledBuffer.setRGB(i2, r, g, b);
     m_led.setData(m_ledBuffer);
   }
 }
