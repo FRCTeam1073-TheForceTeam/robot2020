@@ -43,23 +43,28 @@ public class BlingControls extends CommandBase {
   public void execute() {
     match_time = DriverStation.getInstance().getMatchTime();
 
-    //if (burst_done == 0) {
-    //  burst(Robot.bling.m_ledBuffer.getLength());
-    //  Robot.bling.setPatternRGBAll(0, 0, 0);
-    //}
-    //if (burst_done == 1) {
-    if (match_time < 30) {
+    if (burst_done == 0) {
+      burst(Robot.bling.m_ledBuffer.getLength());
+      Robot.bling.setPatternRGBAll(0, 0, 0);
+    }
+    if (burst_done == 1) {
+      
+    /* if (match_time < 30) {
       blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
     } else {
       Robot.bling.setPatternRGBAll(0, 0, 0);
+    } */
     }
-    //}
     
 
      
     // driverControlledLEDs(8, 4);
     // blinkyLights(14, 3);
     // movingLEDs(19, 7);
+  }
+
+  public void GameData() {
+    if (Robot.gameData.getGameData() returns "A")
   }
 
 
