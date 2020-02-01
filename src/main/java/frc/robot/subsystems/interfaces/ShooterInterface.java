@@ -63,6 +63,11 @@ public interface ShooterInterface {
    public boolean setHoodAngle(double angle);
 
    /**
+    * Resets hood.
+    */
+   public void resetHood();
+
+   /**
     * Set the hood to move in velocity mode which can be done without indexing the hood.
     * @param angle_rate
     * @return True if the hood is indexed, 
