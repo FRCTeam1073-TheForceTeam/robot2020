@@ -19,7 +19,6 @@ public class Lift extends SubsystemBase implements LiftInterface {
 
 
   public Lift() {
-    
     solenoid = new Solenoid(17);
   }
 
@@ -30,39 +29,43 @@ public class Lift extends SubsystemBase implements LiftInterface {
   }
 
   public void setBrakeOn() {
-
+    // Turns on the brake
   }
 
   public void setBrakeOff() {
-    
+    // Turns off the brake
   }
 
   public boolean isBrakeSet() {
+    // Checks to see if the brake is set
     return true;
-    
   }
 
   public boolean isLiftFullyExtended() {
+    // Checks to see if the lift is fully extended
     return true;
   }
 
   public boolean isLiftFullyRetracted() {
+    // Checks to see if the lift is fully retracted
     return true;
   }
 
   public double liftPosition() {
+    // Returns the current position of the lift
     return 0;
   }
 
   public void pinLift() {
-    
+    // Replaces the pin in the lift
   }
 
   public void unpinLift() {
-    
+    // Removes the pin in the lift
   }
 
   public boolean isPinned() {
+    // Checks to see if the lift is pinned or not
     return true;
   }
 }
