@@ -20,10 +20,10 @@ public class Lift extends SubsystemBase implements LiftInterface {
   Solenoid solenoid = new Solenoid(17);
 
   // that is the measured length if the voltage from the potentiometer is 0 (the minimum)
-  double minLiftExtention = 0.0;
+  double minLiftExtension = 0.0;
 
   // that is the measured length if the voltage from the potentiometer is 1 (the maximum)
-  double maxLiftExtention = 1.0;
+  double maxLiftExtension = 1.0;
 
   // defines the potentiometerPort
   int potentiometerPort = 0;
@@ -32,7 +32,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
 
   // Initializes an AnalogPotentiometer on port "potentiometerValue"
-  AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtention, maxLiftExtention);
+  AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
 
 
   public Lift() {
@@ -45,7 +45,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+
     isBrakeSet();
     liftExtension();
     isPinned();
