@@ -39,34 +39,33 @@ public class BlingControls extends CommandBase {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    match_time = DriverStation.getInstance().getMatchTime();
+//  @Override
+//  public void execute() {
+//    match_time = DriverStation.getInstance().getMatchTime();
 
-    if (burst_done == 0) {
-      burst(Robot.bling.m_ledBuffer.getLength());
-      Robot.bling.setPatternRGBAll(0, 0, 0);
-    }
-    if (burst_done == 1) {
+//    if (burst_done == 0) {
+//      burst(Robot.bling.m_ledBuffer.getLength());
+//      Robot.bling.setPatternRGBAll(0, 0, 0);
+//    }
+//    if (burst_done == 1) {
       
     /* if (match_time < 30) {
       blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
     } else {
       Robot.bling.setPatternRGBAll(0, 0, 0);
     } */
-    }
+//    }
     
 
      
     // driverControlledLEDs(8, 4);
     // blinkyLights(14, 3);
     // movingLEDs(19, 7);
-  }
+//  }
 
-  public void GameData() {
-    if (Robot.gameData.getGameData() returns "A")
-  }
-
+//  public void GameData() {
+//    if (Robot.gameData.getGameData() returns "A")
+//  }
 
   public int burst(int length) {    
     // Calculates the middle led(s) of the led string
