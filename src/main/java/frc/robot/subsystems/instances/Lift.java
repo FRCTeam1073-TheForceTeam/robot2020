@@ -7,7 +7,10 @@
 
 package frc.robot.subsystems.instances;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.LiftInterface;
 
@@ -17,15 +20,34 @@ public class Lift extends SubsystemBase implements LiftInterface {
    */
   private static Solenoid solenoid;
 
+  // that is the measured length if the voltage from the potentiometer is 0 (the minimum)
+  double minLiftExtention = 0.0;
+
+  // that is the measured length if the voltage from the potentiometer is 1 (the maximum)
+  double maxLiftExtention = 1.0;
+
+  // defines the potentiometerPort
+  int potentiometerPort = 0;
 
   public Lift() {
     solenoid = new Solenoid(17);
+
+    // Initializes an AnalogInput on port "potentiometerValue", and enables 2-bit averaging
+    AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
+  
+    // 
+    AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtention, maxLiftExtention);
+
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    liftExtension();
+
+
+
   }
 
   public void setBrakeOn() {
@@ -68,4 +90,17 @@ public class Lift extends SubsystemBase implements LiftInterface {
     // Checks to see if the lift is pinned or not
     return true;
   }
+
+  public void potentiometer() {
+
+    potentiometerValue.setAverageBits(2);
+  }
+
+  public double liftExtension() {
+
+    potentiometer.get();
+    return 0.0;
+
+  }
+
 }
