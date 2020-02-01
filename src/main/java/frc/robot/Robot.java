@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.BlingControls;
-import frc.robot.commands.DriveControls;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -46,21 +44,12 @@ public class Robot extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  public static Bling bling;
-  // public NetworkTableEntry value_P;
-  // public NetworkTableEntry value_I;
-  // public NetworkTableEntry value_D;
-  // public NetworkTableEntry update;
-
-
+  
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
-    bling = new Bling();
-    bling.register();
-    CommandScheduler.getInstance().setDefaultCommand(bling, new BlingControls());
 
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
