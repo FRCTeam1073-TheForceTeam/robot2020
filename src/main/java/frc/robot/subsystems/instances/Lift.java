@@ -19,21 +19,23 @@ public class Lift extends SubsystemBase implements LiftInterface {
    */
   Solenoid solenoid = new Solenoid(17);
 
-  // that is the measured length if the voltage from the potentiometer is 0 (the minimum)
-  double minLiftExtension = 0.0;
+  // that sets minimum possible value the potentiometer  can return (when the voltage from the potentiometer is 0 (the minimum))
+  private final double minLiftExtension = 0.0;
+  // that sets maximum possible value the potentiometer can return (when the voltage from the potentiometer is 1 (the maximum))
+  private final double maxLiftExtension = 1.0;
 
-  // that is the measured length if the voltage from the potentiometer is 1 (the maximum)
-  double maxLiftExtension = 1.0;
-
-  // defines the potentiometerPort
-  int potentiometerPort = 0;
+  // these values have to be set to the measured physical limits using the potentiometer HAVE TO BE SET
+  private final double physicalMinExtension = 0.0;
+  private final double physicalMaxExtension = 10.0;
+  
+  // defines the potentiometerPort HAS TO BE SET
+  private final int potentiometerPort = 0;
 
   // Initializes an AnalogInput on port "potentiometerPort"
   AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
 
   // Initializes an AnalogPotentiometer on port "potentiometerValue"
   AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
-
 
   public Lift() {
 
@@ -65,21 +67,31 @@ public class Lift extends SubsystemBase implements LiftInterface {
     return true;
   }
 
-  public boolean isLiftFullyExtended() {
-    // Checks to see if the lift is fully extended
-    return true;
-  }
-
-  public boolean isLiftFullyRetracted() {
-    // Checks to see if the lift is fully retracted
-    return true;
-  }
-
   public double liftExtension() {
 
     // returns in the scale from minLiftExtention to maxLiftExtention
     return potentiometer.get();
 
+  }
+
+  public boolean isLiftFullyRetracted() {
+    // Checks to see if the lift is fully retracted
+    if (liftExtension() <= physicalMinExtension) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  public boolean isLiftFullyExtended() {
+    // Checks to see if the lift is fully extended
+    if (liftExtension() >= physicalMaxExtension) {
+      return true;
+    } else {
+      return false;
+    }
+    
   }
 
   public void pinLift() {
@@ -94,6 +106,5 @@ public class Lift extends SubsystemBase implements LiftInterface {
     // Checks to see if the lift is pinned or not
     return true;
   }
-
   
 }
