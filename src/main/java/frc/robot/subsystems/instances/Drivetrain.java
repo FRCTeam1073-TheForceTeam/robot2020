@@ -158,17 +158,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
         //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
         // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
-        /*SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
-        SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
-        SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
-        SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
-        SmartDashboard.putNumber("lastGyroValue", lastGyroValue);
-        SmartDashboard.putNumber("gyroAngle", gyroAngle);
-        SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
-        SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
-        SmartDashboard.putNumber("Rotation", getAngleDegrees());
-        SmartDashboard.putNumber("leftPower", leftPower);
-        SmartDashboard.putNumber("rightPower", rightPower);*/
     }
 
     public Pose2d getRobotPose() {
