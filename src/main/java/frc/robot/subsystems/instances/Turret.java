@@ -30,13 +30,16 @@ public class Turret extends SubsystemBase implements TurretInterface {
      */
     @Override
     public long getLastTurretUpdate() {
-      // TODO: Return last update timestamp for turret state.
+
       return 0;
+
     }
 
   @Override
   public boolean setPosition(double azimuth) {
+
     return false;
+
   }
 
   /**
@@ -45,7 +48,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public double getMaxPosition() {
+
     return 1.0;
+
   }
 
   /**
@@ -54,7 +59,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public double getMinPosition() {
+
     return -1.0;
+
   }
 
   /**
@@ -66,7 +73,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public boolean setVelocity(double angular_rate) {
+
     return false;
+
   }
 
   /**
@@ -86,7 +95,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public double getPosition() {
+
     return 0.0;
+
   }
 
   /**
@@ -95,7 +106,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public double getVelocity() {
+
     return 0.0;
+
   }
 
   /**
@@ -104,7 +117,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public boolean isIndexed() {
+
     return false;
+    
   }
   
 }

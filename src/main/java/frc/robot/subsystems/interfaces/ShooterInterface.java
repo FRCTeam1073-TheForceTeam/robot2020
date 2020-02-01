@@ -96,7 +96,7 @@ public interface ShooterInterface {
     * Return the hood speed in radians/second.
     * @return Hood speed in radians/second.
     */
-    public double getHoodVelocity();
+   public double getHoodVelocity();
 
    /**
     * Return true if the hood is indexed. False if the hood mechanism is not indexed.

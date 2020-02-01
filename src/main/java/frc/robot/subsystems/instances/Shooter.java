@@ -58,7 +58,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // TODO: Fill in what it needs...
     // Sample flywheel speed, hood position, flywheel temperature, etc.
   }
 
@@ -68,8 +67,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     */
     @Override
     public long getLastShooterUpdate() {
-      // TODO: Return the last update of shooter state timestmap.
+
       return 0;
+
     }
 
     /**
@@ -89,7 +89,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public double getMaximumFlywheelSpeed() {
+
       return 11.0;
+
     }
  
     /**
@@ -107,7 +109,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public double getFlywheelSpeed() {
+
       return 11.0;
+
     }
  
     /**
@@ -116,7 +120,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
      public double[] getInternalTemperature() {
+
        return new double[2];
+
      }
  
     /**
@@ -128,7 +134,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public boolean setHoodAngle(double angle) {
+
       return false;
+
     }
 
    /**
@@ -138,7 +146,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     */
     @Override
     public boolean setHoodVelocity(double angle_rate) {
+
       return false;
+
     }
 
     /**
@@ -155,7 +165,16 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public double getHoodAngle() {
+
       return 0.0;
+
+    }
+
+    @Override
+    public double getHoodVelocity() {
+
+      return 0.0;
+
     }
  
     /**
@@ -164,7 +183,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public double getMinHoodAngle() {
+
       return 0.0;
+
     }
  
     /**
@@ -173,12 +194,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
      */
     @Override
     public double getMaxHoodAngle() {
+
       return 3.14;
+
     }
 
     @Override
     public boolean hoodIsIndexed() {
-      // TODO: Return the hood index state.
+
       return false;
+
     }
 }

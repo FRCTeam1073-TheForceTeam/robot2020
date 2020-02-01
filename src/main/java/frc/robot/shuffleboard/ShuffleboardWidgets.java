@@ -49,10 +49,17 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   int cellCount = 0;
 
+  boolean isBrakeset = false;
+  boolean isLiftFullyExtended = false;
+  boolean isLiftFullyRetracted = false;
+  double liftExtension = 0.0;
+  boolean isPinned = false;
+
   DrivetrainInterface drivetrain;
   TurretInterface turret;
   ShooterInterface shooter;
   MagazineInterface magazine;
+  LiftInterface lift;
 
     public ShuffleboardWidgets() {
 
@@ -121,7 +128,12 @@ public class ShuffleboardWidgets extends SubsystemBase {
       // Magazine Data COMPLETE
       cellCount = magazine.getCellCount();
 
-      // Climbing Data MISSING
+      // Climbing Data COMPLETE
+      isBrakeset = lift.isBrakeSet();
+      isLiftFullyExtended = lift.isLiftFullyExtended();
+      isLiftFullyRetracted = lift.isLiftFullyRetracted();
+      liftExtension = lift.liftExtension();
+      isPinned = lift.isPinned();
 
       // Wheel of Fortune Data MISSING
 
@@ -147,6 +159,12 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("hoodVelocity",hoodVelocity);
 
       tab.add("cellCount",cellCount);
+
+      tab.add("isBrakeset",isBrakeset);
+      tab.add("isLiftFullyExtended",isLiftFullyExtended);
+      tab.add("isLiftFullyRetracted",isLiftFullyRetracted);
+      tab.add("liftExtension",liftExtension);
+      tab.add("isPinned",isPinned);
       
     }
 
