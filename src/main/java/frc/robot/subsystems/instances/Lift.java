@@ -10,7 +10,6 @@ package frc.robot.subsystems.instances;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.LiftInterface;
 
@@ -18,7 +17,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   /**
    * Creates a new Lift.
    */
-  private static Solenoid solenoid;
+  Solenoid solenoid = new Solenoid(17);
 
   // that is the measured length if the voltage from the potentiometer is 0 (the minimum)
   double minLiftExtention = 0.0;
@@ -29,16 +28,15 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // defines the potentiometerPort
   int potentiometerPort = 0;
 
+  // Initializes an AnalogInput on port "potentiometerPort"
+  AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
+
+  // Initializes an AnalogPotentiometer on port "potentiometerValue"
+  AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtention, maxLiftExtention);
+
+
   public Lift() {
-    solenoid = new Solenoid(17);
-
-    // Initializes an AnalogInput on port "potentiometerValue", and enables 2-bit averaging
-    AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
-  
-    // 
-    AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtention, maxLiftExtention);
-
-
+    
   }
 
   @Override
@@ -46,6 +44,8 @@ public class Lift extends SubsystemBase implements LiftInterface {
     // This method will be called once per scheduler run
     liftExtension();
 
+    // Enables 2-bit averaging
+    potentiometerValue.setAverageBits(2);
 
 
   }
@@ -91,15 +91,10 @@ public class Lift extends SubsystemBase implements LiftInterface {
     return true;
   }
 
-  public void potentiometer() {
-
-    potentiometerValue.setAverageBits(2);
-  }
-
   public double liftExtension() {
 
-    potentiometer.get();
-    return 0.0;
+    // returns in the scale from minLiftExtention to maxLiftExtention
+    return potentiometer.get();
 
   }
 
