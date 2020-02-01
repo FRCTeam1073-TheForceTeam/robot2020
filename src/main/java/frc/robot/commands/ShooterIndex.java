@@ -27,7 +27,7 @@ public class ShooterIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.shooter.setHoodVelocity(10);
+    Robot.shooter.setHoodVelocity(1);
   }
 
   // Called once the command ends or is interrupted.

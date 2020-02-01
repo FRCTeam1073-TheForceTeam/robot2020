@@ -92,6 +92,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static double hoodAngle = 0;
   private static long lastTimestamp = 0;
   private static double flywheelVelocity = 0;
+  private static final double hoodIndexAngle = 0;
 
   @Override
   public void periodic() {
@@ -170,7 +171,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
    * Resets hood.
    */
   public void resetHood() {
-    hoodEncoder.setPosition(0);
+    hoodEncoder.setPosition(hoodIndexAngle);
   }
 
   /**
@@ -215,7 +216,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
    */
   @Override
   public void disableHood() {
-    hood.setIdleMode(IdleMode.kCoast);
+    hood.setIdleMode(IdleMode.kBrake);
     isHoodDisabled = true;
   }
 
