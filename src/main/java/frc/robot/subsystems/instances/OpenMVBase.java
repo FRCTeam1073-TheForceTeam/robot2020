@@ -55,8 +55,8 @@ public class OpenMVBase extends SubsystemBase {
    * @param data - Must be 8 bytes or less in length.
    */
   public void write(int APIIndex, byte[] data) {
-    if(data.length <= 8)
-      openmv.writePacket(data, 8);
+    if (data.length <= 8)
+      openmv.writePacket(data, APIIndex);
   }
 
   /**
@@ -78,7 +78,7 @@ public class OpenMVBase extends SubsystemBase {
      */
   public boolean read(int APIIndex, CANData data) {
     return openmv.readPacketNew(APIIndex, data);
-    }
+  }
 
     /**
      * Send a CANBus packet to request that the OpenMV camera change modes.
