@@ -16,20 +16,11 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    */
   private static int cellCount;
   private static WPI_TalonSRX magMotor;
-  private static Ultrasonic entrance;
-  private static Ultrasonic exit;
-  private static Ultrasonic height;
+  private static final int ballDist = 2;
 
   public Magazine() {
     
     magMotor = new WPI_TalonSRX(24);
-    entrance = new Ultrasonic(1, 2);//temp. parameters
-    exit = new Ultrasonic(3, 4);//temp. parameters
-    height = new Ultrasonic(5, 6);//temp. parameters
-
-    enterance.setAutomaticMode(true);
-    exit.setAutomaticMode(true);
-    height.setAutomaticMode(true);
     
   }
 

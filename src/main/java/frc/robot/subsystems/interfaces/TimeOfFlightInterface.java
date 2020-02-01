@@ -4,8 +4,13 @@ import edu.wpi.first.wpilibj.*;
 
 public interface TimeOfFlight{
 
-    int convertTodistance();
+    int convertToDistance();
+    //will convert the signal from Time-Of-Flight sensor to Distance value
 
     int getSignal();
+    //return the raw signal from the Time-Of-Flight sensor
+
+    void set(boolean isOn);
+    //turns sensor on or off
 
 }
