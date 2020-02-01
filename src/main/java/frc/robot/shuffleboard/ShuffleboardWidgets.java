@@ -101,25 +101,24 @@ public class ShuffleboardWidgets extends SubsystemBase {
       // Drivetrain Data INCOMPLETE
       leftEncoderValue = drivetrain.getLeftEncoder();
       rightEncoderValue = drivetrain.getRightEncoder();
-      
-      // Gyro Datas COMPLETE
+        // Gyro Datas COMPLETE
       gyroAngleDegrees = drivetrain.getAngleDegrees();
       Pose2d pose = drivetrain.getRobotPose();
       robotX = pose.getTranslation().getX();
       robotY = pose.getTranslation().getY();
       robotRotation = pose.getRotation().getDegrees();
 
-      // Turret Data INCOMPLETE
+      // Turret Data INCOMPLETE?
       turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
       turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
 
-      // Shooter Data MISSING
+      // Shooter Data COMPLETE
       flywheelVelocity = shooter.getFlywheelSpeed() * (1 / Math.PI) * 180;
       flywheelTemperature = shooter.getInternalTemperature();
       hoodDegrees = shooter.getHoodAngle() * (1 / Math.PI) * 180;
       hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180; 
 
-      // Magazine Data MISSING
+      // Magazine Data COMPLETE
       cellCount = magazine.getCellCount();
 
       // Climbing Data MISSING
