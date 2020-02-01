@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.LiftInterface;
 
@@ -14,17 +15,54 @@ public class Lift extends SubsystemBase implements LiftInterface {
   /**
    * Creates a new Lift.
    */
-  public Lift() {
+  private static Solenoid solenoid;
 
+
+  public Lift() {
+    
+    solenoid = new Solenoid(17);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 
-  @Override
-  public void toPosition() {
+  public void setBrakeOn() {
 
+  }
+
+  public void setBrakeOff() {
+    
+  }
+
+  public boolean isBrakeSet() {
+    return true;
+    
+  }
+
+  public boolean isLiftFullyExtended() {
+    return true;
+  }
+
+  public boolean isLiftFullyRetracted() {
+    return true;
+  }
+
+  public double liftPosition() {
+    return 0;
+  }
+
+  public void pinLift() {
+    
+  }
+
+  public void unpinLift() {
+    
+  }
+
+  public boolean isPinned() {
+    return true;
   }
 }
