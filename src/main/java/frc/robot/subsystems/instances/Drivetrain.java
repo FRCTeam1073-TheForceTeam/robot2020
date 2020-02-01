@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.WinchInterface;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -16,7 +17,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
+public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 
@@ -157,6 +158,17 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
         // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
         //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
         // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
+        /*SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
+        SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
+        SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
+        SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
+        SmartDashboard.putNumber("lastGyroValue", lastGyroValue);
+        SmartDashboard.putNumber("gyroAngle", gyroAngle);
+        SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
+        SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
+        SmartDashboard.putNumber("Rotation", getAngleDegrees());
+        SmartDashboard.putNumber("leftPower", leftPower);
+        SmartDashboard.putNumber("rightPower", rightPower);*/
     }
 
     public Pose2d getRobotPose() {
@@ -231,4 +243,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface {
     public ChassisSpeeds getDrivetrainVelocity() {
         return kinematics.toChassisSpeeds(getWheelSpeeds());
     }
+
+    public void engageWinch(){}
+    public void disengageWinch(){}
+    public boolean isWinchEngaged(){
+        return false;
+    }
+
 }
