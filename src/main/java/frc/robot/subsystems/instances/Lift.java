@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Solenoid;
