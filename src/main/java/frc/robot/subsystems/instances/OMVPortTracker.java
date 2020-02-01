@@ -12,7 +12,6 @@ import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
 public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterface {
   private CANData targetData;
   private AdvancedTrackerInterface.AdvancedTargetData [] targets;
-  private int updateCounter = 0;
   private long lastUpdate = 0;
 
   /**
@@ -27,8 +26,8 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
 
   // Updates our config and mode:
   public boolean readAdvancedTracking() {
-    if (read(apiIndex(5,1), targetData) == true && targetData.length == 8) {
-      targets[0].cx = (targetData.data[0] << 4 ) | ((targetData.data[1] & 0xf0) >> 4);
+    if (read(apiIndex(5, 1), targetData) == true && targetData.length == 8) {
+      targets[0].cx = (targetData.data[0] << 4) | ((targetData.data[1] & 0xf0) >> 4);
       targets[0].cy = ((targetData.data[1] & 0x0f) << 4) | targetData.data[2];
       targets[0].vx = targetData.data[3];
       targets[0].vy = targetData.data[4];
@@ -37,7 +36,6 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       targets[0].skew = targetData.data[7];
       targets[0].timestamp = targetData.timestamp; // Assign the CANBus message timestamp
       lastUpdate = targetData.timestamp;
-      updateCounter++;
       return true;
     }
     return false;

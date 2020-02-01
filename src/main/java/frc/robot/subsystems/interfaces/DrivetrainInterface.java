@@ -8,20 +8,12 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public interface DrivetrainInterface {
 
-        // Setting up motors
-        // FUn Fact: It's pronounced "ph-WHE-nix"
-
-    
-
     public double getAngleDegrees();
 
     public Rotation2d getAngleRadians();
 
-    /** It's a function! */
-
     public Pose2d getRobotPose();
 
-   
     public void resetRobotOdometry();
 
     public void setVelocity(double left, double right);
@@ -32,13 +24,10 @@ public interface DrivetrainInterface {
        
     public double getLeftEncoder();
        
-
     public double getRightEncoder();
         
-
     public void setPID(double P, double I, double D);
        
-
     public ChassisSpeeds getDrivetrainVelocity();
       
 }
