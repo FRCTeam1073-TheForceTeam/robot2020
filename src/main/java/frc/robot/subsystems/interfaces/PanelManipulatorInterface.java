@@ -23,7 +23,7 @@ public interface PanelManipulatorInterface {
     public double getMaxVelocity();
 
     /**
-     * Uses encoder travel since last disable as value 
+     * Uses encoder travel since last disable as value.
      */
     public double getRotation();
 

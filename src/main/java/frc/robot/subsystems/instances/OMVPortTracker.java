@@ -22,6 +22,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
     super(deviceId);
     targetData = new CANData();
     targets = new AdvancedTrackerInterface.AdvancedTargetData[1]; // We only have 1 of these.
+    targets[0] = new AdvancedTrackerInterface.AdvancedTargetData();
   }
 
   // Updates our config and mode:
