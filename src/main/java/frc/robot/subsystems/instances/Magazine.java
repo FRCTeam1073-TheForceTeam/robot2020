@@ -14,8 +14,23 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /** 
    * Creates a new Magazine.
    */
-  public Magazine() {
+  private static int cellCount;
+  private static WPI_TalonSRX magMotor;
+  private static Ultrasonic entrance;
+  private static Ultrasonic exit;
+  private static Ultrasonic height;
 
+  public Magazine() {
+    
+    magMotor = new WPI_TalonSRX(24);
+    entrance = new Ultrasonic(1, 2);//temp. parameters
+    exit = new Ultrasonic(3, 4);//temp. parameters
+    height = new Ultrasonic(5, 6);//temp. parameters
+
+    enterance.setAutomaticMode(true);
+    exit.setAutomaticMode(true);
+    height.setAutomaticMode(true);
+    
   }
 
   @Override
@@ -25,21 +40,21 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   @Override
   public void run(double speed) {
-
+    magMotor.set(speed);
   }
 
   @Override
   public int getCellCount() {
-    return 0;
+    return cellCount;
   }
 
   @Override
   public void addCell() {
-  
+    cellCount++;
   }
 
   @Override
   public void subtractCell() {
-    
+    cellCount--;
   }
 }

@@ -13,22 +13,26 @@ import frc.robot.subsystems.interfaces.MagazineInterface;
 
 public class MagazineControls extends CommandBase {
   MagazineInterface magazine;
+  private static JoystickButton x;
   /**
    * Creates a new MagazineControls.
    */
   public MagazineControls(MagazineInterface magazine_) {
     magazine = magazine_;
     addRequirements((SubsystemBase)magazine);
+    x = new JoystickButton(operatorController, XBoxController.Button.kX.value);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Returns true when the command should end.
