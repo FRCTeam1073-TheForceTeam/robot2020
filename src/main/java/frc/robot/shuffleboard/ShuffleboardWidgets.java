@@ -16,12 +16,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.*;
 
-//import frc.robot.Robot;
-/**
- * Add your docs here.
- */
 public class ShuffleboardWidgets extends SubsystemBase {
 
   ShuffleboardTab tab;
@@ -43,7 +39,20 @@ public class ShuffleboardWidgets extends SubsystemBase {
   double I_Value;
   double D_Value;
 
+  double turretDegrees = 0.0;
+  double turretVelocity = 0.0;
+
+  double flywheelVelocity = 0.0;
+  double[] flywheelTemperature = new double[2];
+  double hoodDegrees = 0.0;
+  double hoodVelocity = 0.0;
+
+  int cellCount = 0;
+
   DrivetrainInterface drivetrain;
+  TurretInterface turret;
+  ShooterInterface shooter;
+  MagazineInterface magazine;
 
     public ShuffleboardWidgets() {
 
@@ -100,11 +109,18 @@ public class ShuffleboardWidgets extends SubsystemBase {
       robotY = pose.getTranslation().getY();
       robotRotation = pose.getRotation().getDegrees();
 
-      // Turret Data MISSING
+      // Turret Data INCOMPLETE
+      turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
+      turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
 
       // Shooter Data MISSING
+      flywheelVelocity = shooter.getFlywheelSpeed() * (1 / Math.PI) * 180;
+      flywheelTemperature = shooter.getInternalTemperature();
+      hoodDegrees = shooter.getHoodAngle() * (1 / Math.PI) * 180;
+      hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180; 
 
       // Magazine Data MISSING
+      cellCount = magazine.getCellCount();
 
       // Climbing Data MISSING
 
@@ -121,6 +137,17 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("x-coordinate",robotX);
       tab.add("y-coordinate",robotY);
       tab.add("rotation",robotRotation);
+
+      tab.add("turretDegrees", turretDegrees);
+      tab.add("turretVelocity", turretVelocity);
+
+      tab.add("flywheelVelocity",flywheelVelocity);
+      tab.add("flywheelTemperature1", flywheelTemperature[0] * (9 / 5) + 32);
+      tab.add("flywheelTemperature2", flywheelTemperature[1] * (9 / 5) + 32);
+      tab.add("hoodDegrees",hoodDegrees);
+      tab.add("hoodVelocity",hoodVelocity);
+
+      tab.add("cellCount",cellCount);
       
     }
 
@@ -131,7 +158,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       D_Value = D_testing.getDouble(10.0);
 
       //sets PID values as soon as PID tuning is complete the following line of code should be commented out until next year
-      drivetrain.setPID(P_Value, I_Value, D_Value);
+      //drivetrain.setPID(P_Value, I_Value, D_Value);
 
       //prints the PID Values from Shuffleboard
       System.out.println(P_Value);
