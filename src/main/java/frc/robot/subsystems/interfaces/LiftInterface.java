@@ -17,7 +17,7 @@ public interface LiftInterface {
     // potentiometer
     boolean isLiftFullyExtended();
     boolean isLiftFullyRetracted();
-    double liftPosition();
+    double liftExtension();
 
     // pin
     void pinLift();
