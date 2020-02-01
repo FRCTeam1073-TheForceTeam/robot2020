@@ -38,7 +38,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public Turret() {
     turretRotator = new WPI_TalonSRX(24);
     turretRotator.configFactoryDefault();
-    turretRotator.setSafetyEnabled(false);
+    turretRotator.setSafetyEnabled(true);
     turretRotator.setNeutralMode(NeutralMode.Brake);
     turretRotator.configPeakOutputForward(1);
     turretRotator.configPeakOutputReverse(-1);
@@ -60,6 +60,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     timestamp = System.currentTimeMillis();
     isLeftTriggered = turretRotator.isRevLimitSwitchClosed() == 1;
     isRightTriggered = turretRotator.isFwdLimitSwitchClosed() == 1;
+    turretRotator.feed();
     // SmartDashboard.putNumber("error", turretRotator.getClosedLoopError());
     // System.out.println("error" + turretRotator.getClosedLoopError());
     // This method will be called once per scheduler run
