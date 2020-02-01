@@ -167,6 +167,13 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   }
 
   /**
+   * Resets hood.
+   */
+  public void resetHood() {
+    hoodEncoder.setPosition(0);
+  }
+
+  /**
    * Set the target hood angle. The hood will move toward this angle and hold this
    * angle under closed loop control. This command is only valid if the hood has
    * been indexed.

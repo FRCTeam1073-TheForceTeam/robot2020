@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
   public static MagazineControls magazineControls;
   public static MagazineInterface magazine;
   public static ShooterControls shooterControls;
-  public static ShooterInterface shooter;
+  public static Shooter shooter;
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
