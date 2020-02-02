@@ -55,11 +55,15 @@ public class ShuffleboardWidgets extends SubsystemBase {
   double liftExtension = 0.0;
   boolean isPinned = false;
 
+  boolean isWinchEngaged = false;
+
   DrivetrainInterface drivetrain;
   TurretInterface turret;
   ShooterInterface shooter;
   MagazineInterface magazine;
   LiftInterface lift;
+  WinchInterface winch;
+  
 
     public ShuffleboardWidgets() {
 
@@ -94,6 +98,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       shooter = Robot.shooter;
       magazine = Robot.magazine;
       lift = Robot.lift;
+      winch = (WinchInterface)Robot.drivetrain;
 
       ShuffleboardView();
 
@@ -139,6 +144,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
       liftExtension = lift.liftExtension();
       isPinned = lift.isPinned();
 
+      isWinchEngaged = winch.isWinchEngaged();
+
       // Wheel of Fortune Data MISSING
 
     } 
@@ -169,6 +176,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("isLiftFullyRetracted",isLiftFullyRetracted);
       tab.add("liftExtension",liftExtension);
       tab.add("isPinned",isPinned);
+
+      tab.add("isWinchEngaged",isWinchEngaged);
       
     }
 
