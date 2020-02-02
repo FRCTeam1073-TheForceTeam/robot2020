@@ -7,11 +7,10 @@
 
 package frc.robot.shuffleboard;
 
-import java.util.Map;
-
-import edu.wpi.first.networktables.NetworkTableEntry;
+//import java.util.Map;
+//import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+//import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,12 +31,12 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   double drivetrainVelocity = 0.0;
 
-  private NetworkTableEntry P_testing;
+  /*private NetworkTableEntry P_testing;
   private NetworkTableEntry I_testing;
   private NetworkTableEntry D_testing;
   double P_Value = 0.0;
   double I_Value = 0.0;
-  double D_Value = 0.0;
+  double D_Value = 0.0;*/
 
   double turretDegrees = 0.0;
   double turretVelocity = 0.0;
@@ -69,7 +68,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
       tab = Shuffleboard.getTab("Telemetry");
 
-      P_testing = tab
+      /*P_testing = tab
       .add("P", 1)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withSize(10, 1)
@@ -91,7 +90,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       .withSize(10, 1)
       .withPosition(0, 3)
       .withProperties(Map.of("min", 0, "max", 100))
-      .getEntry();
+      .getEntry();*/
 
       drivetrain = Robot.drivetrain;
       turret = Robot.turret;
@@ -108,7 +107,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     public void periodic() {
       ShuffleboardInformation();
       Shuffleboard.update();
-      PID_testing();
+      //PID_testing();
 
     }
   
@@ -181,7 +180,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       
     }
 
-    public void PID_testing() {
+    /*public void PID_testing() {
 
       P_Value = P_testing.getDouble(1.0);
       I_Value = I_testing.getDouble(0.01);
@@ -195,6 +194,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
       System.out.println(I_Value);
       System.out.println(D_Value);
 
-    }
+    }*/
 
 }
