@@ -8,10 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
