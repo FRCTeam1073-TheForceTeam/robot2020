@@ -11,8 +11,7 @@ package frc.robot.shuffleboard;
 //import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 //import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.*;
@@ -154,12 +153,18 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("leftEncoder", leftEncoderValue);
       tab.add("rightEncoder", rightEncoderValue);
       
-      tab.add("gyroAngle", gyroAngleDegrees);
+      tab.add("gyroAngle", gyroAngleDegrees)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withSize(2, 2);
       tab.add("x-coordinate",robotX);
       tab.add("y-coordinate",robotY);
-      tab.add("rotation",robotRotation);
+      tab.add("rotation",robotRotation)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withSize(2, 2);
 
-      tab.add("turretDegrees", turretDegrees);
+      tab.add("turretDegrees", turretDegrees)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withSize(2, 2);
       tab.add("turretVelocity", turretVelocity);
 
       tab.add("flywheelVelocity",flywheelVelocity);
