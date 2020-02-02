@@ -26,4 +26,6 @@ public interface MagazineInterface {
     static void getExitDist(){
         
     }
+
+    static void getHeight
 }
