@@ -11,11 +11,19 @@ package frc.robot.subsystems.interfaces;
  */
 public interface MagazineInterface {
 
-    void run(double speed);
+    static void run(double speed){
 
-    int getCellCount();
+    }
 
-    void addCell();
+    static int getCellCount(){
+        return 0;
+    }
 
-    void subtractCell();
+    static void getEnteranceDist(){
+
+    }
+    
+    static void getExitDist(){
+        
+    }
 }
