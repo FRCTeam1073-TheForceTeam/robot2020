@@ -90,6 +90,10 @@ public class ShuffleboardWidgets extends SubsystemBase {
       .getEntry();
 
       drivetrain = Robot.drivetrain;
+      turret = Robot.turret;
+      shooter = Robot.shooter;
+      magazine = Robot.magazine;
+      lift = Robot.lift;
 
       ShuffleboardView();
 
