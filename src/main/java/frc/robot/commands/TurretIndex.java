@@ -9,17 +9,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
-public class TurretControls extends CommandBase {
-
+public class TurretIndex extends CommandBase {
+  /**
+   * Creates a new TurretIndex.
+   */
   TurretInterface turret;
 
-  public TurretControls(TurretInterface turret_) {
+  public TurretIndex(TurretInterface turret_) {
     turret = turret_;
-    addRequirements((SubsystemBase)turret);
+    addRequirements((SubsystemBase) turret);
   }
 
   // Called when the command is initially scheduled.
@@ -30,21 +31,18 @@ public class TurretControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // double targetX = 10;
-    // double targetY = 10;
-    // Pose2d pose = Robot.drivetrain.getRobotPose();
-    // double robotX=pose.getTranslation().getX();
-    // double robotY=pose.getTranslation().getY();
-    // double angle = Math.atan2(targetY - robotY, targetX - robotX);
-    double angle = OI.driverController.getRawAxis(0)*10;
-    // double adjustedAngle = angle - Robot.drivetrain.getAngleRadians().getRadians();
-    Robot.turret.setPosition(angle);
-    // System.out.println(Robot.turret.getPosition());
+    Robot.turret.setVelocity(0.5);
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    Robot.turret.indexTurret();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Robot.turret.isIndexed();
   }
 }

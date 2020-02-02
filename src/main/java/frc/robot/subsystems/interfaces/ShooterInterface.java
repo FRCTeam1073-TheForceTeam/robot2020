@@ -49,7 +49,7 @@ public interface ShooterInterface {
 
    /**
     * Return the flywheel motor internal temperature(s) as an array of doubles.
-    * @return temperature in degrees C.
+    * @return temperature in degrees Celcius.
     */
     public double[] getInternalTemperature();
 
@@ -61,6 +61,11 @@ public interface ShooterInterface {
     * @param angle Angular postiion of the hood in radians.
     */
    public boolean setHoodAngle(double angle);
+
+   /**
+    * Resets hood.
+    */
+   public void resetHood();
 
    /**
     * Set the hood to move in velocity mode which can be done without indexing the hood.
@@ -91,6 +96,12 @@ public interface ShooterInterface {
     * @return
     */
    public double getMaxHoodAngle();
+
+   /**
+    * Return the hood speed in radians/second.
+    * @return Hood speed in radians/second.
+    */
+   public double getHoodVelocity();
 
    /**
     * Return true if the hood is indexed. False if the hood mechanism is not indexed.
