@@ -7,10 +7,9 @@
 
 package frc.robot.shuffleboard;
 
-//import java.util.Map;
+import java.util.Map;
 //import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-//import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -150,38 +149,85 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     private void ShuffleboardView() {
 
-      tab.add("leftEncoder", leftEncoderValue);
-      tab.add("rightEncoder", rightEncoderValue);
+      tab.add("leftEncoder", leftEncoderValue)
+      .withPosition(0, 0)
+      .withSize(2, 1);
+      tab.add("rightEncoder", rightEncoderValue)
+      .withPosition(2, 0)
+      .withSize(2, 1);
       
       tab.add("gyroAngle", gyroAngleDegrees)
-      .withWidget(BuiltInWidgets.kGyro)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 360))
+      .withPosition(0, 2)
       .withSize(2, 2);
-      tab.add("x-coordinate",robotX);
-      tab.add("y-coordinate",robotY);
+      tab.add("x-coordinate",robotX)
+      .withPosition(4, 0)
+      .withSize(2, 1);
+      tab.add("y-coordinate",robotY)
+      .withPosition(6, 0)
+      .withSize(2, 1);
       tab.add("rotation",robotRotation)
-      .withWidget(BuiltInWidgets.kGyro)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 360))
+      .withPosition(2, 2)
       .withSize(2, 2);
 
       tab.add("turretDegrees", turretDegrees)
-      .withWidget(BuiltInWidgets.kGyro)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 360))
+      .withPosition(4, 2)
       .withSize(2, 2);
-      tab.add("turretVelocity", turretVelocity);
+      tab.add("turretVelocity", turretVelocity)
+      .withPosition(8, 0)
+      .withSize(2, 1);
 
-      tab.add("flywheelVelocity",flywheelVelocity);
-      tab.add("flywheelTemperature1", flywheelTemperature[0] * (9 / 5) + 32);
-      tab.add("flywheelTemperature2", flywheelTemperature[1] * (9 / 5) + 32);
-      tab.add("hoodDegrees",hoodDegrees);
-      tab.add("hoodVelocity",hoodVelocity);
+      tab.add("flywheelVelocity",flywheelVelocity)
+      .withPosition(0, 1)
+      .withSize(2, 1);
+      tab.add("flywheelTemperature1", flywheelTemperature[0] * (9 / 5) + 32)
+      .withPosition(2, 1)
+      .withSize(2, 1);
+      tab.add("flywheelTemperature2", flywheelTemperature[1] * (9 / 5) + 32)
+      .withPosition(4, 1)
+      .withSize(2, 1);
+      tab.add("hoodDegrees",hoodDegrees)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 360))
+      .withPosition(6, 2)
+      .withSize(2, 2);
+      tab.add("hoodVelocity",hoodVelocity)
+      .withPosition(6, 1)
+      .withSize(2, 1);
 
-      tab.add("cellCount",cellCount);
+      tab.add("cellCount",cellCount)
+      .withPosition(8, 1)
+      .withSize(2, 1);
 
-      tab.add("isBrakeset",isBrakeset);
-      tab.add("isLiftFullyExtended",isLiftFullyExtended);
-      tab.add("isLiftFullyRetracted",isLiftFullyRetracted);
-      tab.add("liftExtension",liftExtension);
-      tab.add("isPinned",isPinned);
+      tab.add("isBrakeset",isBrakeset)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(0, 2)
+      .withSize(2, 1);
+      tab.add("isLiftFullyExtended",isLiftFullyExtended)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(2, 2)
+      .withSize(2, 1);
+      tab.add("isLiftFullyRetracted",isLiftFullyRetracted)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(4, 2)
+      .withSize(2, 1);
+      tab.add("liftExtension",liftExtension)
+      .withPosition(6, 2)
+      .withSize(2, 1);
+      tab.add("isPinned",isPinned)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(8, 2)
+      .withSize(2, 1);
 
-      tab.add("isWinchEngaged",isWinchEngaged);
+      tab.add("isWinchEngaged",isWinchEngaged)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(10, 2)
+      .withSize(2, 1);
       
     }
 
