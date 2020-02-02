@@ -22,7 +22,7 @@ import frc.robot.shuffleboard.*;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class DrivetrainGearboxTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -31,19 +31,6 @@ public class Robot extends TimedRobot {
 
   public static DriveControls driveControls;
   public static DrivetrainInterface drivetrain;
-  public static CollectorControls collectorControls;
-  public static CollectorInterface collector;
-  public static HookControls hookControls;
-  public static HookInterface hook;
-  public static LiftControls liftControls;
-  public static LiftInterface lift;
-  public static MagazineControls magazineControls;
-  public static MagazineInterface magazine;
-  public static ShooterControls shooterControls;
-  public static Shooter shooter;
-  public static TurretControls turretControls;
-  public static TurretInterface turret;
-  public static ShuffleboardWidgets widgets;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -54,33 +41,6 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
-
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
-
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
-
-    lift = new Lift();
-    liftControls = new LiftControls(lift);
-    registerSubsystem((SubsystemBase) lift, liftControls);
-
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
-
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
-
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase)turret, turretControls);
-
-    // widgets = new ShuffleboardWidgets();
-    // widgets.register();
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {

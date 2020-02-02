@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -66,13 +67,13 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
-        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 0.1;
-        double I = 0;
-        double D = 0;
+        double P = 0.2;
+        double I = 0.005;
+        double D = 8;
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
@@ -91,12 +92,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
 
-        /*SmartDashboard.putNumber("P", P);
+        SmartDashboard.putNumber("P", P);
         SmartDashboard.putNumber("I", I);
         SmartDashboard.putNumber("D", D);
         SmartDashboard.clearPersistent("P");
         SmartDashboard.clearPersistent("I");
-        SmartDashboard.clearPersistent("D");*/
+        SmartDashboard.clearPersistent("D");
     }
 
     /**
@@ -147,7 +148,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
         //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
         // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
-        /*SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
+        SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
         SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
         SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
         SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
@@ -156,8 +157,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
         SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
         SmartDashboard.putNumber("Rotation", getAngleDegrees());
-        SmartDashboard.putNumber("leftPower", leftPower);
-        SmartDashboard.putNumber("rightPower", rightPower);*/
+        SmartDashboard.putNumber("leftPower", leftPower*3500);
+        SmartDashboard.putNumber("rightPower", rightPower);
+        SmartDashboard.putNumber("leftVelocity", leftMotorLeader.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("rightVelocity", rightMotorLeader.getSelectedSensorVelocity());
     }
 
     public Pose2d getRobotPose() {
@@ -233,8 +236,13 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         return kinematics.toChassisSpeeds(getWheelSpeeds());
     }
 
-    public void engageWinch(){}
-    public void disengageWinch(){}
+    public void engageWinch() {
+    }
+    
+    public void disengageWinch() {
+
+    }
+    
     public boolean isWinchEngaged(){
         return false;
     }
