@@ -35,6 +35,10 @@ public interface AdvancedTrackerInterface {
             skew = _skew;
             timestamp = 0;
         }
+
+        public AdvancedTargetData() {
+            
+        }
     }
 
     /**

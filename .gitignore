@@ -168,4 +168,4 @@ imgui.ini
 .gradle/6.0.1/javaCompile/javaCompile.lock
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
 .gradle/
-.gradle/buildOutputCleanup/cache.properties
+.DS_Store
