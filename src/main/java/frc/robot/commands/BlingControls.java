@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.commands.BlingControls;
+import frc.robot.subsystems.interfaces.BlingInterface;
 
 
 public class BlingControls extends CommandBase {
@@ -21,11 +22,12 @@ public class BlingControls extends CommandBase {
   int time;
   int leds_from_middle;
   double match_time;
+  int move = 0;
 
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls() {
+  public BlingControls(BlingInterface bling_) {
     addRequirements(Robot.bling);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -36,60 +38,59 @@ public class BlingControls extends CommandBase {
     burst_done = 0;
     time = 0;
     leds_from_middle = 0;
+    move = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-//  @Override
-//  public void execute() {
-//    match_time = DriverStation.getInstance().getMatchTime();
+  @Override
+  public void execute() {
+    match_time = DriverStation.getInstance().getMatchTime();
 
-//    if (burst_done == 0) {
-//      burst(Robot.bling.m_ledBuffer.getLength());
-//      Robot.bling.setPatternRGBAll(0, 0, 0);
-//    }
-//    if (burst_done == 1) {
-      
-    /* if (match_time < 30) {
-      blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
-    } else {
+    if (burst_done == 0) {
+      burst(Robot.bling.m_ledBuffer.getLength());
       Robot.bling.setPatternRGBAll(0, 0, 0);
-    } */
-//    }
-    
-
-     
-    // driverControlledLEDs(8, 4);
-    // blinkyLights(14, 3);
-    // movingLEDs(19, 7);
-//  }
+    } else {
+      if (match_time < 30) {
+        blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
+      } else {
+        // driverControlledLEDs(8, 4);
+        // blinkyLights(14, 3);
+        // movingLEDs(19, 7);
+        Robot.bling.setPatternRGBAll(0, 0, 0);
+      }
+    }
+  }
+  
+  
 
 //  public void GameData() {
 //    if (Robot.gameData.getGameData() returns "A")
 //  }
 
-  public int burst(int length) {    
+  public void burst(int length) {    
     // Calculates the middle led(s) of the led string
     int middle1 = (int) (Math.floor((length / 2)));
     int middle2 = (int) (Math.ceil((length / 2)));
     
     
-    if ((leds_from_middle + middle2) <= length && time < 50) {
+    if ((leds_from_middle + middle2) < (length - 1) && time < 15) {
+      // If there are still more LEDs to change and it is not yet time to change
       // Wait until the 2000th time
       time = time + 1;
-    } else if ((leds_from_middle + middle2) <= length) {
+    } else if ((leds_from_middle + middle2) < (length - 1)) {
+      // If it is time to change and there are still more LEDs to change
+      // Reset the time
       time = 0;
+      // Moves the LEDs out from the center by one light
       leds_from_middle = leds_from_middle + 1;
       Robot.bling.setPatternRGBAll(0, 0, 0);
       Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
     } else {
       burst_done = 1;
-      Robot.bling.setPatternRGBAll(0, 0, 0);
       time = 0;
     }
 
     Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
-    
-    return burst_done;
   }
 
 
@@ -141,15 +142,18 @@ public class BlingControls extends CommandBase {
   }
 
   public void movingLEDs(int minLEDsMove, int numberLEDsMove) {
-    int move = 0;
-    if (move < numberLEDsMove - 1) {
-      move = move + 1;
+    if (time < 50) {
+      time = time + 1;
     } else {
-      move = 0;
+      if (move < numberLEDsMove - 1) {
+        move = move + 1;
+      } else {
+        move = 0;
+      }
+      int set = minLEDsMove + move;
+      Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
+      Robot.bling.setLED(set, 255, 0, 0);
     }
-    int set = minLEDsMove + move;
-    Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
-    Robot.bling.m_ledBuffer.setRGB(set, 255, 0, 0);
   }
 
 

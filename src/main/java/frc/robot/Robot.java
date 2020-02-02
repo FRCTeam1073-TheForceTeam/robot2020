@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static GameData gameData;
+  public static BlingControls blingControls;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -51,8 +52,8 @@ public class Robot extends TimedRobot {
     OI.init();
 
     bling = new Bling();
-    bling.register();
-    CommandScheduler.getInstance().setDefaultCommand(bling, new BlingControls());
+    blingControls = new BlingControls(bling);
+    registerSubsystem((SubsystemBase) bling, blingControls);
 
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
