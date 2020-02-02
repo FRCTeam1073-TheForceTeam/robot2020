@@ -35,9 +35,9 @@ public class ShuffleboardWidgets extends SubsystemBase {
   private NetworkTableEntry P_testing;
   private NetworkTableEntry I_testing;
   private NetworkTableEntry D_testing;
-  double P_Value;
-  double I_Value;
-  double D_Value;
+  double P_Value = 0.0;
+  double I_Value = 0.0;
+  double D_Value = 0.0;
 
   double turretDegrees = 0.0;
   double turretVelocity = 0.0;
@@ -90,6 +90,10 @@ public class ShuffleboardWidgets extends SubsystemBase {
       .getEntry();
 
       drivetrain = Robot.drivetrain;
+      turret = Robot.turret;
+      shooter = Robot.shooter;
+      magazine = Robot.magazine;
+      lift = Robot.lift;
 
       ShuffleboardView();
 
