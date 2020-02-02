@@ -159,7 +159,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("gyroAngle", gyroAngleDegrees)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
-      .withPosition(0, 2)
+      .withPosition(2, 3)
       .withSize(2, 2);
       tab.add("x-coordinate",robotX)
       .withPosition(4, 0)
@@ -170,13 +170,13 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("rotation",robotRotation)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
-      .withPosition(2, 2)
+      .withPosition(4, 3)
       .withSize(2, 2);
 
       tab.add("turretDegrees", turretDegrees)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
-      .withPosition(4, 2)
+      .withPosition(6, 3)
       .withSize(2, 2);
       tab.add("turretVelocity", turretVelocity)
       .withPosition(8, 0)
@@ -194,7 +194,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       tab.add("hoodDegrees",hoodDegrees)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
-      .withPosition(6, 2)
+      .withPosition(8, 3)
       .withSize(2, 2);
       tab.add("hoodVelocity",hoodVelocity)
       .withPosition(6, 1)
@@ -226,7 +226,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
       tab.add("isWinchEngaged",isWinchEngaged)
       .withWidget(BuiltInWidgets.kBooleanBox)
-      .withPosition(10, 2)
+      .withPosition(0, 3)
       .withSize(2, 1);
       
     }
