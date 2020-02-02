@@ -10,7 +10,6 @@ package frc.robot.subsystems.instances;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-//import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.LiftInterface;
 
@@ -18,8 +17,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   /**
    * Creates a new Lift.
    */
-  //Solenoid solenoid = new Solenoid(17);
-
+  
   // that sets minimum possible value the potentiometer  can return (when the voltage from the potentiometer is 0 (the minimum))
   private final double minLiftExtension = 0.0;
   // that sets maximum possible value the potentiometer can return (when the voltage from the potentiometer is 1 (the maximum))
