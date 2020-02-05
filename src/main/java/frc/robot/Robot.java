@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
-  public static GameData gameData;
   public static BlingControls blingControls;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
