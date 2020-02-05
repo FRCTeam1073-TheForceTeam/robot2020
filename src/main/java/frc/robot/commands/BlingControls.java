@@ -22,7 +22,8 @@ public class BlingControls extends CommandBase {
   int time;
   int leds_from_middle;
   double match_time;
-  int move = 0;
+  int move;
+  String gameData;
 
   /**
    * Creates a new BlingControls.
@@ -44,6 +45,7 @@ public class BlingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
