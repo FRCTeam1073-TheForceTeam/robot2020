@@ -21,6 +21,7 @@ public class GameData extends SubsystemBase implements GameDataInterface {
   }
 
   public String getGameData() {
+    // Recieves the color that the control panel needs to be set to
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     /*if(gameData.length() > 0) {
         switch (gameData.charAt(0)) {

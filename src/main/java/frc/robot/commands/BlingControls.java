@@ -54,7 +54,7 @@ public class BlingControls extends CommandBase {
         blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
       } else {
         // driverControlledLEDs(8, 4);
-        // blinkyLights(14, 3);
+        // blinkyLights(14, 3, 255, 255, 255);
         // movingLEDs(19, 7);
         Robot.bling.setPatternRGBAll(0, 0, 0);
       }
@@ -67,7 +67,8 @@ public class BlingControls extends CommandBase {
 //    if (Robot.gameData.getGameData() returns "A")
 //  }
 
-  public void burst(int length) {    
+// burst() lights LEDs from the middle out  
+public void burst(int length) {    
     // Calculates the middle led(s) of the led string
     int middle1 = (int) (Math.floor((length / 2)));
     int middle2 = (int) (Math.ceil((length / 2)));
@@ -83,44 +84,53 @@ public class BlingControls extends CommandBase {
       time = 0;
       // Moves the LEDs out from the center by one light
       leds_from_middle = leds_from_middle + 1;
+      // Sets the LEDs
       Robot.bling.setPatternRGBAll(0, 0, 0);
       Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
     } else {
+      // Resets the time and says that the burst is finished
       burst_done = 1;
       time = 0;
     }
-
     Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
   }
 
 
+  // blinkyLightsTwoColors() switches the lights between two colors for all LEDs
   public void blinkyLightsTwoColors(int h, int s, int v, int r, int g, int b) {
     if (time < 50) {
+      // Sets the LEDs to the first color
       Robot.bling.setPatternHSVAll(h, s, v);
       time = time + 1;
     } else if (time < 100) {
+      // Sets the LEDs to the second color
       Robot.bling.setPatternRGBAll(r, g, b);
       time = time + 1;
     } else {
+      // Resets the time
       time = 0;
     }
   }
 
 
-  
-  public void blinkyLights(int minLEDsBlink, int numberLEDsBlink) {
+  // blinkyLights() flashes lights on and off in one color for a range of LEDs
+  public void blinkyLights(int minLEDsBlink, int numberLEDsBlink, int r, int g, int b) {
     int time = 0;
     if (time < 20) {
+      // Turns the LEDs off
       Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
       time = time + 1;
     } else if (time < 40) {
+      // Sets the LEDs to the specified color
       time = time + 1;
-      Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 255, 255, 255);
+      Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, r, g, b);
     } else {
+      // Resets the time counter
       time = 0;
     }
   }
 
+  // batteryBling() sets the LED color and number depending on the battery voltage
   public void batteryBling(int minLEDsVolts, int numberLEDsVolts, double min_volts, double max_volts) {
     double volts = RobotController.getBatteryVoltage();
 
@@ -141,26 +151,30 @@ public class BlingControls extends CommandBase {
     }
   }
 
+  // movingLEDs() lights a single LED that moves up the range and then restarts
   public void movingLEDs(int minLEDsMove, int numberLEDsMove) {
     if (time < 50) {
+      // Waits until the 50th time
       time = time + 1;
     } else {
       if (move < numberLEDsMove - 1) {
+        // Changes the LED that is lit
         move = move + 1;
       } else {
         move = 0;
       }
+      // Sets the LED that is lit
       int set = minLEDsMove + move;
       Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
       Robot.bling.setLED(set, 255, 0, 0);
     }
   }
 
-
+  // driverControlledLEDs() allows the driver to control the LEDs using start, B, X, and Y
   public void driverControlledLEDs(int minLEDsDriver, int numberLEDsDriver){
     if (OI.driverController.getStartButtonPressed()){
       // If start was pressed
-      // set color
+      // set color orange
       Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0);
     } else if (OI.driverController.getBButtonPressed()){
       // If b was pressed
@@ -168,7 +182,7 @@ public class BlingControls extends CommandBase {
       Robot.bling.alternateRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0, 0, 0, 255);
     } else if (OI.driverController.getXButtonPressed()){
       // If x was pressed
-      // set color
+      // set color blue
       Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 255);
     } else if (OI.driverController.getYButtonPressed()){
       // If y was pressed

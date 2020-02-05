@@ -19,15 +19,17 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
     m_led.start();
-    
   }
 
+  // setPatternRGBAll sets the LEDs all to one color
   public void setPatternRGBAll(int r, int g, int b) {
     for (var i = 0; i < (m_ledBuffer.getLength()); i++) {
       m_ledBuffer.setRGB(i, r, g, b);
     }
     m_led.setData(m_ledBuffer);
   }
+
+  // alternateRGB sets a range of LEDs where the even are one color and the odd are another
   public void alternateRGB(int min, int number, int r1, int g1, int b1, int r2, int g2, int b2) {
     int max = min + number;
     for (int i = min; i < (max); i = i + 2) {
@@ -38,6 +40,8 @@ public class Bling extends SubsystemBase implements BlingInterface {
     }
     m_led.setData(m_ledBuffer);
   }
+
+  // rangeRGB() sets a range of LEDs to one color
   public void rangeRGB(int min, int number, int r, int g, int b) {
     int max = min + number;
     for (int i = min; i < (max); i++) {
@@ -46,6 +50,7 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_led.setData(m_ledBuffer);
   }
 
+  // setPatternHSVAll() sets all of the LEDs to one color using HSV
   public void setPatternHSVAll(int h, int s, int v) {
     for (var i = 0; i < (m_ledBuffer.getLength()); i++) {
       m_ledBuffer.setHSV(i, h, s, v);
