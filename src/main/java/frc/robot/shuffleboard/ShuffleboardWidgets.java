@@ -8,7 +8,7 @@
 package frc.robot.shuffleboard;
 
 import java.util.Map;
-//import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +19,16 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   ShuffleboardTab tab;
 
+  /*private NetworkTableEntry P_testing;
+  private NetworkTableEntry I_testing;
+  private NetworkTableEntry D_testing;
+  double P_Value = 0.0;
+  double I_Value = 0.0;
+  double D_Value = 0.0;*/
+
+  private NetworkTableEntry leftEncoderEntry;
   double leftEncoderValue = 0.0;
+ 
   double rightEncoderValue = 0.0;
 
   double gyroAngleDegrees = 0.0;
@@ -29,13 +38,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   double drivetrainVelocity = 0.0;
 
-  /*private NetworkTableEntry P_testing;
-  private NetworkTableEntry I_testing;
-  private NetworkTableEntry D_testing;
-  double P_Value = 0.0;
-  double I_Value = 0.0;
-  double D_Value = 0.0;*/
-
   double turretDegrees = 0.0;
   double turretVelocity = 0.0;
 
@@ -44,6 +46,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
   double hoodDegrees = 0.0;
   double hoodVelocity = 0.0;
 
+  private NetworkTableEntry cellCountEntry;
   int cellCount = 0;
 
   boolean isBrakeset = false;
@@ -103,13 +106,14 @@ public class ShuffleboardWidgets extends SubsystemBase {
   
   @Override
     public void periodic() {
+      cellCount = cellCount + 1;
       ShuffleboardInformation();
       Shuffleboard.update();
       //PID_testing();
 
     }
-  
-    private void ShuffleboardInformation() {
+
+  private void ShuffleboardInformation() {
 
       // Drivetrain Data INCOMPLETE
       leftEncoderValue = drivetrain.getLeftEncoder();
@@ -133,7 +137,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
       // Magazine Data COMPLETE
       cellCount = magazine.getCellCount();
-
+      
       // Climbing Data COMPLETE
       isBrakeset = lift.isBrakeSet();
       isLiftFullyExtended = lift.isLiftFullyExtended();
@@ -149,85 +153,107 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     private void ShuffleboardView() {
 
-      tab.add("leftEncoder", leftEncoderValue)
+      leftEncoderEntry = tab
+      .add("leftEncoder", leftEncoderValue)
       .withPosition(0, 0)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("rightEncoder", rightEncoderValue)
       .withPosition(2, 0)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       
       tab.add("gyroAngle", gyroAngleDegrees)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
       .withPosition(2, 3)
-      .withSize(2, 2);
+      .withSize(2, 2)
+      .getEntry();
       tab.add("x-coordinate",robotX)
       .withPosition(4, 0)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("y-coordinate",robotY)
       .withPosition(6, 0)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("rotation",robotRotation)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
       .withPosition(4, 3)
-      .withSize(2, 2);
+      .withSize(2, 2)
+      .getEntry();
 
       tab.add("turretDegrees", turretDegrees)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
       .withPosition(6, 3)
-      .withSize(2, 2);
+      .withSize(2, 2)
+      .getEntry();
       tab.add("turretVelocity", turretVelocity)
       .withPosition(8, 0)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
 
       tab.add("flywheelVelocity",flywheelVelocity)
       .withPosition(0, 1)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("flywheelTemperature1", flywheelTemperature[0] * (9 / 5) + 32)
       .withPosition(2, 1)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("flywheelTemperature2", flywheelTemperature[1] * (9 / 5) + 32)
       .withPosition(4, 1)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("hoodDegrees",hoodDegrees)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", 0, "max", 360))
       .withPosition(8, 3)
-      .withSize(2, 2);
+      .withSize(2, 2)
+      .getEntry();
       tab.add("hoodVelocity",hoodVelocity)
       .withPosition(6, 1)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
 
-      tab.add("cellCount",cellCount)
+      leftEncoderEntry = tab
+      .add("cellCount",cellCount)
       .withPosition(8, 1)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
 
       tab.add("isBrakeset",isBrakeset)
       .withWidget(BuiltInWidgets.kBooleanBox)
       .withPosition(0, 2)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("isLiftFullyExtended",isLiftFullyExtended)
       .withWidget(BuiltInWidgets.kBooleanBox)
       .withPosition(2, 2)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("isLiftFullyRetracted",isLiftFullyRetracted)
       .withWidget(BuiltInWidgets.kBooleanBox)
       .withPosition(4, 2)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("liftExtension",liftExtension)
       .withPosition(6, 2)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       tab.add("isPinned",isPinned)
       .withWidget(BuiltInWidgets.kBooleanBox)
       .withPosition(8, 2)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
 
       tab.add("isWinchEngaged",isWinchEngaged)
       .withWidget(BuiltInWidgets.kBooleanBox)
       .withPosition(0, 3)
-      .withSize(2, 1);
+      .withSize(2, 1)
+      .getEntry();
       
     }
 
