@@ -7,11 +7,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class GameDataControls extends CommandBase {
-    String gameData;
+  String gameData;
   /**
    * Creates a new GameDataControls.
    */
