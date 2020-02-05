@@ -29,11 +29,9 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
     if (read(apiIndex(5, 1), targetData) == true && targetData.length == 8) {
       targets[0].cx = (targetData.data[0] << 4) | ((targetData.data[1] & 0xf0) >> 4);
       targets[0].cy = ((targetData.data[1] & 0x0f) << 4) | targetData.data[2];
-      targets[0].vx = targetData.data[3];
-      targets[0].vy = targetData.data[4];
+      targets[0].area = (targetData.data[3] << 8) | targetData.data[4];
       targets[0].targetType = targetData.data[5];
       targets[0].quality = targetData.data[6];
-      targets[0].skew = targetData.data[7];
       targets[0].timestamp = targetData.timestamp; // Assign the CANBus message timestamp
       lastUpdate = targetData.timestamp;
       return true;
@@ -52,8 +50,8 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       System.out.println("Advanced Tracking...");
       
       System.out.println(String.format("T: %d Cx: %d Cy: %d Vx: %d Vy: %d Type: %d Qual: %d Skew: %d", 
-              lastUpdate, targets[0].cx, targets[0].cy, targets[0].vx, targets[0].vy, 
-              targets[0].targetType, targets[0].quality, targets[0].skew));
+              lastUpdate, targets[0].cx, targets[0].cy, 
+              targets[0].targetType, targets[0].quality));
     }
 
   }
