@@ -218,7 +218,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       .withSize(2, 1)
       .getEntry();
 
-      leftEncoderEntry = tab
+      cellCountEntry = tab
       .add("cellCount",cellCount)
       .withPosition(8, 1)
       .withSize(2, 1)
