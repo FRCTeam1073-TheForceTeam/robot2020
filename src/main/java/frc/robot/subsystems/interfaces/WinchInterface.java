@@ -13,8 +13,6 @@ package frc.robot.subsystems.interfaces;
 public interface WinchInterface {
 
     // winch engage
-    void engageWinch();
-    void disengageWinch();
-    boolean isWinchEngaged();
-
+    public void engageWinch();
+    public boolean isWinchEngaged();
 }

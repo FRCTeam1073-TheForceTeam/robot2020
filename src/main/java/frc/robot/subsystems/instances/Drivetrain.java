@@ -244,10 +244,15 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         return kinematics.toChassisSpeeds(getWheelSpeeds());
     }
 
-    public void engageWinch(){}
-    public void disengageWinch(){}
+    public void engageWinch(){
+
+    }
+
+    public void engageDrivetrain(){
+
+    }
+
     public boolean isWinchEngaged(){
         return false;
     }
-
 }
