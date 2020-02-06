@@ -59,7 +59,6 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
               lastUpdate, targets[0].cx, targets[0].cy, 
               targets[0].targetType, targets[0].quality, targets[0].area));
     }
-
   }
 
   @Override
@@ -72,4 +71,10 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
     return lastUpdate;
   }
 
+  /**
+   *
+   */
+   private void computeDistance(AdvancedTrackerInterface.AdvancedTargetData[] data){
+     data[0].distance = (7.484 * 240) / (data.cy * 1.016);
+   }
 }
