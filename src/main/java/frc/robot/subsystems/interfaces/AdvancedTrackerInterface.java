@@ -18,21 +18,23 @@ public interface AdvancedTrackerInterface {
     public static class AdvancedTargetData {
         public int cx = 0; // X coordinate of target center in image (pixels)
         public int cy = 0; // Y coordinate of target center in image (pixels)
-        public int vx = 0; // X veloicity of target in image pixels/second
-        public int vy = 0; // Y velocity of target in image pixels/second
         public int targetType = 0; // Target type: 0-15 allows different targets
         public int quality = 0; // Quality of target data in percent. 0 = lost/empty, 100 = perfect lock.
-        public int skew = 0; // +- 127 is skewness of target. 0 = dead ahead, -127 is far left, 127 far right
+        public double azimuth = 0; // Horizontal rotation in radians to the target
+        public double angle = 0; // Vertical angle in radians to the target center
+        public double range = 0; // Distance to the target center in meters
+        public double area = 0; // Area of the target in squre meters
         public long timestamp = 0; // Timestamp of target data
 
-        public AdvancedTargetData(int _cx, int _cy, int _vx, int _vy, int _targetType, int _quality, int _skew) {
+        public AdvancedTargetData(int _cx, int _cy, int _targetType, int _quality, double azimuth_, double angle_, double range_, double area_) {
             cx = _cx;
             cy = _cy;
-            vx = _vx;
-            vy = _vy;
             targetType = _targetType;
             quality = _quality;
-            skew = _skew;
+            azimuth = azimuth_;
+            angle = angle_;
+            range = range_;
+            area = area_;
             timestamp = 0;
         }
 
@@ -51,4 +53,5 @@ public interface AdvancedTrackerInterface {
      * Return timestamp of last update.
      */
     public long getLastAdvancedTargetUpdate();
+
 }
