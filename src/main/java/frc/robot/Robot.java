@@ -41,12 +41,18 @@ public class Robot extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
+  public static Bling bling;
+  public static BlingControls blingControls;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
+
+    bling = new Bling();
+    blingControls = new BlingControls(bling);
+    registerSubsystem((SubsystemBase) bling, blingControls);
 
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
