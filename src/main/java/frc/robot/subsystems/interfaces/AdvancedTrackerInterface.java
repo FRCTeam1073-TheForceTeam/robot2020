@@ -21,18 +21,18 @@ public interface AdvancedTrackerInterface {
         public int targetType = 0; // Target type: 0-15 allows different targets
         public int quality = 0; // Quality of target data in percent. 0 = lost/empty, 100 = perfect lock.
         public double azimuth = 0; // Horizontal rotation in radians to the target
-        public double angle = 0; // Vertical angle in radians to the target center
+        public double elevation = 0; // Vertical angle in radians to the target center
         public double range = 0; // Distance to the target center in meters
         public double area = 0; // Area of the target in squre meters
         public long timestamp = 0; // Timestamp of target data
 
-        public AdvancedTargetData(int _cx, int _cy, int _targetType, int _quality, double azimuth_, double angle_, double range_, double area_) {
+        public AdvancedTargetData(int _cx, int _cy, int _targetType, int _quality, double azimuth_, double elevation_, double range_, double area_) {
             cx = _cx;
             cy = _cy;
             targetType = _targetType;
             quality = _quality;
             azimuth = azimuth_;
-            angle = angle_;
+            elevation = elevation_;
             range = range_;
             area = area_;
             timestamp = 0;
