@@ -11,7 +11,7 @@ import java.util.Map;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.*;
@@ -99,10 +99,11 @@ public class ShuffleboardWidgets extends SubsystemBase {
   @Override
   public void periodic() {
 
-    cellCount = cellCount + 1;
+    cellCount += 1;
     ShuffleboardInformation();
+    cellCountEntry.getValue();
     Shuffleboard.update();
-    SmartDashboard.putNumber("cellCount", cellCount);
+    //SmartDashboard.putNumber("cellCount", cellCount);
     // PID_testing();
     System.out.println(cellCount);
 
@@ -213,7 +214,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
     .withSize(2, 1)
     .getEntry();
 
-    tab.add("cellCount", cellCount)
+    NetworkTableEntry cellCountEntry = tab
+    .add("cellCount", cellCount)
     .withPosition(8, 1)
     .withSize(2, 1)
     .getEntry();
