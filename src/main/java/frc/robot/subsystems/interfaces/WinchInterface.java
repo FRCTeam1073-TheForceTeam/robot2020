@@ -14,7 +14,9 @@ public interface WinchInterface {
 
     // winch engage
     void engageWinch();
+
     void disengageWinch();
+    
     boolean isWinchEngaged();
 
 }
