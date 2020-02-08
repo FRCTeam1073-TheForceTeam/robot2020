@@ -17,7 +17,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterface, WinchInterface {
+public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterface {
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 
@@ -246,8 +246,8 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
 
     public void engageWinch(){}
     public void disengageWinch(){}
+    public void engageDrivetrain(){}
     public boolean isWinchEngaged(){
         return false;
     }
-
 }

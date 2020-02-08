@@ -43,12 +43,17 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     public Drivetrain() {
         // Setting up motors
         // Fun Fact: It's pronounced "ph-WHE-nix"
-
         
+        leftMotorLeader = new WPI_TalonFX(12);
+        rightMotorLeader = new WPI_TalonFX(13);
+        leftMotorFollower = new WPI_TalonFX(14);
+        rightMotorFollower = new WPI_TalonFX(15);
 
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
         odometry = new DifferentialDriveOdometry(getAngleRadians());
+
+        engageDrivetrain();
     }
 
     /**
@@ -226,10 +231,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         solenoid.set(true);
     }
     public void engageDrivetrain() {
-        leftMotorLeader = new WPI_TalonFX(12);
-        rightMotorLeader = new WPI_TalonFX(13);
-        leftMotorFollower = new WPI_TalonFX(14);
-        rightMotorFollower = new WPI_TalonFX(15);
 
         leftMotorLeader.configFactoryDefault();
         rightMotorLeader.configFactoryDefault();
