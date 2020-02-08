@@ -14,10 +14,4 @@ public interface MagazineInterface {
     void run(double speed);
 
     void updateCellCount();
-
-    void updateEnteranceDist();
-    
-    void updateExitDist();
-
-    void updateHeightCellCount();
 }

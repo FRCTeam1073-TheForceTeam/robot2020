@@ -18,22 +18,18 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /** 
    * Creates a new Magazine.
    */
-  private static int cellCount; //cell count determined by enterance and exit counter
-  private static int heightCellCount;//The cell count as determined by the distance sensor facing upward
+  private static int CellCount;//The cell count as determined by the distance sensor facing upward
   private static WPI_TalonSRX magMotor; //motor controls all belts on magazine. Will likely not have encoder
   private static final int ballDist = 2;
-  private static TimeOfFlight enterance;
   private static TimeOfFlight exit;
   private static TimeOfFlight height;//distance sensor facing upward from the bottom of the magazine
 
   public Magazine() {
-    magMotor = new WPI_TalonSRX(24);
-    cellCount = 0;
-    enterance = new TimeOfFlight(1);
-    exit = new TimeOfFlight(2);
-    height = new TimeOfFlight(3);
+    magMotor = new WPI_TalonSRX(24);//24 is temporary ID
+    CellCount = 0;
+    exit = new TimeOfFlight(1);//1 is temporary ID
+    height = new TimeOfFlight(2);//2 is temporary ID
 
-    enterance.setRangingMode(RangingMode.Short, 20);
     exit.setRangingMode(RangingMode.Short, 20);
     height.setRangingMode(RangingMode.Short, 20);
   }
@@ -42,37 +38,28 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   public void periodic() {
     // This method will be called once per scheduler run
     updateCellCount();
-    updateEnteranceDist();
-    updateExitDist();
+
   }
 
   @Override
+  /**
+   * run
+   * sets power to the magazine motor
+   * @param - double power: between 0 and 1. The power to the motor
+   */
   public void run(double power) {
     magMotor.set(power);
   }
   @Override
+  /**
+   * updateCellCount()
+   * if a ball passes through the enterance, a power cell is added
+   * if a ball passes through the exit, a power cell is decreased
+   */
   public void updateCellCount() {
-    if(enterance.getRange() <= ballDist){
-      cellCount++;
-    }
-    if(exit.getRange() <= ballDist){
-      cellCount--;
-    }
-  }
-  @Override
-  public void updateExitDist(){
-    exit.getRange();
-  }
-  @Override
-  public void updateHeightCellCount(){
     double heightDistance = height.getRange();
-    heightCellCount = (int)(heightDistance/7);
+    CellCount = (int)(heightDistance/7);//7 is the diameter of the ball. The Magazine can fit 4 balls. Therefore, the 
   }
-  @Override
-  public void updateEnteranceDist() {
-    enterance.getRange();
-  }
-  
 
   
 }
