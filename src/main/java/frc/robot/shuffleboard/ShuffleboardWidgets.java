@@ -112,7 +112,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     lift = Robot.lift;
     winch = (WinchInterface) Robot.drivetrain;
 
-    ShuffleboardView();
+    ShuffleboardDisplay();
 
   }
 
@@ -194,7 +194,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
   }
 
   /**Creates the widgets and sets them to their corresponding NetworkTableEntry */
-  private void ShuffleboardView() {
+  private void ShuffleboardDisplay() {
 
     leftEncoderEntry = tab
     .add("leftEncoder", leftEncoderValue)
