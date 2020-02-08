@@ -57,10 +57,10 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * if a ball passes through the exit, a power cell is decreased
    */
 public void updateCellCount() {
-    if(entrance.getRange() == ballDist){
+    if(entrance.getRange() <= ballDist){
       cellCount++;
     }
-    if(exit.getRange() == ballDist){
+    if(exit.getRange() <= ballDist){
       cellCount--;
     }
   }
