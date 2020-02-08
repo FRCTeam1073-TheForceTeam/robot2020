@@ -18,6 +18,8 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
   private static final double azimuthConv = 1.26/320;
   private static final double elevationConv = 1.1/240;
 
+  private static int loopIncrement = 0;
+
   /**
    * Creates a new OMVPortTracker.
    */
@@ -47,8 +49,12 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       return true;
     }
     else {
-      targets[0].quality = 0;
-      return false;
+      if(loopIncrement++ >= 5){
+        targets[0].quality = 0;
+        loopIncrement = 0;
+        return false;
+      }
+      else return true;
     }
   }
 
@@ -63,6 +69,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       computeAzimuth(targets[0]);
       computeElevation(targets[0]);
       computeDistance(targets[0]);
+      computeRange(targets[0]);
 
       System.out.println("Advanced Tracking...");
       
@@ -86,7 +93,11 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * Updates the distance variable in the target data array
    */
   private void computeDistance(AdvancedTrackerInterface.AdvancedTargetData data) {
-    data.range = (7.484 * 240) / (data.cy * 1.016);
+    data.distance = (7.484 * 240) / (data.cy * 1.016);
+  }
+
+  private void computeRange(AdvancedTrackerInterface.AdvancedTargetData data) {
+    data.range = Math.sqrt(Math.pow(data.distance,2) - Math.pow(7.484, 2));
   }
 
   private void computeAzimuth(AdvancedTrackerInterface.AdvancedTargetData data) {
