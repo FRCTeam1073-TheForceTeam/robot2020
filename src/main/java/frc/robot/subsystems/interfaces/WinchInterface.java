@@ -14,8 +14,15 @@ public interface WinchInterface {
     // I CHOOOOSE: Winch! Winch uses ENGAGE!    
     void engageWinch();
 
-    void disengageWinch();
+    void engageDrivetrain();
     
     boolean isWinchEngaged();
 
+    public int isFwdLimitSwitchClosedLeft();
+
+    public int isFwdLimitSwitchClosedRight();
+
+    public int isRevLimitSwitchClosedLeft();
+
+    public int isRevLimitSwitchClosedRight();
 }
