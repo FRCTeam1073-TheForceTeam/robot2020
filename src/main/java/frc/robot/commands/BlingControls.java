@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Robot;
@@ -24,6 +25,10 @@ public class BlingControls extends CommandBase {
   double match_time;
   int move;
   String gameData;
+  
+  static Color red = new Color (255, 0, 0);
+  static Color green = new Color (0, 255, 0);
+  static Color blue = new Color (0, 0, 255);
 
   /**
    * Creates a new BlingControls.
@@ -45,7 +50,7 @@ public class BlingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    /*gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
@@ -58,9 +63,11 @@ public class BlingControls extends CommandBase {
         // driverControlledLEDs(8, 4);
         // blinkyLights(14, 3, 255, 255, 255);
         // movingLEDs(19, 7);
-        Robot.bling.setPatternRGBAll(0, 0, 0);
-      }
-    }
+        // Robot.bling.setPatternRGBAll(0, 0, 0);
+        
+      } */
+    Robot.bling.setLEDFromColor(3);
+    //}
   }
   
   
