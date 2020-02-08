@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.*;
 
+/**The class - Defines all the variables used*/
 public class ShuffleboardWidgets extends SubsystemBase {
 
   ShuffleboardTab tab;
@@ -85,8 +86,10 @@ public class ShuffleboardWidgets extends SubsystemBase {
   LiftInterface lift;
   WinchInterface winch;
 
+  /**The constructor - creates the shuffleboard tab - gets the interfaces' methods to be able to display it - calls the method ShuffleboardView()*/
   public ShuffleboardWidgets() {
 
+    //creates the tab in shuffleboard called Telemetry
     tab = Shuffleboard.getTab("Telemetry");
 
     /*
@@ -114,6 +117,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   }
 
+  /**used to update the values periodically*/
   @Override
   public void periodic() {
 
@@ -151,6 +155,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   }
 
+  /**sets variables to data from the interfaces - gets called periodically*/
   private void ShuffleboardInformation() {
 
     // Drivetrain Data INCOMPLETE
@@ -174,8 +179,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180;
 
     // Magazine Data COMPLETE
-    
-    //cellCount = magazine.getCellCount();
+    cellCount = magazine.getCellCount();
 
     // Climbing Data COMPLETE
     isBrakeset = lift.isBrakeSet();
@@ -190,6 +194,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   }
 
+  /**Creates the widgets and sets them to their corresponding NetworkTableEntry */
   private void ShuffleboardView() {
 
     leftEncoderEntry = tab
