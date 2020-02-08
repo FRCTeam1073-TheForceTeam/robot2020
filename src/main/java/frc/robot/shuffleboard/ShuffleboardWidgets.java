@@ -122,7 +122,28 @@ public class ShuffleboardWidgets extends SubsystemBase {
     leftEncoderEntry.setDouble(leftEncoderValue);
     rightEncoderEntry.setDouble(rightEncoderValue);
     gyroAngleEntry.setDouble(gyroAngleDegrees);
+    xcoordinateEntry.setDouble(robotX);
+    ycoordinateEntry.setDouble(robotY);
+    rotationEntry.setDouble(robotRotation);
+
+    turretAngleEntry.setDouble(turretDegrees);
+    turretVelocityEntry.setDouble(turretVelocity);
+
+    flywheelVelocityEntry.setDouble(flywheelVelocity);
+    flywheelTemperature1Entry.setDouble(flywheelTemperature[0]);
+    flywheelTemperature2Entry.setDouble(flywheelTemperature[1]);
+
+    hoodAngleEntry.setDouble(hoodDegrees);
+    hoodVelocityEntry.setDouble(hoodVelocity);
+
     cellCountEntry.setDouble(cellCount);
+
+    isBrakesetEntry.setBoolean(isBrakeset);
+    isLiftFullyExtendedEntry.setBoolean(isLiftFullyExtended);
+    isLiftFullyRetractedEntry.setBoolean(isLiftFullyRetracted);
+    liftExtensionEntry.setDouble(liftExtension);
+    isPinnedEntry.setBoolean(isPinned);
+    isWinchEngagedEntry.setBoolean(isWinchEngaged);
 
     Shuffleboard.update();
     // PID_testing();
