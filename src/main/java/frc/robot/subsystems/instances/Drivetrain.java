@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -61,8 +60,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
 
         leftMotorLeader.configPeakOutputForward(1.0);
-        rightMotorLeader.configPeakOutputReverse(-1.0);
+        leftMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
+        leftMotorFollower.configPeakOutputReverse(-1.0);
+        rightMotorLeader.configPeakOutputForward(1.0);
+        rightMotorLeader.configPeakOutputReverse(-1.0);
+        rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
@@ -90,6 +93,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         odometry = new DifferentialDriveOdometry(getAngleRadians());
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
+        leftMotorLeader.setIntegralAccumulator(0);
+        rightMotorLeader.setIntegralAccumulator(0);
 
         SmartDashboard.putNumber("P", P);
         SmartDashboard.putNumber("I", I);
