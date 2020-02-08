@@ -90,20 +90,33 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
   }
 
   /**
-   * Updates the distance variable in the target data array
+   * Updates the distance variable in the target data instance variables
+   * @param data
    */
   private void computeDistance(AdvancedTrackerInterface.AdvancedTargetData data) {
     data.distance = (7.484 * 240) / (data.cy * 1.016);
   }
 
+  /**
+   * Updates the range variable in the target data instance variable
+   * @param data
+   */
   private void computeRange(AdvancedTrackerInterface.AdvancedTargetData data) {
     data.range = Math.sqrt(Math.pow(data.distance,2) - Math.pow(7.484, 2));
   }
 
+  /**
+   * Updates the azimuth variable in the target data instance variable
+   * @param data
+   */
   private void computeAzimuth(AdvancedTrackerInterface.AdvancedTargetData data) {
     data.azimuth = (centerX - data.cx) * azimuthConv;
   }
 
+  /**
+   * Updates the elevation variable in the target data instance variable
+   * @param data
+   */
   private void computeElevation(AdvancedTrackerInterface.AdvancedTargetData data) {
     data.elevation = (centerY - data.cy) * elevationConv;
   }
