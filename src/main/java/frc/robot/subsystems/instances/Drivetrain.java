@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 
@@ -34,11 +35,14 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private static WPI_TalonFX rightMotorLeader;
     private static WPI_TalonFX leftMotorFollower;
     private static WPI_TalonFX rightMotorFollower;
+    //private static LimitSwitchNormal limitSwitch;
 
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
 
     Solenoid solenoid = new Solenoid(6);
+
+    private boolean winchEngaged;
 
     public Drivetrain() {
         // Setting up motors
@@ -198,6 +202,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorFollower.configFactoryDefault();
         rightMotorFollower.configFactoryDefault();
 
+        // Keep this false for testing on roadkill where motors are unplugged
         leftMotorLeader.setSafetyEnabled(false);
         rightMotorLeader.setSafetyEnabled(false);
         leftMotorFollower.setSafetyEnabled(false);
@@ -209,13 +214,15 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
 
         leftMotorLeader.configPeakOutputForward(1.0);
-        rightMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
+        rightMotorLeader.configPeakOutputReverse(-1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
+
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
 
@@ -225,10 +232,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
 
-        // leftMotorLeader.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyClosed, 3, 0);
-        // leftMotorLeader.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyClosed, 3, 0);
+        leftMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        leftMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
 
         solenoid.set(true);
+
+        winchEngaged = true;
     }
     public void engageDrivetrain() {
 
@@ -289,9 +298,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.clearPersistent("D");
 
         solenoid.set(false);
+        
+        winchEngaged = false;
     }
 
     public boolean isWinchEngaged(){
-        return solenoid.get();
+        return winchEngaged;
     }
 }
