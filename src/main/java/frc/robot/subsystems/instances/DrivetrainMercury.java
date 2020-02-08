@@ -250,4 +250,20 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
     public boolean isWinchEngaged(){
         return false;
     }
+
+    public int isFwdLimitSwitchClosedLeft() {
+        return leftMotorLeader.isFwdLimitSwitchClosed();
+    }
+
+    public int isRevLimitSwitchClosedLeft() {
+        return leftMotorLeader.isRevLimitSwitchClosed();
+    }
+
+    public int isFwdLimitSwitchClosedRight() {
+        return rightMotorLeader.isFwdLimitSwitchClosed();
+    }
+
+    public int isRevLimitSwitchClosedRight() {
+        return rightMotorLeader.isRevLimitSwitchClosed();
+    }
 }

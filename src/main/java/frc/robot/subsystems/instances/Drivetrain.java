@@ -305,4 +305,20 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     public boolean isWinchEngaged(){
         return winchEngaged;
     }
+    
+    public int isFwdLimitSwitchClosedLeft() {
+        return leftMotorLeader.isFwdLimitSwitchClosed();
+    }
+
+    public int isRevLimitSwitchClosedLeft() {
+        return leftMotorLeader.isRevLimitSwitchClosed();
+    }
+
+    public int isFwdLimitSwitchClosedRight() {
+        return rightMotorLeader.isFwdLimitSwitchClosed();
+    }
+
+    public int isRevLimitSwitchClosedRight() {
+        return rightMotorLeader.isRevLimitSwitchClosed();
+    }
 }
