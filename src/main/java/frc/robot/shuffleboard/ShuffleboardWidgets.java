@@ -163,7 +163,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     robotY = pose.getTranslation().getY();
     robotRotation = pose.getRotation().getDegrees();
 
-    // Turret Data INCOMPLETE?
+    // Turret Data COMPLETE
     turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
     turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
 
