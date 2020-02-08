@@ -1,6 +1,6 @@
 package frc.robot.subsystems.instances;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
+public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterface, WinchInterface {
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 
@@ -27,55 +27,63 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
     private double ticksPerMeter = ((52352 + 56574 + 54036 + 56452 + 53588 + 57594) / 6.0) / Units.feetToMeters(10);
     // ticksPerWheelRotation / (Math.PI * wheelDiameter);
-    private static WPI_TalonFX leftMotorLeader;
-    private static WPI_TalonFX rightMotorLeader;
-    private static WPI_TalonFX leftMotorFollower;
-    private static WPI_TalonFX rightMotorFollower;
+    private static WPI_TalonSRX leftMotorLeader;
+    private static WPI_TalonSRX rightMotorLeader;
+    private static WPI_TalonSRX leftMotorFollower;
+    private static WPI_TalonSRX rightMotorFollower;
+    private static WPI_TalonSRX leftMotorFollower2;
+    private static WPI_TalonSRX rightMotorFollower2;
 
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
 
-    public Drivetrain() {
+    public DrivetrainMercury() {
         // Setting up motors
         // FUn Fact: It's pronounced "ph-WHE-nix"
 
-        leftMotorLeader = new WPI_TalonFX(12);
-        rightMotorLeader = new WPI_TalonFX(13);
-        leftMotorFollower = new WPI_TalonFX(14);
-        rightMotorFollower = new WPI_TalonFX(15);
+        leftMotorLeader = new WPI_TalonSRX(12);
+        rightMotorLeader = new WPI_TalonSRX(13);
+        leftMotorFollower = new WPI_TalonSRX(14);
+        rightMotorFollower = new WPI_TalonSRX(15);
+        leftMotorFollower2 = new WPI_TalonSRX(16);
+        rightMotorFollower2 = new WPI_TalonSRX(17);
 
         leftMotorLeader.configFactoryDefault();
         rightMotorLeader.configFactoryDefault();
         leftMotorFollower.configFactoryDefault();
         rightMotorFollower.configFactoryDefault();
+        leftMotorFollower2.configFactoryDefault();
+        rightMotorFollower2.configFactoryDefault();
 
         leftMotorLeader.setSafetyEnabled(false);
         rightMotorLeader.setSafetyEnabled(false);
         leftMotorFollower.setSafetyEnabled(false);
         rightMotorFollower.setSafetyEnabled(false);
+        leftMotorFollower2.setSafetyEnabled(false);
+        rightMotorFollower2.setSafetyEnabled(false);
 
         leftMotorLeader.setNeutralMode(NeutralMode.Brake);
         rightMotorLeader.setNeutralMode(NeutralMode.Brake);
         leftMotorFollower.setNeutralMode(NeutralMode.Brake);
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
+        leftMotorFollower2.setNeutralMode(NeutralMode.Brake);
+        rightMotorFollower2.setNeutralMode(NeutralMode.Brake);
 
         leftMotorLeader.configPeakOutputForward(1.0);
-        leftMotorLeader.configPeakOutputReverse(-1.0);
-        leftMotorFollower.configPeakOutputForward(1.0);
-        leftMotorFollower.configPeakOutputReverse(-1.0);
-        rightMotorLeader.configPeakOutputForward(1.0);
         rightMotorLeader.configPeakOutputReverse(-1.0);
-        rightMotorFollower.configPeakOutputForward(1.0);
+        leftMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
+        leftMotorFollower2.configPeakOutputForward(1.0);
+        rightMotorFollower2.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
-        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 0.2;
-        double I = 0.005;
-        double D = 8;
+        double P = 2;
+        double I = 0;
+        double D = 6;
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
@@ -84,24 +92,22 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.config_kD(0, D);
 
         leftMotorFollower.follow(leftMotorLeader);
-        leftMotorFollower.setInverted(true);
+        leftMotorFollower2.follow(leftMotorLeader);
         rightMotorFollower.follow(rightMotorLeader);
-        rightMotorFollower.setInverted(true);
+        rightMotorFollower2.follow(rightMotorLeader);
 
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
         odometry = new DifferentialDriveOdometry(getAngleRadians());
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
-        leftMotorLeader.setIntegralAccumulator(0);
-        rightMotorLeader.setIntegralAccumulator(0);
 
-        SmartDashboard.putNumber("P", P);
+        /*SmartDashboard.putNumber("P", P);
         SmartDashboard.putNumber("I", I);
         SmartDashboard.putNumber("D", D);
         SmartDashboard.clearPersistent("P");
         SmartDashboard.clearPersistent("I");
-        SmartDashboard.clearPersistent("D");
+        SmartDashboard.clearPersistent("D");*/
     }
 
     /**
@@ -152,7 +158,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
         //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
         // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
-        SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
+        /*SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
         SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
         SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
         SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
@@ -161,10 +167,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
         SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
         SmartDashboard.putNumber("Rotation", getAngleDegrees());
-        SmartDashboard.putNumber("leftPower", leftPower*3500);
-        SmartDashboard.putNumber("rightPower", rightPower);
-        SmartDashboard.putNumber("leftVelocity", leftMotorLeader.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("rightVelocity", rightMotorLeader.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("leftPower", leftPower);
+        SmartDashboard.putNumber("rightPower", rightPower);*/
     }
 
     public Pose2d getRobotPose() {
@@ -240,13 +244,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         return kinematics.toChassisSpeeds(getWheelSpeeds());
     }
 
-    public void engageWinch() {
-    }
-    
-    public void disengageWinch() {
-
-    }
-    
+    public void engageWinch(){}
+    public void disengageWinch(){}
     public boolean isWinchEngaged(){
         return false;
     }
