@@ -8,6 +8,8 @@
 package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.MagazineInterface;
@@ -20,28 +22,28 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   private static int heightCellCount;//The cell count as determined by the distance sensor facing upward
   private static WPI_TalonSRX magMotor; //motor controls all belts on magazine. Will likely not have encoder
   private static final int ballDist = 2;
-  //private static TimeOfFlight enterance;
-  //private static TimeOfFlight exit;
-  //private static TimeOfFlight height;//distance sensor facing upward from the bottom of the magazine
+  private static TimeOfFlight enterance;
+  private static TimeOfFlight exit;
+  private static TimeOfFlight height;//distance sensor facing upward from the bottom of the magazine
 
   public Magazine() {
     magMotor = new WPI_TalonSRX(24);
     cellCount = 0;
-    //enterance = new TimeOfFlight(1);
-    //exit = new TimeOfFlight(2);
-    //height = new TimeOfFlight(3);
+    enterance = new TimeOfFlight(1);
+    exit = new TimeOfFlight(2);
+    height = new TimeOfFlight(3);
 
-    //enterance.setRangingMode(RangingMode.Short, 20);
-    //exit.setRangingMode(RangingMode.Short, 20);
-    //height.setRangingMode(RangingMode.Short, 20);
+    enterance.setRangingMode(RangingMode.Short, 20);
+    exit.setRangingMode(RangingMode.Short, 20);
+    height.setRangingMode(RangingMode.Short, 20);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    int cellCount = getCellCount();
-    //int enterDist = updateEnteranceDist();
-    //int exitDist = updateExitDist();
+    int cellCount = updateCellCount();
+    updateEnteranceDist();
+    updateExitDist();
   }
 
   @Override
@@ -49,19 +51,27 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor.set(power);
   }
   @Override
-  public int getCellCount() {
+  public int updateCellCount() {
+    if(enterance.getRange() <= ballDist){
+
+    }
+    if(exit ){
+
+    }
     return cellCount;
   }
   @Override
   public void updateExitDist(){
+    exit.getRange();
   }
   @Override
   public void updateHeightCellCount(){
-
+    double heightDistance = height.getRange();
+    heightCellCount = (int)(heightDistance/7);
   }
   @Override
   public void updateEnteranceDist() {
-
+    enterance.getRange();
   }
   
 
