@@ -82,8 +82,8 @@ public class Robot extends TimedRobot {
     turretControls = new TurretControls(turret);
     registerSubsystem((SubsystemBase)turret, turretControls);
 
-    // widgets = new ShuffleboardWidgets();
-    // widgets.register();
+    widgets = new ShuffleboardWidgets();
+    widgets.register();
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
