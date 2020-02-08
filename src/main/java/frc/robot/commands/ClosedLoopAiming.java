@@ -161,7 +161,8 @@ public class ClosedLoopAiming extends CommandBase {
     double shooterVelocity = targetTrajectory.velocity;
     double hoodAngle = targetTrajectory.angle;
     shooter.setHoodAngle(hoodAngle);
-    shooter.setFlywheelSpeed();
+    shooter.setFlywheelSpeed(getFlywheelRotationRate(shooterVelocity));
+    turret.setVelocity(azimuthCorrection);
   }
 
   /**
