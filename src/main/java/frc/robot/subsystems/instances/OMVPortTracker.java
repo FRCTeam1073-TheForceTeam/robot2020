@@ -13,10 +13,13 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
   private CANData targetData;
   private AdvancedTrackerInterface.AdvancedTargetData [] targets;
   private long lastUpdate = 0;
-  private static final int centerX = 160;
-  private static final int centerY = 120;
-  private static final double azimuthConv = 1.26/320;
-  private static final double elevationConv = 1.1/240;
+  private static final int centerX = 160; // Horizontal center of the image in pixels
+  private static final int centerY = 120; // Vertical center of the image in pixels
+  private static final double azimuthConv = 1.222/320; // Conversion ratio for the azimuth in degrees from pixels
+  private static final double elevationConv = 0.977/240; // Conversion ratio for the elevation in degrees from pixels
+  private static final double baseElev = 0.384; // Standard elevation of the camera in degrees
+  private static final double portHeight = 2.49; // Height of the center of the inner port in meters
+  private static final double trackerHeight = 0.8636; // Height of the port tracker camera in meters
 
   private static int loopIncrement = 0;
 
@@ -94,7 +97,8 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeDistance(AdvancedTrackerInterface.AdvancedTargetData data) {
-    data.distance = (7.484 * 240) / (data.cy * 1.016);
+    data.distance = (portHeight - trackerHeight) / Math.tan(data.elevation);
+    //data.distance = (7.484 * 240) / (data.cy * 1.016);
   }
 
   /**
@@ -102,7 +106,8 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeRange(AdvancedTrackerInterface.AdvancedTargetData data) {
-    data.range = Math.sqrt(Math.pow(data.distance,2) - Math.pow(7.484, 2));
+    data.range = (portHeight - trackerHeight) / Math.sin(data.elevation);
+    //data.range = Math.sqrt(Math.pow(data.distance,2) - Math.pow(7.484, 2));
   }
 
   /**
@@ -110,7 +115,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeAzimuth(AdvancedTrackerInterface.AdvancedTargetData data) {
-    data.azimuth = (centerX - data.cx) * azimuthConv;
+    data.azimuth = -(centerX - data.cx) * azimuthConv;
   }
 
   /**
@@ -118,6 +123,6 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeElevation(AdvancedTrackerInterface.AdvancedTargetData data) {
-    data.elevation = (centerY - data.cy) * elevationConv;
+    data.elevation = (centerY - data.cy) * elevationConv + baseElev;
   }
 }
