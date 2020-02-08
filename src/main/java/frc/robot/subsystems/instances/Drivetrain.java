@@ -293,13 +293,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorLeader.setIntegralAccumulator(0);
         rightMotorLeader.setIntegralAccumulator(0);
 
-        SmartDashboard.putNumber("P", P);
-        SmartDashboard.putNumber("I", I);
-        SmartDashboard.putNumber("D", D);
-        SmartDashboard.clearPersistent("P");
-        SmartDashboard.clearPersistent("I");
-        SmartDashboard.clearPersistent("D");
-
         solenoid.set(false);
         
         winchEngaged = false;
