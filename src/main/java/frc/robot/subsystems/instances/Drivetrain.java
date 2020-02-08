@@ -287,6 +287,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.clearPersistent("P");
         SmartDashboard.clearPersistent("I");
         SmartDashboard.clearPersistent("D");
+
+        solenoid.set(false);
     }
 
     public boolean isWinchEngaged(){
