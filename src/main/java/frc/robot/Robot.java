@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  public static CommandBase widgetsCommand;
   public static Bling bling;
   public static BlingControls blingControls;
   
