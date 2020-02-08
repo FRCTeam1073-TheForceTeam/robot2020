@@ -44,7 +44,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
   private NetworkTableEntry rotationEntry;
   double robotRotation = 0.0;
 
-  //private NetworkTableEntry;
   double drivetrainVelocity = 0.0;
 
   private NetworkTableEntry turretAngleEntry;
