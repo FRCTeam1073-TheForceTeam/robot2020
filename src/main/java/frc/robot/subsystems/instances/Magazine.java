@@ -18,20 +18,20 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /** 
    * Creates a new Magazine.
    */
-  private static int CellCount;//The cell count as determined by the distance sensor facing upward
+  private static int cellCount;//The cell count as determined by the distance sensor facing upward
   private static WPI_TalonSRX magMotor; //motor controls all belts on magazine. Will likely not have encoder
-  private static final int ballDist = 2;
+  private static final int ballDist = 1;
   private static TimeOfFlight exit;
-  private static TimeOfFlight height;//distance sensor facing upward from the bottom of the magazine
+  private static TimeOfFlight entrance;//distance sensor facing upward from the bottom of the magazine
 
   public Magazine() {
     magMotor = new WPI_TalonSRX(24);//24 is temporary ID
     CellCount = 0;
     exit = new TimeOfFlight(1);//1 is temporary ID
-    height = new TimeOfFlight(2);//2 is temporary ID
+    entrance = new TimeOfFlight(2);//2 is temporary ID
 
     exit.setRangingMode(RangingMode.Short, 20);
-    height.setRangingMode(RangingMode.Short, 20);
+    entrance.setRangingMode(RangingMode.Short, 20);
   }
 
   @Override
@@ -56,9 +56,13 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * if a ball passes through the enterance, a power cell is added
    * if a ball passes through the exit, a power cell is decreased
    */
-  public void updateCellCount() {
-    double heightDistance = height.getRange();
-    CellCount = (int)(heightDistance/7);//7 is the diameter of the ball. The Magazine can fit 4 balls. Therefore, the 
+public void updateCellCount() {
+    if(entrance.getRange() == ballDist){
+      cellCount++;
+    }
+    if(exit.getRange() == ballDist){
+      cellCount--;
+    }
   }
 
   
