@@ -190,8 +190,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private double leftPower = 0, rightPower = 0;
 
     public void setVelocity(double left, double right) {
-        leftMotorLeader.set(ControlMode.Velocity, left*3500);
-        rightMotorLeader.set(ControlMode.Velocity, right*3500);
+        leftMotorLeader.set(ControlMode.Velocity, left * 3500);
+        rightMotorLeader.set(ControlMode.Velocity, right * 3500);
         leftPower = left;
         rightPower = right;
         //System.out.println("x");

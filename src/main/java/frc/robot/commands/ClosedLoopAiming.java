@@ -20,13 +20,15 @@ public class ClosedLoopAiming extends CommandBase {
   ShooterInterface shooter;
 
   private double azimuthTarget;
-  private int currX;
-  private int currY;
   private boolean temporary;
 
-  private final int targX;
-  private final int targY;
-  private final double accelConstant;
+  private double currentAzimuth = 0;
+  private double currentDistance = 0;
+  private double currentRange = 0;
+  private double currentElevation = 0;
+
+  private double accelConstant = 0.1;
+  private double azimuthThreshold = 0;
 
   /**
    * When activated, will align turret and shooter to the port vision target
@@ -37,14 +39,13 @@ public class ClosedLoopAiming extends CommandBase {
    */
 
   public ClosedLoopAiming(final TurretInterface turret_, final AdvancedTrackerInterface portTracker_,
-      final ShooterInterface shooter_, boolean temporary_) {
+      final ShooterInterface shooter_, boolean temporary_, double azimuthThreshold_) {
     turret = turret_;
     portTracker = portTracker_;
     shooter = shooter_;
+    temporary = temporary_;
+    azimuthThreshold = azimuthThreshold_;
     addRequirements((SubsystemBase) turret, (SubsystemBase) portTracker);
-    targX = 0;
-    targY = 0;
-    accelConstant = 1;
   }
 
   public static final double kGravity = 9.807;
@@ -145,10 +146,13 @@ public class ClosedLoopAiming extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currX = portTracker.getAdvancedTargets()[0].cx;
-    currY = portTracker.getAdvancedTargets()[0].cy;
-    azimuthTarget = (targX - currX) * accelConstant;
-    turret.setVelocity(azimuthTarget);
+    currentAzimuth = portTracker.getAdvancedTargets()[0].azimuth;
+    currentDistance = portTracker.getAdvancedTargets()[0].distance;
+    currentRange = portTracker.getAdvancedTargets()[0].range;
+    currentElevation = portTracker.getAdvancedTargets()[0].elevation;
+    double azimuthCorrection = (azimuthTarget - currentAzimuth) * accelConstant;
+    turret.setVelocity(azimuthCorrection);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -161,7 +165,7 @@ public class ClosedLoopAiming extends CommandBase {
   @Override
   public boolean isFinished() {
     if (temporary)
-      return targX - currX == 0;
+      return Math.abs(azimuthTarget - currentAzimuth) < azimuthThreshold;
     else
       return false;
   }
