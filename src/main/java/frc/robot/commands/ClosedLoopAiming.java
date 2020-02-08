@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
@@ -23,9 +24,9 @@ public class ClosedLoopAiming extends CommandBase {
   private boolean temporary;
 
   private double currentAzimuth = 0;
-  private double currentDistance = 0;
-  private double currentRange = 0;
-  private double currentElevation = 0;
+  public double currentDistance = 0;
+  public double currentRange = 0;
+  public double currentElevation = 0;
 
   private double accelConstant = 0.1;
   private double azimuthThreshold = 0;
@@ -51,6 +52,11 @@ public class ClosedLoopAiming extends CommandBase {
   public static final double kGravity = 9.807;
   public static final double kShooterHeight = 0.873;
   public static final double kRelativePortDistance = 0.873;
+  private static final double kPowerCellRadius = 0.09;
+  private static final double kFlywheelRadius = Units.inchesToMeters(2.5);
+
+  //The distance after which the robot decides to switch to targeting only the outer port.
+  public static final double distanceTargetingThreshold = 10;
  
   /**Gets velocity given the angle, range, and height.
    * @param angle The angle in radians.
@@ -151,8 +157,20 @@ public class ClosedLoopAiming extends CommandBase {
     currentRange = portTracker.getAdvancedTargets()[0].range;
     currentElevation = portTracker.getAdvancedTargets()[0].elevation;
     double azimuthCorrection = (azimuthTarget - currentAzimuth) * accelConstant;
-    turret.setVelocity(azimuthCorrection);
+    TrajectoryConfiguration targetTrajectory = getDoublePortConfiguration(currentRange, currentElevation);
+    double shooterVelocity = targetTrajectory.velocity;
+    double hoodAngle = targetTrajectory.angle;
+    shooter.setHoodAngle(hoodAngle);
+    shooter.setFlywheelSpeed();
+  }
 
+  /**
+   * Gets the flywheel rotation rate given a desired speed
+   * @param speed Speed of power cell (in meters/sec)
+   * @return Motor speed suitable for Shooter.setFlywheelSpeed (in radians/sec)
+   */
+  public double getFlywheelRotationRate(double speed) {
+    return speed * 0.5 * (kPowerCellRadius+kFlywheelRadius);
   }
 
   // Called once the command ends or is interrupted.

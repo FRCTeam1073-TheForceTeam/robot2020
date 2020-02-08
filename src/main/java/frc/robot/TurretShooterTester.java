@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ClosedLoopAiming;
 import frc.robot.commands.DriveControls;
 import frc.robot.commands.TurretControls;
+import frc.robot.components.InterpolatorTable;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
@@ -54,7 +55,8 @@ public class TurretShooterTester extends TimedRobot {
     turret = new Turret();
     ((SubsystemBase) turret).register();
     shooter = new Shooter();
-    turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, false);
+    ((SubsystemBase) shooter).register();
+    turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, false, 0.01);
     registerSubsystem((SubsystemBase) turret, turretControls);
   }
 
@@ -75,15 +77,8 @@ public class TurretShooterTester extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
-  /**
-   * This function is called once each time the robot enters Disabled mode.
-   */
   @Override
   public void disabledInit() {
-  }
-
-  @Override
-  public void disabledPeriodic() {
   }
 
   /**
@@ -122,6 +117,11 @@ public class TurretShooterTester extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+
+  }
+
+  @Override
+  public void disabledPeriodic() {
 
   }
 }
