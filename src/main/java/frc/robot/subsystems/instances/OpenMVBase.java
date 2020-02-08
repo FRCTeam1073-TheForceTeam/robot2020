@@ -66,8 +66,8 @@ public class OpenMVBase extends SubsystemBase {
    * @param index - Lower 4 bits of API Index
    * @return
    */
-  public int apiIndex(int apiClass, int index){
-      return ((apiClass & 0x03f) <<4) |(index & 0x0f);
+  public int apiIndex(int apiClass, int index) {
+      return ((apiClass & 0x03f) <<4) | (index & 0x0f);
     }
 
     /**
@@ -122,10 +122,12 @@ public class OpenMVBase extends SubsystemBase {
    * 
    * @return True if we got a heartbeat mesage, false if we did not.
    */
-  public boolean readHeartbeat(){
+  public boolean readHeartbeat() {
     if(read(apiIndex(1, 2), recvData) == true && recvData.length == 3) {
       mode = recvData.data[0];
-      frameCounter = (recvData.data[1] << 8) | recvData.data[2];
+      int counterHi = recvData.data[1] & 0xFF;
+      int counterLo = recvData.data[2] & 0xFF;
+      frameCounter = (counterHi << 8) | counterLo;
       lastHeartbeat = recvData.timestamp;
       return true;
     }
