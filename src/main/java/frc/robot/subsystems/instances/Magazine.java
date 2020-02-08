@@ -41,7 +41,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    int cellCount = updateCellCount();
+    updateCellCount();
     updateEnteranceDist();
     updateExitDist();
   }
@@ -51,14 +51,13 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor.set(power);
   }
   @Override
-  public int updateCellCount() {
+  public void updateCellCount() {
     if(enterance.getRange() <= ballDist){
-
+      cellCount++;
     }
-    if(exit ){
-
+    if(exit.getRange() <= ballDist){
+      cellCount--;
     }
-    return cellCount;
   }
   @Override
   public void updateExitDist(){

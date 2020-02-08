@@ -13,7 +13,7 @@ public interface MagazineInterface {
 
     void run(double speed);
 
-    int updateCellCount();
+    void updateCellCount();
 
     void updateEnteranceDist();
     
