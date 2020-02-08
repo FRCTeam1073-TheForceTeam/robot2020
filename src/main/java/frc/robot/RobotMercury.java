@@ -8,9 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
+import frc.robot.subsystems.instances.DrivetrainMercury;
 import frc.robot.subsystems.interfaces.*;
 import frc.robot.shuffleboard.*;
 /**
@@ -19,7 +22,7 @@ import frc.robot.shuffleboard.*;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class RobotMercury extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -41,8 +44,7 @@ public class Robot extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  public static Bling bling;
-  public static BlingControls blingControls;
+  // public static Bling bling;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -50,11 +52,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     OI.init();
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+    // bling = new Bling();
+    // bling.register();
+    // CommandScheduler.getInstance().setDefaultCommand(bling, new BlingControls());
 
-    drivetrain = new Drivetrain();
+    drivetrain = new DrivetrainMercury();
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
@@ -82,8 +84,8 @@ public class Robot extends TimedRobot {
     turretControls = new TurretControls(turret);
     registerSubsystem((SubsystemBase)turret, turretControls);
 
-    // widgets = new ShuffleboardWidgets();
-    // widgets.register();
+    widgets = new ShuffleboardWidgets();
+    widgets.register();
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
