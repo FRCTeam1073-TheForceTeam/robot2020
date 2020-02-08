@@ -103,24 +103,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
-        // System.out.println("Meters: " + robotPose.getTranslation().getX() + "," + robotPose.getTranslation().getY()
-        //         + "," + getAngleRadians());
-        // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
-        //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
-        // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
-        SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
-        SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
-        SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
-        SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
-        SmartDashboard.putNumber("lastGyroValue", lastGyroValue);
-        SmartDashboard.putNumber("gyroAngle", gyroAngle);
-        SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
-        SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
-        SmartDashboard.putNumber("Rotation", getAngleDegrees());
-        SmartDashboard.putNumber("leftPower", leftPower*3500);
-        SmartDashboard.putNumber("rightPower", rightPower);
-        SmartDashboard.putNumber("leftVelocity", leftMotorLeader.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("rightVelocity", rightMotorLeader.getSelectedSensorVelocity());
     }
 
     public Pose2d getRobotPose() {
