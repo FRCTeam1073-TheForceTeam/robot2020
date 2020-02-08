@@ -44,69 +44,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // Setting up motors
         // Fun Fact: It's pronounced "ph-WHE-nix"
 
-        leftMotorLeader = new WPI_TalonFX(12);
-        rightMotorLeader = new WPI_TalonFX(13);
-        leftMotorFollower = new WPI_TalonFX(14);
-        rightMotorFollower = new WPI_TalonFX(15);
-
-        leftMotorLeader.configFactoryDefault();
-        rightMotorLeader.configFactoryDefault();
-        leftMotorFollower.configFactoryDefault();
-        rightMotorFollower.configFactoryDefault();
-
-        leftMotorLeader.setSafetyEnabled(false);
-        rightMotorLeader.setSafetyEnabled(false);
-        leftMotorFollower.setSafetyEnabled(false);
-        rightMotorFollower.setSafetyEnabled(false);
-
-        leftMotorLeader.setNeutralMode(NeutralMode.Brake);
-        rightMotorLeader.setNeutralMode(NeutralMode.Brake);
-        leftMotorFollower.setNeutralMode(NeutralMode.Brake);
-        rightMotorFollower.setNeutralMode(NeutralMode.Brake);
-
-        leftMotorLeader.configPeakOutputForward(1.0);
-        leftMotorLeader.configPeakOutputReverse(-1.0);
-        leftMotorFollower.configPeakOutputForward(1.0);
-        leftMotorFollower.configPeakOutputReverse(-1.0);
-        rightMotorLeader.configPeakOutputForward(1.0);
-        rightMotorLeader.configPeakOutputReverse(-1.0);
-        rightMotorFollower.configPeakOutputForward(1.0);
-        rightMotorFollower.configPeakOutputReverse(-1.0);
-
-        leftMotorLeader.setInverted(true);
-        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        leftMotorLeader.setSensorPhase(true);
-        rightMotorLeader.setSensorPhase(true);
-        double P = 0.2;
-        double I = 0.005;
-        double D = 8;
-        leftMotorLeader.config_kP(0, P);
-        rightMotorLeader.config_kP(0, P);
-        leftMotorLeader.config_kI(0, I);
-        rightMotorLeader.config_kI(0, I);
-        leftMotorLeader.config_kD(0, D);
-        rightMotorLeader.config_kD(0, D);
-
-        leftMotorFollower.follow(leftMotorLeader);
-        leftMotorFollower.setInverted(true);
-        rightMotorFollower.follow(rightMotorLeader);
-        rightMotorFollower.setInverted(true);
+        
 
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
         odometry = new DifferentialDriveOdometry(getAngleRadians());
-        leftMotorLeader.setSelectedSensorPosition(0);
-        rightMotorLeader.setSelectedSensorPosition(0);
-        leftMotorLeader.setIntegralAccumulator(0);
-        rightMotorLeader.setIntegralAccumulator(0);
-
-        SmartDashboard.putNumber("P", P);
-        SmartDashboard.putNumber("I", I);
-        SmartDashboard.putNumber("D", D);
-        SmartDashboard.clearPersistent("P");
-        SmartDashboard.clearPersistent("I");
-        SmartDashboard.clearPersistent("D");
     }
 
     /**
@@ -246,35 +188,25 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     }
 
     public void engageWinch(){
-        // TODO: Change this when the drivetrain is updated to falcons
-
         leftMotorLeader.configFactoryDefault();
         rightMotorLeader.configFactoryDefault();
         leftMotorFollower.configFactoryDefault();
         rightMotorFollower.configFactoryDefault();
-        leftMotorFollower2.configFactoryDefault();
-        rightMotorFollower2.configFactoryDefault();
 
         leftMotorLeader.setSafetyEnabled(false);
         rightMotorLeader.setSafetyEnabled(false);
         leftMotorFollower.setSafetyEnabled(false);
         rightMotorFollower.setSafetyEnabled(false);
-        leftMotorFollower2.setSafetyEnabled(false);
-        rightMotorFollower2.setSafetyEnabled(false);
 
         leftMotorLeader.setNeutralMode(NeutralMode.Brake);
         rightMotorLeader.setNeutralMode(NeutralMode.Brake);
         leftMotorFollower.setNeutralMode(NeutralMode.Brake);
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
-        leftMotorFollower2.setNeutralMode(NeutralMode.Brake);
-        rightMotorFollower2.setNeutralMode(NeutralMode.Brake);
 
         leftMotorLeader.configPeakOutputForward(1.0);
         rightMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
-        leftMotorFollower2.configPeakOutputForward(1.0);
-        rightMotorFollower2.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
@@ -283,9 +215,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.setSensorPhase(true);
 
         leftMotorFollower.follow(leftMotorLeader);
-        leftMotorFollower2.follow(leftMotorLeader);
         rightMotorFollower.follow(rightMotorLeader);
-        rightMotorFollower2.follow(rightMotorLeader);
         
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
@@ -294,55 +224,45 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // leftMotorLeader.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyClosed, 3, 0);
 
         solenoid.set(true);
-    public void engageWinch() {
     }
-    
-    public void disengageWinch() {
+    public void engageDrivetrain() {
+        leftMotorLeader = new WPI_TalonFX(12);
+        rightMotorLeader = new WPI_TalonFX(13);
+        leftMotorFollower = new WPI_TalonFX(14);
+        rightMotorFollower = new WPI_TalonFX(15);
 
-    }
-    
-    public boolean isWinchEngaged(){
-        return false;
-    }
-
-    public void engageDrivetrain(){
-        // Motor setup
         leftMotorLeader.configFactoryDefault();
         rightMotorLeader.configFactoryDefault();
         leftMotorFollower.configFactoryDefault();
         rightMotorFollower.configFactoryDefault();
-        leftMotorFollower2.configFactoryDefault();
-        rightMotorFollower2.configFactoryDefault();
 
         leftMotorLeader.setSafetyEnabled(false);
         rightMotorLeader.setSafetyEnabled(false);
         leftMotorFollower.setSafetyEnabled(false);
         rightMotorFollower.setSafetyEnabled(false);
-        leftMotorFollower2.setSafetyEnabled(false);
-        rightMotorFollower2.setSafetyEnabled(false);
 
         leftMotorLeader.setNeutralMode(NeutralMode.Brake);
         rightMotorLeader.setNeutralMode(NeutralMode.Brake);
         leftMotorFollower.setNeutralMode(NeutralMode.Brake);
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
-        leftMotorFollower2.setNeutralMode(NeutralMode.Brake);
-        rightMotorFollower2.setNeutralMode(NeutralMode.Brake);
 
         leftMotorLeader.configPeakOutputForward(1.0);
-        rightMotorLeader.configPeakOutputReverse(-1.0);
+        leftMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
+        leftMotorFollower.configPeakOutputReverse(-1.0);
+        rightMotorLeader.configPeakOutputForward(1.0);
+        rightMotorLeader.configPeakOutputReverse(-1.0);
+        rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
-        leftMotorFollower2.configPeakOutputForward(1.0);
-        rightMotorFollower2.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
-        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 2;
-        double I = 0;
-        double D = 6;
+        double P = 0.2;
+        double I = 0.005;
+        double D = 8;
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
@@ -351,14 +271,21 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.config_kD(0, D);
 
         leftMotorFollower.follow(leftMotorLeader);
-        leftMotorFollower2.follow(leftMotorLeader);
+        leftMotorFollower.setInverted(true);
         rightMotorFollower.follow(rightMotorLeader);
-        rightMotorFollower2.follow(rightMotorLeader);
-        
+        rightMotorFollower.setInverted(true);
+
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
-        
-        solenoid.set(false);
+        leftMotorLeader.setIntegralAccumulator(0);
+        rightMotorLeader.setIntegralAccumulator(0);
+
+        SmartDashboard.putNumber("P", P);
+        SmartDashboard.putNumber("I", I);
+        SmartDashboard.putNumber("D", D);
+        SmartDashboard.clearPersistent("P");
+        SmartDashboard.clearPersistent("I");
+        SmartDashboard.clearPersistent("D");
     }
 
     public boolean isWinchEngaged(){
