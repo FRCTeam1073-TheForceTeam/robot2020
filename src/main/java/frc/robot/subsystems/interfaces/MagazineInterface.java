@@ -15,7 +15,9 @@ public interface MagazineInterface {
 
     int getCellCount();
 
-    void addCell();
+    void updateEnteranceDist();
+    
+    void updateExitDist();
 
-    void subtractCell();
+    void updateHeightCellCount();
 }

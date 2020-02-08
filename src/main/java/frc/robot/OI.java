@@ -7,6 +7,10 @@ public class OI {
     public static XboxController operatorController;
     public static void init() {
         driverController = new XboxController(0);
-        operatorController = new XboxController(1);    
+        operatorController = new XboxController(1);
+        
+        
+        
     }
+    
 }
