@@ -49,12 +49,13 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       targets[0].quality = targetData.data[6];
       targets[0].timestamp = targetData.timestamp; // Assign the CANBus message timestamp
       lastUpdate = targetData.timestamp;
+
+      loopIncrement = 0;
       return true;
     }
     else {
       if(loopIncrement++ >= 5){
         targets[0].quality = 0;
-        loopIncrement = 0;
         return false;
       }
       else return true;
