@@ -23,4 +23,8 @@ public interface LiftInterface {
     void pinLift();
     void unpinLift();
     boolean isPinned();
+    
+    void setLiftPower(double percVal);
+
+    void setHookPower(double percVal);
 }

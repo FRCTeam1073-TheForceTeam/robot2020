@@ -7,8 +7,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.OI;
 import frc.robot.subsystems.interfaces.LiftInterface;
 
 public class LiftControls extends CommandBase {
@@ -31,6 +33,18 @@ public class LiftControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (OI.operatorController.getYButton()) {
+      lift.setLiftPower(.3);
+    }
+    if (OI.operatorController.getBButton()) {
+      lift.setLiftPower(-.3);
+    }
+    if (OI.operatorController.getTriggerAxis(Hand.kRight) > .1) {
+      lift.setHookPower(OI.operatorController.getTriggerAxis(Hand.kRight) * .75);
+    }
+    if (OI.operatorController.getTriggerAxis(Hand.kLeft) > .1) {
+      lift.setHookPower(-OI.operatorController.getTriggerAxis(Hand.kLeft) * .75);
+    }
   }
 
   // Called once the command ends or is interrupted.

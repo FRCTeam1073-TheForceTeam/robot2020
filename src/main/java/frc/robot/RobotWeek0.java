@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.instances.DrivetrainMercury;
 import frc.robot.subsystems.interfaces.*;
 import frc.robot.shuffleboard.*;
 /**
@@ -31,19 +30,19 @@ public class RobotWeek0 extends TimedRobot {
 
   public static DriveControls driveControls;
   public static DrivetrainInterface drivetrain;
-  public static CollectorControls collectorControls;
-  public static CollectorInterface collector;
-  public static HookControls hookControls;
-  public static HookInterface hook;
+  // public static CollectorControls collectorControls;
+  // public static CollectorInterface collector;
+  // public static HookControls hookControls;
+  // public static HookInterface hook;
   public static LiftControls liftControls;
   public static LiftInterface lift;
-  public static MagazineControls magazineControls;
-  public static MagazineInterface magazine;
-  public static ShooterControls shooterControls;
-  public static Shooter shooter;
-  public static TurretControls turretControls;
-  public static TurretInterface turret;
-  public static ShuffleboardWidgets widgets;
+  // public static MagazineControls magazineControls;
+  // public static MagazineInterface magazine;
+  // public static ShooterControls shooterControls;
+  // public static Shooter shooter;
+  // public static TurretControls turretControls;
+  // public static TurretInterface turret;
+  // public static ShuffleboardWidgets widgets;
   // public static Bling bling;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -60,32 +59,32 @@ public class RobotWeek0 extends TimedRobot {
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
+    // collector = new Collector();
+    // collectorControls = new CollectorControls(collector);
+    // registerSubsystem((SubsystemBase) collector, collectorControls);
 
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
+    // hook = new Hook();
+    // hookControls = new HookControls(hook);
+    // registerSubsystem((SubsystemBase) hook, hookControls);
 
     lift = new Lift();
     liftControls = new LiftControls(lift);
     registerSubsystem((SubsystemBase) lift, liftControls);
 
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
+    // magazine = new Magazine();
+    // magazineControls = new MagazineControls(magazine);
+    // registerSubsystem((SubsystemBase) magazine, magazineControls);
 
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
+    // shooter = new Shooter();
+    // shooterControls = new ShooterControls(shooter);
+    // registerSubsystem((SubsystemBase) shooter, shooterControls);
 
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase)turret, turretControls);
+    // turret = new Turret();
+    // turretControls = new TurretControls(turret);
+    // registerSubsystem((SubsystemBase)turret, turretControls);
 
-    widgets = new ShuffleboardWidgets();
-    widgets.register();
+    // widgets = new ShuffleboardWidgets();
+    // widgets.register();
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
