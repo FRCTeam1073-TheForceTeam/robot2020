@@ -7,24 +7,20 @@
 
 package frc.robot.subsystems.interfaces;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 public interface LiftInterface {
 
-    // brake control
-    void setBrakeOn();
-    void setBrakeOff();
-    boolean isBrakeSet();
+    private static WPI_TalonSRX liftMotor;
 
-    // potentiometer
-    boolean isLiftFullyExtended();
-    boolean isLiftFullyRetracted();
-    double liftExtension();
+    liftMotor = new WPI_TalonSRX(x);
+    liftMotor.configFactoryDefault();
+    liftMotor.setSafetyEnabled(false);
+    liftMotor.setNeutralMode(NeutralMode.Brake);
+    //liftMotor.configPeakOutputForward(1.0);
+    //liftMotor.configPeakOutputReverse(-1.0);
+    //liftMotor.setInverted(true);
+    //liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    //liftMotor.setSensorPhase(true);
 
-    // pin
-    void pinLift();
-    void unpinLift();
-    boolean isPinned();
-    
-    void setLiftPower(double percVal);
-
-    void setHookPower(double percVal);
-}
+    }
