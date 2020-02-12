@@ -19,6 +19,12 @@ public class Lift extends SubsystemBase implements LiftInterface {
   private boolean hasLiftStopped = false;
   private double liftPower = 0.0;
 
+  //the TalonSRX ID
+  int x = 0;
+
+  //some value for the liftMotor control
+  double y = 0.0;
+
   public Lift() {
 
     liftWinch = new WPI_TalonSRX(x);
