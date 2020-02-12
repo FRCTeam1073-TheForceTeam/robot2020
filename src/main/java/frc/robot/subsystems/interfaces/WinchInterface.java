@@ -11,12 +11,18 @@ package frc.robot.subsystems.interfaces;
  * Add your docs here.
  */
 public interface WinchInterface {
-
-    // winch engage
+    // I CHOOOOSE: Winch! Winch uses ENGAGE!    
     void engageWinch();
 
-    void disengageWinch();
+    void engageDrivetrain();
     
     boolean isWinchEngaged();
 
+    public int isFwdLimitSwitchClosedLeft();
+
+    public int isFwdLimitSwitchClosedRight();
+
+    public int isRevLimitSwitchClosedLeft();
+
+    public int isRevLimitSwitchClosedRight();
 }
