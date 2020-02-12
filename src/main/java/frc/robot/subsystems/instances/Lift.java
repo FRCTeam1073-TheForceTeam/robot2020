@@ -22,7 +22,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   //the TalonSRX ID
   int x = 0;
 
-  //some value for the liftMotor control
+  //some value for the liftWinch control
   double y = 0.0;
 
   public Lift() {
@@ -53,14 +53,18 @@ public class Lift extends SubsystemBase implements LiftInterface {
 
   }
   
-   public void setVelocity(double lift) {
-    liftMotor.set(ControlMode.Velocity, lift*y);
-    liftPower = lift;
-    }
+  public void setVelocity(double lift) {
+  liftWinch.set(ControlMode.Velocity, lift*y);
+  liftPower = lift;
+  }
 
-   public void setPower(double lift) {
-   liftMotor.set(ControlMode.PercentOutput, lift);
-   liftPower = lift;
-   }
+  public void setPower(double lift) {
+  liftWinch.set(ControlMode.PercentOutput, lift);
+  liftPower = lift;
+  }
+
+  public double getLiftEncoder() {
+  return liftWinch.getSelectedSensorPosition();
+  }
 
 }

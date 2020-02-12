@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
-import frc.robot.subsystems.interfaces.WinchInterface;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -20,7 +19,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 
-public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
+public class Drivetrain extends SubsystemBase implements DrivetrainInterface{
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 

@@ -148,8 +148,8 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
         // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
         }
 
-    public Pose2d getRobotPose() {
-        return robotPose;
+        public Pose2d getRobotPose() {
+            return robotPose;
     }
 
     /**
