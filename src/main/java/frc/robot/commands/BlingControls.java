@@ -50,7 +50,7 @@ public class BlingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*gameData = DriverStation.getInstance().getGameSpecificMessage();
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
@@ -64,10 +64,8 @@ public class BlingControls extends CommandBase {
         // blinkyLights(14, 3, 255, 255, 255);
         // movingLEDs(19, 7);
         // Robot.bling.setPatternRGBAll(0, 0, 0);
-        
-      } */
-    Robot.bling.setLEDFromColor(3);
-    //}
+      }
+    }
   }
   
   
