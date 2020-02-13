@@ -8,9 +8,8 @@
 package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.TimeOfFlight.RangingMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.MagazineInterface;
 
@@ -20,18 +19,19 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    */
   private static int cellCount;//The cell count as determined by the distance sensor facing upward
   private static WPI_TalonSRX magMotor; //motor controls all belts on magazine. Will likely not have encoder
-  private static final int ballDist = 1;
-  private static TimeOfFlight exit;
-  private static TimeOfFlight entrance;//distance sensor facing upward from the bottom of the magazine
+  private static DigitalInput enterance;
+  private static DigitalInput exit;
+  
+
+
 
   public Magazine() {
     magMotor = new WPI_TalonSRX(24);//24 is temporary ID
     cellCount = 0;
-    exit = new TimeOfFlight(1);//1 is temporary ID
-    entrance = new TimeOfFlight(2);//2 is temporary ID
+    enterance = new DigitalInput(1);
+    exit = new DigitalInput(2);
+    
 
-    exit.setRangingMode(RangingMode.Short, 20);
-    entrance.setRangingMode(RangingMode.Short, 20);
   }
 
   @Override
@@ -56,13 +56,15 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * if a ball passes through the enterance, a power cell is added
    * if a ball passes through the exit, a power cell is decreased
    */
-public void updateCellCount() {
-    if(entrance.getRange() <= ballDist){
+  public void updateCellCount() {
+
+    if(enterance.get() == true){
       cellCount++;
     }
-    if(exit.getRange() <= ballDist){
+    if(exit.get() == true){
       cellCount--;
     }
+
   }
 
   
