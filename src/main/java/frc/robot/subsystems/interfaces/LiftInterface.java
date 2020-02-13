@@ -7,12 +7,20 @@
 
 package frc.robot.subsystems.interfaces;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 public interface LiftInterface {
 
-    public void setVelocity(double lift);
+    private static WPI_TalonSRX liftMotor;
 
-    public void setPower(double lift);
-
-    public double getLiftEncoder();
+    liftMotor = new WPI_TalonSRX(x);
+    liftMotor.configFactoryDefault();
+    liftMotor.setSafetyEnabled(false);
+    liftMotor.setNeutralMode(NeutralMode.Brake);
+    //liftMotor.configPeakOutputForward(1.0);
+    //liftMotor.configPeakOutputReverse(-1.0);
+    //liftMotor.setInverted(true);
+    //liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    //liftMotor.setSensorPhase(true);
 
     }

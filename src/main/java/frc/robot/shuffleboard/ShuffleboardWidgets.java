@@ -64,14 +64,26 @@ public class ShuffleboardWidgets extends SubsystemBase {
   private NetworkTableEntry cellCountEntry;
   int cellCount = 0;
 
-  private NetworkTableEntry liftEncoderValueEntry;
-  double liftEncoderValue = 0.0;
+  private NetworkTableEntry isBrakesetEntry;
+  boolean isBrakeset = false;
+  private NetworkTableEntry isLiftFullyExtendedEntry;
+  boolean isLiftFullyExtended = false;
+  private NetworkTableEntry isLiftFullyRetractedEntry;
+  boolean isLiftFullyRetracted = false;
+  private NetworkTableEntry liftExtensionEntry;
+  double liftExtension = 0.0;
+  private NetworkTableEntry isPinnedEntry;
+  boolean isPinned = false;
+
+  private NetworkTableEntry isWinchEngagedEntry;
+  boolean isWinchEngaged = false;
 
   DrivetrainInterface drivetrain;
   TurretInterface turret;
   ShooterInterface shooter;
   MagazineInterface magazine;
   LiftInterface lift;
+  WinchInterface winch;
 
   /**The constructor - creates the shuffleboard tab - gets the interfaces' methods to be able to display it - calls the method ShuffleboardView()*/
   public ShuffleboardWidgets() {
@@ -98,6 +110,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
     shooter = Robot.shooter;
     magazine = Robot.magazine;
     lift = Robot.lift;
+    winch = (WinchInterface) Robot.drivetrain;
+
     ShuffleboardWidgetInit();
 
   }
@@ -127,7 +141,12 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     cellCountEntry.setDouble(cellCount);
 
-    liftEncoderValueEntry.setDouble(liftEncoderValue);
+    isBrakesetEntry.setBoolean(isBrakeset);
+    isLiftFullyExtendedEntry.setBoolean(isLiftFullyExtended);
+    isLiftFullyRetractedEntry.setBoolean(isLiftFullyRetracted);
+    liftExtensionEntry.setDouble(liftExtension);
+    isPinnedEntry.setBoolean(isPinned);
+    isWinchEngagedEntry.setBoolean(isWinchEngaged);
 
     Shuffleboard.update();
     // PID_testing();
@@ -162,7 +181,13 @@ public class ShuffleboardWidgets extends SubsystemBase {
     cellCount = magazine.getCellCount();
 
     // Climbing Data COMPLETE
-    liftEncoderValue = lift.getLiftEncoder();
+    isBrakeset = lift.isBrakeSet();
+    isLiftFullyExtended = lift.isLiftFullyExtended();
+    isLiftFullyRetracted = lift.isLiftFullyRetracted();
+    liftExtension = lift.liftExtension();
+    isPinned = lift.isPinned();
+
+    isWinchEngaged = winch.isWinchEngaged();
 
     // Wheel of Fortune Data MISSING
 
@@ -254,12 +279,43 @@ public class ShuffleboardWidgets extends SubsystemBase {
     .withSize(2, 1)
     .getEntry();
 
-    liftEncoderValueEntry = tab
-    .add("liftExtension",liftEncoderValue)
+    isBrakesetEntry = tab
+    .add("isBrakeset",isBrakeset)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(0, 2)
+    .withSize(2, 1)
+    .getEntry();
+    isLiftFullyExtendedEntry = tab
+    .add("isLiftFullyExtended",isLiftFullyExtended)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(2, 2)
+    .withSize(2, 1)
+    .getEntry();
+    isLiftFullyRetractedEntry = tab
+    .add("isLiftFullyRetracted",isLiftFullyRetracted)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(4, 2)
+    .withSize(2, 1)
+    .getEntry();
+    liftExtensionEntry = tab
+    .add("liftExtension",liftExtension)
     .withPosition(6, 2)
     .withSize(2, 1)
     .getEntry();
-    
+    isPinnedEntry = tab
+    .add("isPinned",isPinned)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(8, 2)
+    .withSize(2, 1)
+    .getEntry();
+
+    isWinchEngagedEntry = tab
+    .add("isWinchEngaged",isWinchEngaged)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(0, 3)
+    .withSize(2, 1)
+    .getEntry();
+      
     }
 
     /*public void PID_testing() {
