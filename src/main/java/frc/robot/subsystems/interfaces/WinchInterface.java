@@ -7,24 +7,22 @@
 
 package frc.robot.subsystems.interfaces;
 
-public interface LiftInterface {
+/**
+ * Add your docs here.
+ */
+public interface WinchInterface {
+    // I CHOOOOSE: Winch! Winch uses ENGAGE!    
+    void engageWinch();
 
-    // brake control
-    void setBrakeOn();
-    void setBrakeOff();
-    boolean isBrakeSet();
-
-    // potentiometer
-    boolean isLiftFullyExtended();
-    boolean isLiftFullyRetracted();
-    double liftExtension();
-
-    // pin
-    void pinLift();
-    void unpinLift();
-    boolean isPinned();
+    void engageDrivetrain();
     
-    void setLiftPower(double percVal);
+    boolean isWinchEngaged();
 
-    void setHookPower(double percVal);
+    public int isFwdLimitSwitchClosedLeft();
+
+    public int isFwdLimitSwitchClosedRight();
+
+    public int isRevLimitSwitchClosedLeft();
+
+    public int isRevLimitSwitchClosedRight();
 }

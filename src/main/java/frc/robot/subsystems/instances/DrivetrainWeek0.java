@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -40,7 +41,8 @@ public class DrivetrainWeek0 extends SubsystemBase implements DrivetrainInterfac
 
     public DrivetrainWeek0() {
         // Setting up motors
-        
+        // FUn Fact: It's pronounced "ph-WHE-nix"
+
         leftMotorLeader = new WPI_TalonSRX(12);
         rightMotorLeader = new WPI_TalonSRX(13);
         leftMotorFollower = new WPI_VictorSPX(14);
@@ -102,7 +104,13 @@ public class DrivetrainWeek0 extends SubsystemBase implements DrivetrainInterfac
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
 
-        }
+        /*SmartDashboard.putNumber("P", P);
+        SmartDashboard.putNumber("I", I);
+        SmartDashboard.putNumber("D", D);
+        SmartDashboard.clearPersistent("P");
+        SmartDashboard.clearPersistent("I");
+        SmartDashboard.clearPersistent("D");*/
+    }
 
     /**
      * Returns the gyro feedback in degrees instead of radians so that humans
@@ -110,10 +118,12 @@ public class DrivetrainWeek0 extends SubsystemBase implements DrivetrainInterfac
      */
 
     public double getAngleDegrees() {
+        // Rotrwation?
         return -gyroAngle;
     }
 
     public Rotation2d getAngleRadians() {
+        // Rotrwation?
         return Rotation2d.fromDegrees(-gyroAngle);
     }
 
@@ -122,6 +132,7 @@ public class DrivetrainWeek0 extends SubsystemBase implements DrivetrainInterfac
     double lastGyroValue = 0;
     double totalGyroDrift = 0;
 
+    /** It's a function! */
     @Override
     public void periodic() {
         // This method will be called once per sceduler run
@@ -149,7 +160,18 @@ public class DrivetrainWeek0 extends SubsystemBase implements DrivetrainInterfac
         // System.out.println("Feet: " + Units.metersToFeet(robotPose.getTranslation().getX()) + ","
         //         + Units.metersToFeet(robotPose.getTranslation().getY()) + "," + getAngleRadians());
         // System.out.println("Periodic! " + getLeftEncoder() + ":" + getRightEncoder());
-        }
+        /*SmartDashboard.putBoolean("hasStoppedRobot", hasRobotStopped);
+        SmartDashboard.putNumber("rawGyroAngle", rawGyroAngle);
+        SmartDashboard.putNumber("gyroDriftValue", gyroDriftValue);
+        SmartDashboard.putNumber("totalGyroDrift", totalGyroDrift);
+        SmartDashboard.putNumber("lastGyroValue", lastGyroValue);
+        SmartDashboard.putNumber("gyroAngle", gyroAngle);
+        SmartDashboard.putNumber("X", Units.metersToFeet(robotPose.getTranslation().getX()));
+        SmartDashboard.putNumber("Y", Units.metersToFeet(robotPose.getTranslation().getY()));
+        SmartDashboard.putNumber("Rotation", getAngleDegrees());
+        SmartDashboard.putNumber("leftPower", leftPower);
+        SmartDashboard.putNumber("rightPower", rightPower);*/
+    }
 
     public Pose2d getRobotPose() {
         return robotPose;
@@ -222,6 +244,12 @@ public class DrivetrainWeek0 extends SubsystemBase implements DrivetrainInterfac
 
     public ChassisSpeeds getDrivetrainVelocity() {
         return kinematics.toChassisSpeeds(getWheelSpeeds());
+    }
+
+    public void engageWinch(){}
+    public void disengageWinch(){}
+    public boolean isWinchEngaged(){
+        return false;
     }
 
 }
