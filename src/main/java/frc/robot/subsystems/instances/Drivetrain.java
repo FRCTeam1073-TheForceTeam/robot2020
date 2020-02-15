@@ -56,7 +56,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         gyro.calibrate();
         odometry = new DifferentialDriveOdometry(getAngleRadians());
 
-        engageWinch();
+        engageDrivetrain();
     }
 
     /**
