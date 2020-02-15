@@ -109,13 +109,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
     this.drivetrain = drivetrain;
     this.turret = turret;
 
-    // drivetrain = Robot.drivetrain;
-    // turret = Robot.turret;
-    // shooter = Robot.shooter;
-    // magazine = Robot.magazine;
-    // lift = Robot.lift;
-    // winch = (WinchInterface) Robot.drivetrain;
-
     ShuffleboardWidgetInit();
 
   }
