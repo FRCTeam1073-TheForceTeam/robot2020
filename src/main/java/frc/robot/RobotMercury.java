@@ -44,6 +44,7 @@ public class RobotMercury extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
+  public AutoDrive driveAuto;
   // public static Bling bling;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -120,6 +121,9 @@ public class RobotMercury extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if(driveAuto != null){
+      driveAuto.schedule();
+    }
   }
 
   /**
@@ -127,6 +131,7 @@ public class RobotMercury extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
