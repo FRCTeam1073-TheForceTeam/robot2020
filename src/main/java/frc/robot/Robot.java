@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
     turretControls = new TurretControls(turret);
     registerSubsystem((SubsystemBase)turret, turretControls);
 
-    widgets = new ShuffleboardWidgets();
+    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
   }
 
