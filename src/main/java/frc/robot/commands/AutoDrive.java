@@ -40,6 +40,7 @@ public class AutoDrive extends CommandBase {
     @Override
     public void execute() {
         drivetrain.setVelocity(velocity, velocity);
+        // TODO: set up distances for auto
         //distanceTraveled = (drivetrain.getRobotPose()).getTranslation().getY();
         //if (distanceTraveled >= distance) {
         //drivetrain.setVelocity(0, 0);
