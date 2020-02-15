@@ -40,11 +40,11 @@ public class AutoDrive extends CommandBase {
     @Override
     public void execute() {
         drivetrain.setVelocity(velocity, velocity);
-        distanceTraveled = (drivetrain.getRobotPose()).getTranslation().getY();
-        if (distanceTraveled >= distance) {
-            drivetrain.setVelocity(0, 0);
-            isFinished = true;
-        }
+        //distanceTraveled = (drivetrain.getRobotPose()).getTranslation().getY();
+        //if (distanceTraveled >= distance) {
+        //drivetrain.setVelocity(0, 0);
+            //isFinished = true;
+        //}
     }
     
     
