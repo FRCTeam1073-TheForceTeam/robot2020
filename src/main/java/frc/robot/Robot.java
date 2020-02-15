@@ -118,6 +118,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if(driveAuto != null){
+      driveAuto.schedule();
+    }
   }
 
   /**
@@ -125,6 +128,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
