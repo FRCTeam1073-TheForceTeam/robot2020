@@ -92,6 +92,7 @@ public class Bling extends SubsystemBase implements BlingInterface {
   }
   
   public void setLEDFromColor(int i) {
-    m_ledBuffer.setLED(i, Color.kBlue);
+    Color blue = Color.kBlue;
+    m_ledBuffer.setLED(i, blue);
   }
 }

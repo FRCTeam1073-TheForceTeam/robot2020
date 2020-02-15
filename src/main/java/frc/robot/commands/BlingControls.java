@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.util.Color;
@@ -55,11 +57,11 @@ public class BlingControls extends CommandBase {
 
     if (burst_done == 0) {
       burst(Robot.bling.m_ledBuffer.getLength());
-      Robot.bling.setPatternRGBAll(0, 0, 0);
     } else {
-      if (match_time < 30) {
+      if (0 < match_time && match_time < 30) {
         blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
       } else {
+        Robot.bling.setLEDFromColor(3);
         // driverControlledLEDs(8, 4);
         // blinkyLights(14, 3, 255, 255, 255);
         // movingLEDs(19, 7);
