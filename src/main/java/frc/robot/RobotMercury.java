@@ -86,8 +86,8 @@ public class RobotMercury extends TimedRobot {
     turretControls = new TurretControls(turret);
     registerSubsystem((SubsystemBase)turret, turretControls);
 
-    //widgets = new ShuffleboardWidgets();
-    //widgets.register();
+    widgets = new ShuffleboardWidgets(drivetrain, turret);
+    widgets.register();
 
     driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
   }
