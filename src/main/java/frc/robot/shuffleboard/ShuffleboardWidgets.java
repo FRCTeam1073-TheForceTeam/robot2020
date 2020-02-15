@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.instances.Drivetrain;
 import frc.robot.subsystems.interfaces.*;
 
 /**The class - Defines all the variables used*/
@@ -86,7 +87,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
   WinchInterface winch;
 
   /**The constructor - creates the shuffleboard tab - gets the interfaces' methods to be able to display it - calls the method ShuffleboardView()*/
-  public ShuffleboardWidgets() {
+  public ShuffleboardWidgets(DrivetrainInterface drivetrain, TurretInterface turret) {
 
     //creates the tab in shuffleboard called Telemetry
     tab = Shuffleboard.getTab("Telemetry");
@@ -105,12 +106,15 @@ public class ShuffleboardWidgets extends SubsystemBase {
      * 100)) .getEntry();
      */
 
-    drivetrain = Robot.drivetrain;
-    turret = Robot.turret;
-    shooter = Robot.shooter;
-    magazine = Robot.magazine;
-    lift = Robot.lift;
-    winch = (WinchInterface) Robot.drivetrain;
+    this.drivetrain = drivetrain;
+    this.turret = turret;
+
+    // drivetrain = Robot.drivetrain;
+    // turret = Robot.turret;
+    // shooter = Robot.shooter;
+    // magazine = Robot.magazine;
+    // lift = Robot.lift;
+    // winch = (WinchInterface) Robot.drivetrain;
 
     ShuffleboardWidgetInit();
 
