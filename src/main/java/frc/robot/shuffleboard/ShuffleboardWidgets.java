@@ -87,10 +87,17 @@ public class ShuffleboardWidgets extends SubsystemBase {
   WinchInterface winch;
 
   /**The constructor - creates the shuffleboard tab - gets the interfaces' methods to be able to display it - calls the method ShuffleboardView()*/
-  public ShuffleboardWidgets(DrivetrainInterface drivetrain, TurretInterface turret) {
+  public ShuffleboardWidgets(DrivetrainInterface drivetrain, TurretInterface turret, ShooterInterface shooter, MagazineInterface magazine, LiftInterface lift, WinchInterface winch) {
 
     //creates the tab in shuffleboard called Telemetry
     tab = Shuffleboard.getTab("Telemetry");
+
+    this.drivetrain = drivetrain;
+    this.turret = turret;
+    this.shooter = shooter;
+    this.magazine = magazine;
+    this.lift = lift;
+    this.winch = winch;
 
     /*
      * P_testing = tab .add("P", 1) .withWidget(BuiltInWidgets.kNumberSlider)
@@ -105,9 +112,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
      * .withSize(10, 1) .withPosition(0, 3) .withProperties(Map.of("min", 0, "max",
      * 100)) .getEntry();
      */
-
-    this.drivetrain = drivetrain;
-    this.turret = turret;
 
     ShuffleboardWidgetInit();
 
@@ -148,7 +152,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
     Shuffleboard.update();
     // PID_testing();
     
-
   }
 
   /**sets variables to data from the interfaces - gets called periodically*/
