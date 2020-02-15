@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.CollectorInterface;
 
 public class Collector extends SubsystemBase implements CollectorInterface {
+  boolean isLocked = false;
   /**
    * Creates a new Collect.
    */
@@ -25,11 +26,38 @@ public class Collector extends SubsystemBase implements CollectorInterface {
 
   @Override
   public void run(double speed, String direction) {
- 
+    if (direction.equals("in")){
+      speed *= 1.0;
+    } else {
+      speed *= -1.0;
+    }
   }
-
   @Override
-  public void lockIntake() {
+  public void collect(){
+    run(1.0, "in");
+  }
+  @Override
+  public void purge(){
+    run(1.0, "out");
+  }
+  @Override
+  public void raise(){
+  
+  }
+  @Override
+  public void lower(){
 
+  }
+  @Override
+  public void stop(){
+    run(0.0,"in");
+  }
+  @Override
+  public void lockIntake(){
+    isLocked = true;
+  }
+  @Override
+  public void unlockIntake(){
+    isLocked = false;
   }
 }

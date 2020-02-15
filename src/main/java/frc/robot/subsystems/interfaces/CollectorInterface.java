@@ -14,5 +14,17 @@ public interface CollectorInterface {
 
     void run(double speed, String direction);
 
+    void collect();
+
+    void purge();
+
+    void raise();
+
+    void lower();
+
+    void stop();
+
     void lockIntake();
+
+    void unlockIntake();
 }
