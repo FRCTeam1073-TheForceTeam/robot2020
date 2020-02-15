@@ -56,7 +56,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         gyro.calibrate();
         odometry = new DifferentialDriveOdometry(getAngleRadians());
 
-        engageDrivetrain();
+        engageWinch();
     }
 
     /**
@@ -195,8 +195,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
 
         leftMotorLeader.configPeakOutputForward(1.0);
+        leftMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
+        leftMotorFollower.configPeakOutputReverse(-1.0);
+        rightMotorLeader.configPeakOutputForward(1.0);
         rightMotorLeader.configPeakOutputReverse(-1.0);
+        rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.setInverted(true);
@@ -208,16 +212,22 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.setSensorPhase(true);
 
         leftMotorFollower.follow(leftMotorLeader);
+        leftMotorFollower.setInverted(true);
         rightMotorFollower.follow(rightMotorLeader);
+        rightMotorFollower.setInverted(true);
         
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
+        leftMotorLeader.setIntegralAccumulator(0);
+        rightMotorLeader.setIntegralAccumulator(0);
 
-        leftMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
-        leftMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        // TODO: Put this back in once we actually get the limit switches
 
-        rightMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
-        rightMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        // leftMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        // leftMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+
+        // rightMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        // rightMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
 
         solenoid.set(true);
 
@@ -264,10 +274,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorLeader.config_kD(0, D);
         rightMotorLeader.config_kD(0, D);
 
-        leftMotorFollower.follow(leftMotorLeader);
-        leftMotorFollower.setInverted(true);
-        rightMotorFollower.follow(rightMotorLeader);
-        rightMotorFollower.setInverted(true);
 
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
