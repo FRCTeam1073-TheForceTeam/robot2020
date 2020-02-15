@@ -65,7 +65,5 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
       cellCount--;
     }
 
-  }
-
-  
+  }  
 }
