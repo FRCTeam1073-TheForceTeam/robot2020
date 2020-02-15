@@ -37,12 +37,17 @@ public class TurretIndex extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Robot.turret.indexTurret();
+    Robot.turret.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Robot.turret.isIndexed();
+    if (Robot.turret.isIndexed() == true) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }
