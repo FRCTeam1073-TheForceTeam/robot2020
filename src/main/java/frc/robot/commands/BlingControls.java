@@ -10,9 +10,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.commands.BlingControls;
+import frc.robot.subsystems.instances.Bling;
 import frc.robot.subsystems.interfaces.BlingInterface;
 
 
@@ -24,12 +26,15 @@ public class BlingControls extends CommandBase {
   double match_time;
   int move;
   String gameData;
+  BlingInterface bling;
+  
 
   /**
    * Creates a new BlingControls.
    */
   public BlingControls(BlingInterface bling_) {
-    addRequirements(Robot.bling);
+    addRequirements((SubsystemBase)bling_);
+    this.bling = bling_;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -49,8 +54,8 @@ public class BlingControls extends CommandBase {
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
-      burst(Robot.bling.m_ledBuffer.getLength());
-      Robot.bling.setPatternRGBAll(0, 0, 0);
+      burst(bling.getM_LEDBuffer().getLength());
+      bling.setPatternRGBAll(0, 0, 0);
     } else {
       if (match_time < 30) {
         blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
@@ -58,7 +63,7 @@ public class BlingControls extends CommandBase {
         // driverControlledLEDs(8, 4);
         // blinkyLights(14, 3, 255, 255, 255);
         // movingLEDs(19, 7);
-        Robot.bling.setPatternRGBAll(0, 0, 0);
+        bling.setPatternRGBAll(0, 0, 0);
       }
     }
   }
@@ -87,14 +92,14 @@ public void burst(int length) {
       // Moves the LEDs out from the center by one light
       leds_from_middle = leds_from_middle + 1;
       // Sets the LEDs
-      Robot.bling.setPatternRGBAll(0, 0, 0);
-      Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
+      bling.setPatternRGBAll(0, 0, 0);
+      bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
     } else {
       // Resets the time and says that the burst is finished
       burst_done = 1;
       time = 0;
     }
-    Robot.bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
+    bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
   }
 
 
@@ -102,11 +107,11 @@ public void burst(int length) {
   public void blinkyLightsTwoColors(int h, int s, int v, int r, int g, int b) {
     if (time < 50) {
       // Sets the LEDs to the first color
-      Robot.bling.setPatternHSVAll(h, s, v);
+      bling.setPatternHSVAll(h, s, v);
       time = time + 1;
     } else if (time < 100) {
       // Sets the LEDs to the second color
-      Robot.bling.setPatternRGBAll(r, g, b);
+      bling.setPatternRGBAll(r, g, b);
       time = time + 1;
     } else {
       // Resets the time
@@ -120,12 +125,12 @@ public void burst(int length) {
     int time = 0;
     if (time < 20) {
       // Turns the LEDs off
-      Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
+      bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
       time = time + 1;
     } else if (time < 40) {
       // Sets the LEDs to the specified color
       time = time + 1;
-      Robot.bling.rangeRGB(minLEDsBlink, numberLEDsBlink, r, g, b);
+      bling.rangeRGB(minLEDsBlink, numberLEDsBlink, r, g, b);
     } else {
       // Resets the time counter
       time = 0;
@@ -145,11 +150,11 @@ public void burst(int length) {
     // If between 1/3 and 2/3 of the leds are lit up, the light is yellow.
     // If more than 2/3 of the leds are lit up, the light is green.
     if (num <= (numberLEDsVolts / 3)) {
-      Robot.bling.rangeRGB(minLEDsVolts, num, 255, 0, 0);
+      bling.rangeRGB(minLEDsVolts, num, 255, 0, 0);
     } else if (num > (numberLEDsVolts / 3) && num <= (2 * (numberLEDsVolts / 3))) {
-      Robot.bling.rangeRGB(minLEDsVolts, num, 255, 255, 0);
+      bling.rangeRGB(minLEDsVolts, num, 255, 255, 0);
     } else if (num > (2 * (numberLEDsVolts / 3))) {
-      Robot.bling.rangeRGB(minLEDsVolts, num, 0, 255, 0);
+      bling.rangeRGB(minLEDsVolts, num, 0, 255, 0);
     }
   }
 
@@ -167,8 +172,8 @@ public void burst(int length) {
       }
       // Sets the LED that is lit
       int set = minLEDsMove + move;
-      Robot.bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
-      Robot.bling.setLED(set, 255, 0, 0);
+      bling.rangeRGB(minLEDsMove, numberLEDsMove, 0, 0, 0);
+      bling.setLED(set, 255, 0, 0);
     }
   }
 
@@ -177,19 +182,19 @@ public void burst(int length) {
     if (OI.driverController.getStartButtonPressed()){
       // If start was pressed
       // set color orange
-      Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0);
+      bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0);
     } else if (OI.driverController.getBButtonPressed()){
       // If b was pressed
       // set colors to have alternating orange and blue
-      Robot.bling.alternateRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0, 0, 0, 255);
+      bling.alternateRGB(minLEDsDriver, numberLEDsDriver, 255, 42, 0, 0, 0, 255);
     } else if (OI.driverController.getXButtonPressed()){
       // If x was pressed
       // set color blue
-      Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 255);
+      bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 255);
     } else if (OI.driverController.getYButtonPressed()){
       // If y was pressed
       // turn the light off
-      Robot.bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 0);
+      bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 0);
     }
   }
 
