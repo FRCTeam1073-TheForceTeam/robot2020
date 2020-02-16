@@ -16,4 +16,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    //the maximum velocity the drivetrain can drive at
+    final double maxVelocity = 100.0;
+    //the minimum distance needed to drive off of the initiation line
+    final double minDistanceCrossInitLine = 0.46;
 }

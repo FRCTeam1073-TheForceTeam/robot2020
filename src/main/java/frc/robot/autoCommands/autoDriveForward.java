@@ -7,19 +7,23 @@
 
 package frc.robot.autoCommands;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
 public class autoDriveForward extends CommandBase {
   DrivetrainInterface drivetrain;
-  double maxVelocity = 100.0;
-  double distance = 0.46;
+  double maxVelocity;
+  double distance;
+  double distanceTraveledFromInit;
+  Pose2d initPose;
+  Pose2d currentPose;
 
   /**
    * Creates a new autoDriveForward.
    */
-  public autoDriveForward(DrivetrainInterface drivetrain, double distance, final double maxVelocity) {
+  public autoDriveForward(DrivetrainInterface drivetrain, double distance, double maxVelocity) {
     this.drivetrain = drivetrain;
     this.distance = distance;
     this.maxVelocity = maxVelocity;
@@ -27,36 +31,35 @@ public class autoDriveForward extends CommandBase {
   }
 
   public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
-    this.drivetrain = drivetrain;
-    this.distance = distance;
-    maxVelocity = 100.0;
+    this(drivetrain, distance, 100.0);
   }
 
   public autoDriveForward(DrivetrainInterface drivetrain) {
-    this.drivetrain = drivetrain;
-    distance = 0.46;
-    maxVelocity = 100.0;
+    this(drivetrain, 0.46, 100.0);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    initPose=drivetrain.getRobotPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
+    currentPose = drivetrain.getRobotPose();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.setVelocity(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return currentPose.minus(initPose).getTranslation().getNorm()>=distance;
   }
 }

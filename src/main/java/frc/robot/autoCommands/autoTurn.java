@@ -9,7 +9,6 @@ package frc.robot.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.instances.Drivetrain;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
 public class autoTurn extends CommandBase {
