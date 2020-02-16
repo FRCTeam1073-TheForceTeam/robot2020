@@ -19,7 +19,7 @@ import frc.robot.subsystems.interfaces.DrivetrainInterface;
 public class AutoDrive extends CommandBase {
     DrivetrainInterface drivetrain;
     Bling bling;
-    private double velocity = 0.5;
+    private double velocity = 0;
     private double distance = Units.inchesToMeters(18);
     private boolean isFinished = false;
     private double distanceTraveled = 0.0;
@@ -28,7 +28,7 @@ public class AutoDrive extends CommandBase {
     public AutoDrive(DrivetrainInterface drivetrain_, Bling bling_, double velocity, final double distance) {
         drivetrain = drivetrain_;
         bling = bling_;
-        // this.velocity = velocity;
+        this.velocity = velocity;
         this.distance = distance;
 
         addRequirements((SubsystemBase)drivetrain);
