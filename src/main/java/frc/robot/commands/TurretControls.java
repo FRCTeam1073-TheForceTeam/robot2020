@@ -36,7 +36,7 @@ public class TurretControls extends CommandBase {
     // double robotX=pose.getTranslation().getX();
     // double robotY=pose.getTranslation().getY();
     // double angle = Math.atan2(targetY - robotY, targetX - robotX);
-    double angle = OI.driverController.getRawAxis(0)*10;
+    double angle = OI.driverController.getRawAxis(0) * 10;
     // double adjustedAngle = angle - Robot.drivetrain.getAngleRadians().getRadians();
     Robot.turret.setPosition(angle);
     // System.out.println(Robot.turret.getPosition());

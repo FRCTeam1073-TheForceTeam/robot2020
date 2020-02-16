@@ -14,6 +14,7 @@ import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
 import frc.robot.subsystems.instances.OMVPortTracker;
 import frc.robot.subsystems.instances.Turret;
+import frc.robot.OI;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,6 +28,7 @@ public class TurretControlTester extends TimedRobot {
   public static OpenMVBase portTrackerCamera;
   public static Turret turret;
   public static TurretIndex turretIndex;
+  public static OI oi;
 
 
   /**
@@ -72,10 +74,10 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    turretIndex = new TurretIndex(turret);
-    if (turretIndex != null) {
-      turretIndex.schedule();
-    }
+    // turretIndex = new TurretIndex(turret);
+    // if (turretIndex != null) {
+    //   turretIndex.schedule();
+    // }
   }
 
   /**
@@ -87,9 +89,9 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (turretIndex != null) {
-      turretIndex.cancel();
-    }
+    // if (turretIndex != null) {
+    //   turretIndex.cancel();
+    // }
   }
 
   /**
@@ -97,6 +99,7 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    turret.setVelocity(OI.driverController.getRawAxis(1));
   }
 
   @Override
