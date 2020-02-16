@@ -44,7 +44,9 @@ public class RobotMercury extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  // public static Bling bling;
+  public AutoDrive driveAuto;
+  public static Bling bling;
+  public static BlingControls blingControls;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -52,9 +54,9 @@ public class RobotMercury extends TimedRobot {
   public void robotInit() {
     OI.init();
 
-    // bling = new Bling();
-    // bling.register();
-    // CommandScheduler.getInstance().setDefaultCommand(bling, new BlingControls());
+    bling = new Bling();
+    blingControls = new BlingControls(bling);
+    registerSubsystem((SubsystemBase) bling, blingControls);
 
     drivetrain = new DrivetrainMercury();
     driveControls = new DriveControls(drivetrain);
@@ -86,6 +88,8 @@ public class RobotMercury extends TimedRobot {
 
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
+
+    driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -120,6 +124,9 @@ public class RobotMercury extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if(driveAuto != null){
+      driveAuto.schedule();
+    }
   }
 
   /**
@@ -127,6 +134,7 @@ public class RobotMercury extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
