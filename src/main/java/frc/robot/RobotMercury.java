@@ -62,33 +62,6 @@ public class RobotMercury extends TimedRobot {
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
-
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
-
-    lift = new Lift();
-    liftControls = new LiftControls(lift);
-    registerSubsystem((SubsystemBase) lift, liftControls);
-
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
-
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
-
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase)turret, turretControls);
-
-    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-    widgets.register();
-
     driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
   }
 
