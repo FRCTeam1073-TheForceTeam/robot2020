@@ -18,7 +18,7 @@ package frc.robot;
 public final class Constants {
 
     //the maximum velocity the drivetrain can drive at
-    final double maxVelocity = 100.0;
+    public static final double MAX_VELOCITY = 100.0;
     //the minimum distance needed to drive off of the initiation line
-    final double minDistanceCrossInitLine = 0.46;
+    public static final double MIN_DISTANCE_INIT_LINE = 0.46;
 }

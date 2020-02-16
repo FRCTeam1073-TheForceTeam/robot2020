@@ -10,13 +10,16 @@ package frc.robot.autoCommands;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
 public class autoDriveForward extends CommandBase {
   DrivetrainInterface drivetrain;
-  double maxVelocity;
-  double distance;
+  private double maxVelocity;
+  private double velocity;
+  private double distance;
   double distanceTraveledFromInit;
+  private double accelConstant = 0.0;
   Pose2d initPose;
   Pose2d currentPose;
 
@@ -31,24 +34,26 @@ public class autoDriveForward extends CommandBase {
   }
 
   public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
-    this(drivetrain, distance, 100.0);
+    this(drivetrain, distance, Constants.MAX_VELOCITY);
   }
 
   public autoDriveForward(DrivetrainInterface drivetrain) {
-    this(drivetrain, 0.46, 100.0);
+    this(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_VELOCITY);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initPose=drivetrain.getRobotPose();
+    initPose = drivetrain.getRobotPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     currentPose = drivetrain.getRobotPose();
+
+    velocity = accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm());
+    drivetrain.setVelocity(velocity, velocity);
   }
 
   // Called once the command ends or is interrupted.
@@ -60,6 +65,6 @@ public class autoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return currentPose.minus(initPose).getTranslation().getNorm()>=distance;
+    return currentPose.minus(initPose).getTranslation().getNorm() >= distance;
   }
 }
