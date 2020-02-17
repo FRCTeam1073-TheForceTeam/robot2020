@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
@@ -89,9 +88,8 @@ public class Robot extends TimedRobot {
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
     subsystem.register();
-    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);    
   }
-
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.

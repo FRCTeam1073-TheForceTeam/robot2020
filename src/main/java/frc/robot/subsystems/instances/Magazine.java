@@ -25,7 +25,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   //private static TimeOfFlight height;//distance sensor facing upward from the bottom of the magazine
 
   public Magazine() {
-    magMotor = new WPI_TalonSRX(25);
+    magMotor = new WPI_TalonSRX(24);
     cellCount = 0;
     //enterance = new TimeOfFlight(1);
     //exit = new TimeOfFlight(2);
