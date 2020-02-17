@@ -1,5 +1,7 @@
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -88,5 +90,9 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_ledBuffer.setRGB(i, r, g, b);
     m_ledBuffer.setRGB(i2, r, g, b);
     m_led.setData(m_ledBuffer);
+  }
+
+  public AddressableLEDBuffer getM_LEDBuffer() {
+    return m_ledBuffer;
   }
 }

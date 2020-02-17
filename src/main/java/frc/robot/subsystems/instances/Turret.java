@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -17,7 +18,8 @@ import frc.robot.subsystems.interfaces.TurretInterface;
 public class Turret extends SubsystemBase implements TurretInterface {
   private WPI_TalonSRX turretRotator;
   private final double ticksPerRadian = 1440 / (2 * Math.PI);
-  private double range = 350;
+  private double range = 3;         // radians
+  private double indexOffset = 0.2; //radians   //TODO: get from CAD
   private double P = 0.2;
   private double I = 0.001;
   private double D = 5;
@@ -32,8 +34,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private double turretAngle = 0;
   private double turretVelocity = 0;
   private long timestamp = System.currentTimeMillis();
-  private boolean isLeftTriggered = false;
-  private boolean isRightTriggered = false;
+  private boolean leftLimitSwitch = false;
+  private boolean rightLimitSwitch = false;
+  private boolean indexed = false;
   
   public Turret() {
     turretRotator = new WPI_TalonSRX(24);
@@ -48,19 +51,32 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.config_kD(0, D);
     turretRotator.setSelectedSensorPosition(0);
     turretRotator.setIntegralAccumulator(0);
-    turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
-    turretRotator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
+      System.out.println("ERROR! Forward Turret Limit Switch not configured");
+    }
+    if (turretRotator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
+      System.out.println("ERROR! Reverse Turret Limit Switch not configured");
+    }
+    if (turretRotator.configClearPositionOnLimitF(true, 30) != ErrorCode.OK) {
+      System.out.println("ERROR! Turret Postion limit is NOT set");
+    }
   }
-
+  //left = forward
+  //right = back?
+  //TODO: MUST resolve with real hardware
   @Override
   public void periodic() {
-    turretAngle=turretRotator.getSelectedSensorPosition() / ticksPerRadian;
+    turretAngle = (turretRotator.getSelectedSensorPosition() / ticksPerRadian) + indexOffset;
     turretVelocity = turretRotator.getSelectedSensorVelocity() * 0.1 / ticksPerRadian;
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
-    isLeftTriggered = turretRotator.isRevLimitSwitchClosed() == 1;
-    isRightTriggered = turretRotator.isFwdLimitSwitchClosed() == 1;
+    leftLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
+    if (leftLimitSwitch == true) {
+      indexed = true;
+    }
+    rightLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
     turretRotator.feed();
+    timestamp = System.currentTimeMillis();
     // SmartDashboard.putNumber("error", turretRotator.getClosedLoopError());
     // System.out.println("error" + turretRotator.getClosedLoopError());
     // This method will be called once per scheduler run
@@ -84,28 +100,31 @@ public class Turret extends SubsystemBase implements TurretInterface {
       disabled = false;
       turretRotator.setNeutralMode(NeutralMode.Coast);
     }
-    turretRotator.set(ControlMode.Position, azimuth * ticksPerRadian);
+    /**
+     * Convert azimuth ang back into encoder ticks referencinf the index offset 
+     */
+    turretRotator.set(ControlMode.Position, ((azimuth - indexOffset) * ticksPerRadian)); 
     return true;
   }
 
   /**
    * Return the maximum turret angle in radians.
-   * 
+   * our zero is the index offset (the limit switch)
    * @return Maximum turret angle in radians.
    */
   @Override
   public double getMaxPosition() {
-    return 0.5 * Units.degreesToRadians(range);
+    return indexOffset;
   }
 
   /**
    * Return the minimum turret angle in radians.
-   * 
+   * opposite of our index offset, assuming left = forward
    * @return Minimum turret angle in radians.
    */
   @Override
   public double getMinPosition() {
-    return -0.5 * Units.degreesToRadians(range);
+    return indexOffset - range;  
   }
 
   /**
@@ -165,15 +184,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public boolean isIndexed() {
-    return isLeftTriggered || isRightTriggered;
+    return indexed;
   }
 
   public void resetTurret() {
     turretRotator.setSelectedSensorPosition(0);
   }
 
-  public void indexTurret(){
-    resetTurret();
-    disable();
-  }
 }
