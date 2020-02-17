@@ -65,5 +65,14 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
       cellCount--;
     }
 
-  }  
+  }
+  
+  @Override
+  /**
+   * getCellCount()
+   * @return number of cells in the magazine
+   */
+  public int getCellCount(){
+    return cellCount;
+  }
 }

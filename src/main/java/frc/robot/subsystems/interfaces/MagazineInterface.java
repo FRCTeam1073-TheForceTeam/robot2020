@@ -14,4 +14,6 @@ public interface MagazineInterface {
     void run(double speed);
 
     void updateCellCount();
+
+    int getCellCount();
 }
