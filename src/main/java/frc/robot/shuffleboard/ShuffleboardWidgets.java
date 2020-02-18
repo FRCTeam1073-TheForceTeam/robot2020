@@ -161,37 +161,57 @@ public class ShuffleboardWidgets extends SubsystemBase {
   /**sets variables to data from the interfaces - gets called periodically*/
   private void ShuffleboardInformation() {
 
-    // Drivetrain Data INCOMPLETE
-    leftEncoderValue = drivetrain.getLeftEncoder();
-    rightEncoderValue = drivetrain.getRightEncoder();
+    // only pulls data if it exists
+    if(drivetrain != null){
+      // Drivetrain Data INCOMPLETE
+      leftEncoderValue = drivetrain.getLeftEncoder();
+      rightEncoderValue = drivetrain.getRightEncoder();
 
-    // Gyro Datas COMPLETE
-    gyroAngleDegrees = drivetrain.getAngleDegrees();
-    Pose2d pose = drivetrain.getRobotPose();
-    robotX = pose.getTranslation().getX();
-    robotY = pose.getTranslation().getY();
-    robotRotation = pose.getRotation().getDegrees();
+      // Gyro Datas COMPLETE
+      gyroAngleDegrees = drivetrain.getAngleDegrees();
+      Pose2d pose = drivetrain.getRobotPose();
+      robotX = pose.getTranslation().getX();
+      robotY = pose.getTranslation().getY();
+      robotRotation = pose.getRotation().getDegrees();
+    }
 
-    // Turret Data COMPLETE
-    turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
-    turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
+    // only pulls data if it exists
+    if(turret != null){
+      // Turret Data COMPLETE
+      turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
+      turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
+    }
 
-    // Shooter Data COMPLETE
-    flywheelVelocity = shooter.getFlywheelSpeed() * (1 / Math.PI) * 180;
-    flywheelTemperature = shooter.getInternalTemperature();
-    hoodDegrees = shooter.getHoodAngle() * (1 / Math.PI) * 180;
-    hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180;
+    // only pulls data if it exists
+    if(shooter != null){
+      // Shooter Data COMPLETE
+      flywheelVelocity = shooter.getFlywheelSpeed() * (1 / Math.PI) * 180;
+      flywheelTemperature = shooter.getInternalTemperature();
+      hoodDegrees = shooter.getHoodAngle() * (1 / Math.PI) * 180;
+      hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180;
+    }
 
-    // Magazine Data COMPLETE
-    cellCount = magazine.getCellCount();
+    // only pulls data if it exists
+    if(magazine != null){
+      // Magazine Data COMPLETE
+      cellCount = magazine.getCellCount();
+    }
 
-    // Climbing Data COMPLETE
-    isBrakeset = lift.isBrakeSet();
-    isLiftFullyExtended = lift.isLiftFullyExtended();
-    isLiftFullyRetracted = lift.isLiftFullyRetracted();
-    liftExtension = lift.liftExtension();
-    isPinned = lift.isPinned();
-    isWinchEngaged = winch.isWinchEngaged();
+    // only pulls data if it exists
+    if(lift != null){
+      // Lift Data COMPLETE
+      isBrakeset = lift.isBrakeSet();
+      isLiftFullyExtended = lift.isLiftFullyExtended();
+      isLiftFullyRetracted = lift.isLiftFullyRetracted();
+      liftExtension = lift.liftExtension();
+      isPinned = lift.isPinned();
+    }
+
+    // only pulls data if it exists
+    if(winch != null){
+      // Winch Data Complete
+      isWinchEngaged = winch.isWinchEngaged();
+    }
 
     // Wheel of Fortune Data MISSING
 
