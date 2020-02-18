@@ -26,7 +26,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
 
   public Magazine() {
-    magMotor = new WPI_TalonSRX(24);//24 is temporary ID
+    magMotor = new WPI_TalonSRX(26);//24 is temporary ID
     cellCount = 0;
     enterance = new DigitalInput(1);
     exit = new DigitalInput(2);
