@@ -9,11 +9,10 @@ package frc.robot.shuffleboard;
 
 import java.util.Map;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
-import frc.robot.subsystems.instances.Drivetrain;
 import frc.robot.subsystems.interfaces.*;
 
 /**The class - Defines all the variables used*/
@@ -79,18 +78,21 @@ public class ShuffleboardWidgets extends SubsystemBase {
   private NetworkTableEntry isWinchEngagedEntry;
   boolean isWinchEngaged = false;
 
+  private NetworkTableEntry batteryVoltageEntry;
+  double batteryVoltage = 0.0;
+
   DrivetrainInterface drivetrain;
   TurretInterface turret;
   ShooterInterface shooter;
   MagazineInterface magazine;
   LiftInterface lift;
   WinchInterface winch;
-
+  
   /**The constructor - creates the shuffleboard tab - gets the interfaces' methods to be able to display it - calls the method ShuffleboardView()*/
   public ShuffleboardWidgets(DrivetrainInterface drivetrain, TurretInterface turret, ShooterInterface shooter, MagazineInterface magazine, LiftInterface lift, WinchInterface winch) {
 
-    //creates the tab in shuffleboard called Telemetry
-    tab = Shuffleboard.getTab("Telemetry");
+    //creates the tab in shuffleboard called Robot2020
+    tab = Shuffleboard.getTab("Robot2020");
 
     this.drivetrain = drivetrain;
     this.turret = turret;
@@ -149,6 +151,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
     isPinnedEntry.setBoolean(isPinned);
     isWinchEngagedEntry.setBoolean(isWinchEngaged);
 
+    batteryVoltageEntry.setDouble(batteryVoltage);
+
     Shuffleboard.update();
     // PID_testing();
     
@@ -160,6 +164,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     // Drivetrain Data INCOMPLETE
     leftEncoderValue = drivetrain.getLeftEncoder();
     rightEncoderValue = drivetrain.getRightEncoder();
+
     // Gyro Datas COMPLETE
     gyroAngleDegrees = drivetrain.getAngleDegrees();
     Pose2d pose = drivetrain.getRobotPose();
@@ -186,10 +191,12 @@ public class ShuffleboardWidgets extends SubsystemBase {
     isLiftFullyRetracted = lift.isLiftFullyRetracted();
     liftExtension = lift.liftExtension();
     isPinned = lift.isPinned();
-
     isWinchEngaged = winch.isWinchEngaged();
 
     // Wheel of Fortune Data MISSING
+
+    // General Robot
+    batteryVoltage = RobotController.getBatteryVoltage();
 
   }
 
@@ -315,8 +322,16 @@ public class ShuffleboardWidgets extends SubsystemBase {
     .withPosition(0, 3)
     .withSize(2, 1)
     .getEntry();
+
+    batteryVoltageEntry = tab
+    .add("batteryVoltage", batteryVoltage)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 14))
+    .withPosition(0, 4)
+    .withSize(2, 2)
+    .getEntry();
       
-    }
+  }
 
     /*public void PID_testing() {
 
