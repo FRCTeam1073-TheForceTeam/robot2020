@@ -77,6 +77,8 @@ public interface TurretInterface {
      */
     public boolean isIndexed();
 
+    public void deindex();
+
     /**
      * Resets turret encoder.
      */
