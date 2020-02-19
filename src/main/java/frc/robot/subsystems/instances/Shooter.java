@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//TODO: write in the deadzone roller
+
 package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -33,6 +35,8 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static CANPIDController hoodController;
   private static final double flywheelTicksPerRevolution = 2048;
   private static final int hoodEncoderTPR = 2048;
+  // private static CANSparkMax deadzone;
+  // private static CANPIDController deadzoneController;
   /**
    * Creates a new Shooter.
    */
