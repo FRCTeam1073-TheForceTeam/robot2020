@@ -8,9 +8,5 @@ public class OI {
     public static void init() {
         driverController = new XboxController(0);
         operatorController = new XboxController(1);
-        
-        
-        
-    }
-    
+    }   
 }

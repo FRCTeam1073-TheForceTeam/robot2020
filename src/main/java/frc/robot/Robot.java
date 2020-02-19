@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static BlingControls blingControls;
+  public AutoDrive driveAuto;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -82,8 +83,10 @@ public class Robot extends TimedRobot {
     turretControls = new TurretControls(turret);
     registerSubsystem((SubsystemBase) turret, turretControls);
 
-    widgets = new ShuffleboardWidgets();
+    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
+
+    driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -118,6 +121,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
+    //if(driveAuto != null){
+    //  driveAuto.schedule();
+    //}
   }
 
   /**
@@ -125,6 +132,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
+    //CommandScheduler.getInstance().run();
   }
 
   @Override

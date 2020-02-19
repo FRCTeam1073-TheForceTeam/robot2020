@@ -23,7 +23,8 @@ public final class Main {
    * <p>If you change your main robot class, change the parameter type.
    */
   public static void main(String... args) {
-    RobotBase.startRobot(TurretShooterTester::new);
-   // RobotBase.startRobot(VisionTester::new);
+    RobotBase.startRobot(Robot::new);
+    // RobotBase.startRobot(VisionTester::new);
+    // RobotBase.startRobot(RobotMercury::new);
   }
 }

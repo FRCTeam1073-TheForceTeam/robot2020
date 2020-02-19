@@ -1,6 +1,8 @@
 package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -29,10 +31,10 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
     // ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonSRX leftMotorLeader;
     private static WPI_TalonSRX rightMotorLeader;
-    private static WPI_TalonSRX leftMotorFollower;
-    private static WPI_TalonSRX rightMotorFollower;
-    private static WPI_TalonSRX leftMotorFollower2;
-    private static WPI_TalonSRX rightMotorFollower2;
+    private static WPI_VictorSPX leftMotorFollower;
+    private static WPI_VictorSPX rightMotorFollower;
+    private static WPI_VictorSPX leftMotorFollower2;
+    private static WPI_VictorSPX rightMotorFollower2;
 
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
@@ -43,10 +45,10 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
 
         leftMotorLeader = new WPI_TalonSRX(12);
         rightMotorLeader = new WPI_TalonSRX(13);
-        leftMotorFollower = new WPI_TalonSRX(14);
-        rightMotorFollower = new WPI_TalonSRX(15);
-        leftMotorFollower2 = new WPI_TalonSRX(16);
-        rightMotorFollower2 = new WPI_TalonSRX(17);
+        leftMotorFollower = new WPI_VictorSPX(14);
+        rightMotorFollower = new WPI_VictorSPX(15);
+        leftMotorFollower2 = new WPI_VictorSPX(16);
+        rightMotorFollower2 = new WPI_VictorSPX(17);
 
         leftMotorLeader.configFactoryDefault();
         rightMotorLeader.configFactoryDefault();
