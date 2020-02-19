@@ -8,17 +8,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.instances.OpenMVBase;
+import frc.robot.commands.PointTurret;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
-import frc.robot.commands.TurretPosAndVel;
 import frc.robot.subsystems.instances.OMVPortTracker;
 import frc.robot.subsystems.instances.Turret;
 import frc.robot.OI;
+
+// THIS WILL FAIL ULTIMATELY UNTIL ENCODER VALUES ARE FIGURED OUT
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -48,7 +49,6 @@ public class TurretControlTester extends TimedRobot {
     turret = new Turret();
     turret.register();
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
-    System.out.println("VisionTester Init");
   }
 
   /*
@@ -90,17 +90,10 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // turretIndex = new TurretIndex(turret);
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret));
-    // new TurretPosAndVel(turret, 0.5));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0));
     if (turretGroup != null) {
       turretGroup.schedule();
     }
-    
-
-    // if (turretIndex != null) {
-    //   turretIndex.cancel();
-    // }
   }
 
   /**

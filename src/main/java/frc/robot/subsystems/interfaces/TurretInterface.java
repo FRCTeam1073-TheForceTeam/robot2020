@@ -79,9 +79,6 @@ public interface TurretInterface {
 
     public void deindex();
 
-    public void enterPIDIndexMode();
-    public void enterPIDPositionMode();
-
     /**
      * Resets turret encoder.
      */
