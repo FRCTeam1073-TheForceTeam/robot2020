@@ -8,10 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.instances.OpenMVBase;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
+import frc.robot.commands.TurretPosAndVel;
 import frc.robot.subsystems.instances.OMVPortTracker;
 import frc.robot.subsystems.instances.Turret;
 import frc.robot.OI;
@@ -27,7 +31,7 @@ public class TurretControlTester extends TimedRobot {
 
   public static OpenMVBase portTrackerCamera;
   public static Turret turret;
-  public static TurretIndex turretIndex;
+  public static SequentialCommandGroup turretGroup;
   public static OI oi;
 
 
@@ -43,6 +47,7 @@ public class TurretControlTester extends TimedRobot {
     portTrackerCamera.register();
     turret = new Turret();
     turret.register();
+    CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
     System.out.println("VisionTester Init");
   }
 
@@ -74,10 +79,6 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // turretIndex = new TurretIndex(turret);
-    // if (turretIndex != null) {
-    //   turretIndex.schedule();
-    // }
   }
 
   /**
@@ -89,6 +90,14 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // turretIndex = new TurretIndex(turret);
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret));
+    // new TurretPosAndVel(turret, 0.5));
+    if (turretGroup != null) {
+      turretGroup.schedule();
+    }
+    
+
     // if (turretIndex != null) {
     //   turretIndex.cancel();
     // }
@@ -99,7 +108,7 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    turret.setVelocity(OI.driverController.getRawAxis(1));
+
   }
 
   @Override

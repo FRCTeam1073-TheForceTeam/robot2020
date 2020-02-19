@@ -11,6 +11,7 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.TurretInterface;
@@ -20,9 +21,14 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private final double ticksPerRadian = 1440 / (2 * Math.PI);
   private double range = 3;         // radians
   private double indexOffset = 0.2; //radians   //TODO: get from CAD
-  private double P = 0.2;
-  private double I = 0.001;
-  private double D = 5;
+  private double indexingP = 1;
+  private double indexingI = 0;
+  private double indexingD = 0;
+
+  private double positionP = 0;
+  private double positionI = 0;
+  private double positionD = 0;
+
   private boolean disabled = false;
 
   /* How to tell if the temperature sensor isn't working: if the robot
@@ -41,14 +47,12 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public Turret() {
     turretRotator = new WPI_TalonSRX(24);
     turretRotator.configFactoryDefault();
-    turretRotator.setSafetyEnabled(true);
+    turretRotator.setSafetyEnabled(false);
     turretRotator.setNeutralMode(NeutralMode.Brake);
     turretRotator.configPeakOutputForward(1);
     turretRotator.configPeakOutputReverse(-1);
     turretRotator.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    turretRotator.config_kP(0, P);
-    turretRotator.config_kI(0, I);
-    turretRotator.config_kD(0, D);
+    enterPIDIndexMode();
     turretRotator.setSelectedSensorPosition(0);
     turretRotator.setIntegralAccumulator(0);
     if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
@@ -72,11 +76,17 @@ public class Turret extends SubsystemBase implements TurretInterface {
     timestamp = System.currentTimeMillis();
     leftLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
     if (leftLimitSwitch == true) {
+      System.out.println("LIMIT SWITCH HIT");
       indexed = true;
+      indexOffset = turretRotator.getSelectedSensorPosition() / ticksPerRadian;
+      SmartDashboard.putNumber("Turret Encoder", turretRotator.getSelectedSensorPosition());
+      SmartDashboard.putNumber("Index Offset", indexOffset);
     }
     rightLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
-    turretRotator.feed();
     timestamp = System.currentTimeMillis();
+
+    // SmartDashboard.putNumber("Motor Output",turretRotator.getMotorOutputPercent());
+    // SmartDashboard.putNumber("Velocity error (aka how much it's HOLDING ITSELF BACK)",turretRotator.getClosedLoopError());
     // SmartDashboard.putNumber("error", turretRotator.getClosedLoopError());
     // System.out.println("error" + turretRotator.getClosedLoopError());
     // This method will be called once per scheduler run
@@ -93,6 +103,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   @Override
   public boolean setPosition(double azimuth) {
+    SmartDashboard.putNumber("update2",System.currentTimeMillis());
     if (!isIndexed()) {
       return false;
     }
@@ -101,10 +112,15 @@ public class Turret extends SubsystemBase implements TurretInterface {
       turretRotator.setNeutralMode(NeutralMode.Coast);
     }
     /**
-     * Convert azimuth ang back into encoder ticks referencinf the index offset 
+     * Convert azimuth ang back into encoder ticks referencing the index offset 
      */
+    // SmartDashboard.putBoolean("Actually Setting Position???", true);
     turretRotator.set(ControlMode.Position, ((azimuth - indexOffset) * ticksPerRadian)); 
     return true;
+  }
+
+  public void deindex(){
+    indexed=false;
   }
 
   /**
@@ -136,6 +152,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
    */
   @Override
   public boolean setVelocity(double angular_rate) {
+    SmartDashboard.putNumber("update",System.currentTimeMillis());
     if (disabled) {
       disabled = false;
       turretRotator.setNeutralMode(NeutralMode.Brake);
@@ -189,6 +206,20 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   public void resetTurret() {
     turretRotator.setSelectedSensorPosition(0);
+  }
+
+  @Override
+  public void enterPIDIndexMode() {
+    turretRotator.config_kP(0, indexingP);
+    turretRotator.config_kI(0, indexingI);
+    turretRotator.config_kD(0, indexingD);
+  }
+
+  @Override
+  public void enterPIDPositionMode() {
+    turretRotator.config_kP(0, positionP);
+    turretRotator.config_kI(0, positionI);
+    turretRotator.config_kD(0, positionD);
   }
 
 }
