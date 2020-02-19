@@ -48,7 +48,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public Turret() {
     turretRotator = new WPI_TalonSRX(24);
     turretRotator.configFactoryDefault();
-    turretRotator.setSafetyEnabled(false); // TODO: fix motor safety
+    turretRotator.setSafetyEnabled(false);
     turretRotator.setNeutralMode(NeutralMode.Brake);
     turretRotator.configPeakOutputForward(1);
     turretRotator.configPeakOutputReverse(-1);
