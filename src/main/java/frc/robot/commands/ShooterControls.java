@@ -10,10 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.ShooterInterface;
+import frc.robot.OI;
 
 public class ShooterControls extends CommandBase {
   ShooterInterface shooter;
-  double speed;
+  double speed; 
+  double flyVelocity = OI.operatorController.getRawAxis(1);
+  double hoodVelocity = OI.operatorController.getRawAxis(5);
 
   public ShooterControls(ShooterInterface shooter_) {
     shooter = shooter_;
@@ -29,8 +32,10 @@ public class ShooterControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    speed = 0;
-    shooter.setFlywheelSpeed(speed);
+    // speed = 0;
+    // shooter.setFlywheelSpeed(speed);
+    shooter.setFlywheelSpeed(flyVelocity);
+    shooter.setHoodVelocity(hoodVelocity);
   }
 
   // Returns true when the command should end.

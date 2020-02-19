@@ -80,11 +80,11 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       computeDistance(targets[0]);
       computeRange(targets[0]);
 
-      System.out.println("Advanced Tracking...");
+      // System.out.println("Advanced Tracking...");
       
-      System.out.println(String.format("T: %d Cx: %d Cy: %d Type: %d Qual: %d Area: %f", 
-              lastUpdate, targets[0].cx, targets[0].cy, 
-              targets[0].targetType, targets[0].quality, targets[0].area));
+      // System.out.println(String.format("T: %d Cx: %d Cy: %d Type: %d Qual: %d Area: %f", 
+      //         lastUpdate, targets[0].cx, targets[0].cy, 
+      //         targets[0].targetType, targets[0].quality, targets[0].area));
     }
   }
 
