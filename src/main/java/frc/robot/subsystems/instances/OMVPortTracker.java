@@ -8,11 +8,14 @@
 package frc.robot.subsystems.instances;
 import edu.wpi.first.hal.CANData;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
+import edu.wpi.first.wpilibj.PWM;
 
 public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterface {
   private CANData targetData;
+  private PWM ledPWM;
   private AdvancedTrackerInterface.AdvancedTargetData [] targets;
   private long lastUpdate = 0;
+  private double LEDLevel = 0;
   private static final int centerX = 160; // Horizontal center of the image in pixels
   private static final int centerY = 120; // Vertical center of the image in pixels
   private static final double azimuthConv = 1.222/320; // Conversion ratio for the azimuth in degrees from pixels
@@ -20,6 +23,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
   private static final double baseElev = 0.384; // Standard elevation of the camera in degrees
   private static final double portHeight = 2.49; // Height of the center of the inner port in meters
   private static final double trackerHeight = 0.8636; // Height of the port tracker camera in meters
+
 
   private static int loopIncrement = 0;
 
@@ -31,6 +35,8 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
     targetData = new CANData();
     targets = new AdvancedTrackerInterface.AdvancedTargetData[1]; // We only have 1 of these.
     targets[0] = new AdvancedTrackerInterface.AdvancedTargetData();
+    ledPWM = new PWM(0);
+    ledPWM.setRaw(0);
   }
 
   // Updates our config and mode:
@@ -125,4 +131,29 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
   private void computeElevation(AdvancedTrackerInterface.AdvancedTargetData data) {
     data.elevation = (centerY - data.cy) * elevationConv + baseElev;
   }
+
+   /**
+     * gets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
+     * @return double (0 - 1) 
+     */
+    @Override
+    public double getLEDLevel(){
+      return LEDLevel;
+    }
+
+    /**
+     * sets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
+     * set double (0 - 1)
+     */
+    @Override
+    public void setLEDLevel(double illumLevel){
+      if (illumLevel < 0){
+        illumLevel = 0;
+      }
+      if (illumLevel > 1){
+        illumLevel = 1;
+      }
+      LEDLevel = illumLevel;
+      ledPWM.setRaw((int) (illumLevel * 2000));
+    }
 }

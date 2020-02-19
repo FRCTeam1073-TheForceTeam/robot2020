@@ -81,10 +81,4 @@ public interface TurretInterface {
      * Resets turret encoder.
      */
     public void resetTurret();
-
-    /**
-     * Indexes turret.
-     */
-    public void indexTurret();
-
 }
