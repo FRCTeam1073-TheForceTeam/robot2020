@@ -7,16 +7,24 @@
 
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.CollectorInterface;
 
 public class Collector extends SubsystemBase implements CollectorInterface {
   boolean isLocked = false;
-  /**
-   * Creates a new Collect.
-   */
+  private WPI_TalonSRX collectorMotor;
+  private Solenoid collectorSolenoid;
+  
+  
   public Collector() {
-
+    this.collectorSolenoid = new Solenoid(1);
+    this.collectorMotor = new WPI_TalonSRX(24);
+    this.collectorMotor.configFactoryDefault();
+    this.collectorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -31,6 +39,12 @@ public class Collector extends SubsystemBase implements CollectorInterface {
     } else {
       speed *= -1.0;
     }
+    if (direction.equals("in") && isLocked == true){
+      collectorMotor.set(ControlMode.PercentOutput, 0.0);
+    } else {
+      collectorMotor.set(ControlMode.PercentOutput, speed);
+    }
+
   }
   @Override
   public void collect(){
@@ -42,11 +56,11 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   }
   @Override
   public void raise(){
-  
+    collectorSolenoid.set(true);
   }
   @Override
   public void lower(){
-
+    collectorSolenoid.set(false);
   }
   @Override
   public void stop(){
