@@ -33,13 +33,13 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   }
 
   @Override
-  public void run(double speed, String direction) {
-    if (direction.equals("in")){
+  public void run(double speed, CollectorDirection direction) {
+    if (direction==CollectorDirection.IN){
       speed *= 1.0;
     } else {
       speed *= -1.0;
     }
-    if (direction.equals("in") && isLocked == true){
+    if (direction==CollectorDirection.IN && isLocked == true){
       collectorMotor.set(ControlMode.PercentOutput, 0.0);
     } else {
       collectorMotor.set(ControlMode.PercentOutput, speed);
@@ -48,11 +48,11 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   }
   @Override
   public void collect(){
-    run(1.0, "in");
+    run(1.0, CollectorDirection.IN);
   }
   @Override
   public void purge(){
-    run(1.0, "out");
+    run(1.0, CollectorDirection.OUT);
   }
   @Override
   public void raise(){
@@ -64,7 +64,7 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   }
   @Override
   public void stop(){
-    run(0.0,"in");
+    run(0.0, CollectorDirection.OUT);
   }
   @Override
   public void lockIntake(){
