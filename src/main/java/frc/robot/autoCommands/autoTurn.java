@@ -80,7 +80,7 @@ public class autoTurn extends CommandBase {
 
     currentPose = drivetrain.getRobotPose();
     velocity = accelConstant * (rotation - currentPose.minus(initPose).getRotation().getRadians());
-    drivetrain.setVelocity(velocity, -velocity);
+    drivetrain.setVelocity(-velocity, velocity);
   }
 
   // Called once the command ends or is interrupted.
