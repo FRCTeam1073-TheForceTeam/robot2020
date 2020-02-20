@@ -39,9 +39,9 @@ public class autoDriveForward extends CommandBase {
     this(drivetrain, distance, Constants.MAX_VELOCITY);
   }
 
-  public autoDriveForward(DrivetrainInterface drivetrain) {
+  public static autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
 
-    this(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_VELOCITY);
+    return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_VELOCITY);
   }
 
   // Called when the command is initially scheduled.
