@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-    driveAuto = new autoDriveForward(drivetrain).andThen(new autoTurn(drivetrain, 90), new autoDriveForward(drivetrain));
+    driveAuto = new autoTurn(drivetrain, 90);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {

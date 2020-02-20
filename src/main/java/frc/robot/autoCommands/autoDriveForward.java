@@ -39,7 +39,7 @@ public class autoDriveForward extends CommandBase {
     this(drivetrain, distance, Constants.MAX_VELOCITY);
   }
 
-  public static autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
+  public autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
 
     return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_VELOCITY);
   }
