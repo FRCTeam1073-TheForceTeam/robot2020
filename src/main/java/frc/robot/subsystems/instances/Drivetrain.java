@@ -127,8 +127,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private double leftPower = 0, rightPower = 0;
 
     public void setVelocity(double left, double right) {
-        leftMotorLeader.set(ControlMode.Velocity, left*3500);
-        rightMotorLeader.set(ControlMode.Velocity, right*3500);
+        leftMotorLeader.set(ControlMode.Velocity, left * 3500);
+        rightMotorLeader.set(ControlMode.Velocity, right * 3500);
         leftPower = left;
         rightPower = right;
         //System.out.println("x");
@@ -254,9 +254,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 0.2;
-        double I = 0.005;
-        double D = 8;
+        double P = 0.05;
+        double I = 0;
+        double D = 0;
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
