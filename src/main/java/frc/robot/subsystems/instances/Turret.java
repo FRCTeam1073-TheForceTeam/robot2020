@@ -74,7 +74,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   @Override
   public void periodic() {
     turretAngle = (turretRotator.getSelectedSensorPosition() / ticksPerRadian) - indexOffset;
-    turretVelocity = turretRotator.getSelectedSensorVelocity() * 0.1 / ticksPerRadian;
+    turretVelocity = turretRotator.getSelectedSensorVelocity() / ticksPerRadian * 10;
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
     rightLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
@@ -85,6 +85,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
     }
     SmartDashboard.putNumber("Turret Encoder", turretRotator.getSelectedSensorPosition());
     leftLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
+    SmartDashboard.putNumber("Turret Angle", turretAngle);
+    SmartDashboard.putNumber("Turret Velocity", turretVelocity);
 
     // SmartDashboard.putNumber("Motor Output",turretRotator.getMotorOutputPercent());
     // SmartDashboard.putNumber("Velocity error (aka how much it's HOLDING ITSELF BACK)",turretRotator.getClosedLoopError());
