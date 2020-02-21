@@ -30,7 +30,7 @@ import frc.robot.OI;
 public class TurretControlTester extends TimedRobot {
 
 
-  public static OpenMVBase portTrackerCamera;
+  // public static OpenMVBase portTrackerCamera;
   public static Turret turret;
   public static SequentialCommandGroup turretGroup;
   public static OI oi;
@@ -44,8 +44,8 @@ public class TurretControlTester extends TimedRobot {
   public void robotInit() {
     OI.init();
     // OpenMVBase camera = new OpenMVBase(1);
-    OpenMVBase portTrackerCamera = new OMVPortTracker(1);
-    portTrackerCamera.register();
+    // OpenMVBase portTrackerCamera = new OMVPortTracker(1);
+    // portTrackerCamera.register();
     turret = new Turret();
     turret.register();
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
@@ -90,8 +90,8 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret));
-    //, new PointTurret(turret, 0.0), new WatiForTurret(turret, azimuth));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0));
+    // new WatiForTurret(turret, azimuth));
     if (turretGroup != null) {
       turretGroup.schedule();
     }

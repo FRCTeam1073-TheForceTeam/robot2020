@@ -22,8 +22,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private double range = 3;          // radians
   private double indexOffset = -1.0; // radians  TODO: get from CAD
   private boolean velocityMode = true;
-  private double velocityP = 0.85;
-  private double velocityI = 0.0;
+  private double velocityP = 0.2;
+  private double velocityI = 0.01;
   private double velocityD = 0.0;
   private double velocityFF = 0.3;
 
@@ -57,6 +57,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
     configVelocityMode();
     turretRotator.setSelectedSensorPosition(0);
     turretRotator.setIntegralAccumulator(0);
+    turretRotator.configClosedLoopPeriod(0, 10);
+    turretRotator.configVelocityMeasurementWindow(8);
+    turretRotator.configMotionAcceleration(velocityToTicks(1.0) * 4);
+    turretRotator.configMotionCruiseVelocity(velocityToTicks(1.0));
+    turretRotator.selectProfileSlot(0, 0);
     if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
       System.out.println("ERROR! Forward Turret Limit Switch not configured");
     }
@@ -73,8 +78,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
   //TODO: MUST resolve with real hardware
   @Override
   public void periodic() {
-    turretAngle = (turretRotator.getSelectedSensorPosition() / ticksPerRadian) - indexOffset;
-    turretVelocity = turretRotator.getSelectedSensorVelocity() / ticksPerRadian * 10;
+    turretAngle = (turretRotator.getSelectedSensorPosition() / ticksPerRadian) + indexOffset;
+    turretVelocity = ticksToVelocity(turretRotator.getSelectedSensorVelocity());
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
     rightLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
@@ -87,6 +92,13 @@ public class Turret extends SubsystemBase implements TurretInterface {
     leftLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
     SmartDashboard.putNumber("Turret Angle", turretAngle);
     SmartDashboard.putNumber("Turret Velocity", turretVelocity);
+    SmartDashboard.putNumber("Turret Output Power", turretRotator.getMotorOutputPercent());
+
+    SmartDashboard.putNumber("Turret Error P", turretRotator.getClosedLoopError());
+    SmartDashboard.putNumber("Turret Error I", turretRotator.getErrorDerivative());
+    SmartDashboard.putNumber("Turret Error D", turretRotator.getIntegralAccumulator());
+
+    SmartDashboard.updateValues();
 
     // SmartDashboard.putNumber("Motor Output",turretRotator.getMotorOutputPercent());
     // SmartDashboard.putNumber("Velocity error (aka how much it's HOLDING ITSELF BACK)",turretRotator.getClosedLoopError());
@@ -120,7 +132,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
      * Convert azimuth ang back into encoder ticks referencing the index offset 
      */
     // SmartDashboard.putBoolean("Actually Setting Position???", true);
-    turretRotator.set(ControlMode.Position, ((azimuth + indexOffset) * ticksPerRadian)); 
+    //turretRotator.set(ControlMode.Position, ((azimuth + indexOffset) * ticksPerRadian)); 
+    turretRotator.set(ControlMode.MotionMagic, ((azimuth - indexOffset) * ticksPerRadian));
     return true;
   }
 
@@ -168,7 +181,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     }
 
     // Multiplying speed by 10 because it's ticks/100ms, so 10*ticks/sec
-    turretRotator.set(ControlMode.Velocity, angular_rate * ticksPerRadian * 0.1);
+    turretRotator.set(ControlMode.Velocity, velocityToTicks(angular_rate));
     return isIndexed();
   }
 
@@ -180,7 +193,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public void disable() {
     disabled = true;
     turretRotator.setNeutralMode(NeutralMode.Brake);
-    turretRotator.set(ControlMode.PercentOutput, 0);
+    turretRotator.set(ControlMode.Disabled, 0);
   }
 
   /**
@@ -202,6 +215,14 @@ public class Turret extends SubsystemBase implements TurretInterface {
   @Override
   public double getVelocity() {
     return turretVelocity;
+  }
+
+  private int velocityToTicks(double vel) {
+    return (int)(vel * ticksPerRadian * 0.1);
+  }
+  
+  private double ticksToVelocity(double ticks) {
+    return ticks / ticksPerRadian * 10;
   }
 
   /**

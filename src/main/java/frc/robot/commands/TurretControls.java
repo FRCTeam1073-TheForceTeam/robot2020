@@ -41,7 +41,7 @@ public class TurretControls extends CommandBase {
     // turret.setPosition(angle);
     // System.out.println(Robot.turret.getPosition());
     double velocity = OI.driverController.getRawAxis(5);
-    turret.setVelocity(velocity*0.1);
+    turret.setVelocity(velocity*1);
   }
 
   // Returns true when the command should end.
