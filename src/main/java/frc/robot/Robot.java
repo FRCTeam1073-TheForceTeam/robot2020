@@ -121,10 +121,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //if(driveAuto != null){
-    //  driveAuto.schedule();
-    //}
+
+      magazineControls.schedule();
+    
   }
 
   /**
@@ -133,7 +132,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //CommandScheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   @Override

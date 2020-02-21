@@ -28,8 +28,8 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   public Magazine() {
     magMotor = new WPI_TalonSRX(26);//24 is temporary ID
     cellCount = 0;
-    enterance = new DigitalInput(1);
-    exit = new DigitalInput(2);
+    enterance = new DigitalInput(0);
+    exit = new DigitalInput(1);
     
 
   }
@@ -74,5 +74,15 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    */
   public int getCellCount(){
     return cellCount;
+  }
+
+  @Override
+  public boolean getEnteranceState(){
+    return enterance.get();
+  }
+
+  @Override
+  public boolean getExitState(){
+    return exit.get();
   }
 }
