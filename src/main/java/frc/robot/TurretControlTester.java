@@ -90,7 +90,8 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret));
+    //, new PointTurret(turret, 0.0), new WatiForTurret(turret, azimuth));
     if (turretGroup != null) {
       turretGroup.schedule();
     }

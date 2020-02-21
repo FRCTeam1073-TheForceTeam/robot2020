@@ -12,45 +12,35 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
-public class TurretIndex extends CommandBase {
-  /**
-   * Creates a new TurretIndex.
-   */
+public class WaitForTurret extends CommandBase {
   TurretInterface turret;
+  double azimuth = 0.0;
+  double tolerance = 0.01;
 
-  public TurretIndex(TurretInterface turret_) {
+  public WaitForTurret(TurretInterface turret_, double azimuth_) {
     turret = turret_;
-    SmartDashboard.putBoolean("END :) ", false);
+    azimuth = azimuth_;
     addRequirements((SubsystemBase) turret);
   }
 
-  // Called when the command is initially scheduled.
+  // Called instantly
   @Override
   public void initialize() {
-    turret.deindex();
+    SmartDashboard.putBoolean("Waiting = ", true);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    turret.setVelocity(-0.1);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("END :) ", true);
     turret.disable();
-    }
+    SmartDashboard.putBoolean("Waiting = ", false);
+  }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (turret.isIndexed()) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return turret.getPosition() == azimuth;
   }
 }

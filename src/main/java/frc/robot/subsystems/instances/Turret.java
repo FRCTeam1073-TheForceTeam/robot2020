@@ -18,13 +18,14 @@ import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class Turret extends SubsystemBase implements TurretInterface {
   private WPI_TalonSRX turretRotator;
-  private final double ticksPerRadian = 1440 / (2 * Math.PI); // TODO: get from CAD
+  private final double ticksPerRadian = 9126.58;
   private double range = 3;          // radians
   private double indexOffset = -1.0; // radians  TODO: get from CAD
   private boolean velocityMode = true;
-  private double velocityP = 0.25;
-  private double velocityI = 0.01;
+  private double velocityP = 0.85;
+  private double velocityI = 0.0;
   private double velocityD = 0.0;
+  private double velocityFF = 0.3;
 
   private double positionP = 0.01;
   private double positionI = 0.001;
@@ -165,7 +166,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     }
 
     // Multiplying speed by 10 because it's ticks/100ms, so 10*ticks/sec
-    turretRotator.set(ControlMode.Velocity, angular_rate * ticksPerRadian * 10);
+    turretRotator.set(ControlMode.Velocity, angular_rate * ticksPerRadian * 0.1);
     return isIndexed();
   }
 
@@ -177,6 +178,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public void disable() {
     disabled = true;
     turretRotator.setNeutralMode(NeutralMode.Brake);
+    turretRotator.set(ControlMode.PercentOutput, 0);
   }
 
   /**
@@ -220,6 +222,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.config_kP(0, velocityP);
     turretRotator.config_kI(0, velocityI);
     turretRotator.config_kD(0, velocityD);
+    turretRotator.config_kF(0, velocityFF);
+    turretRotator.configMaxIntegralAccumulator(0, 500);
+    
     velocityMode = true;
   }
 
@@ -227,6 +232,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.config_kP(0, positionP);
     turretRotator.config_kI(0, positionI);
     turretRotator.config_kD(0, positionD);
+    turretRotator.config_kF(0, 0);
+    turretRotator.configMaxIntegralAccumulator(0, 500);
     velocityMode = false;
   }
 
