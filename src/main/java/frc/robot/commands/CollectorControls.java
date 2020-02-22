@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.OI;
 import frc.robot.subsystems.interfaces.CollectorInterface;
 
 public class CollectorControls extends CommandBase {
@@ -24,11 +25,17 @@ public class CollectorControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(OI.driverController.getAButtonPressed()){
+      collect.raise();
+    } else if (OI.driverController.getBButtonPressed()){
+      collect.lower();
+    }
   }
 
   // Returns true when the command should end.
