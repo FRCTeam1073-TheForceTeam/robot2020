@@ -39,34 +39,35 @@ public class autoTurn extends CommandBase {
     this(drivetrain, rotation, Constants.MAX_VELOCITY);
   }
 
-  public static autoTurn auto45left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -45);
+   public static autoTurn auto135left(DrivetrainInterface drivetrain) {
+    return new autoTurn(drivetrain, -135);
   }
-
+  
   public static autoTurn auto90left(DrivetrainInterface drivetrain) {
     return new autoTurn(drivetrain, -90);
   }
 
-  public static autoTurn auto135left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -135);
+    public static autoTurn auto45left(DrivetrainInterface drivetrain) {
+    return new autoTurn(drivetrain, -45);
   }
 
+    public static autoTurn auto45right(DrivetrainInterface drivetrain) {
+    return new autoTurn(drivetrain, 45);
+  }
+  
+  public static autoTurn auto90right(DrivetrainInterface drivetrain) {
+    return new autoTurn(drivetrain, 90);
+  }
+  
+  public static autoTurn auto135right(DrivetrainInterface drivetrain) {
+    return new autoTurn(drivetrain, 135);
+  }
+  
   public static autoTurn auto180(DrivetrainInterface drivetrain) {
     return new autoTurn(drivetrain, 180);
   }
 
-  public static autoTurn auto135right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 135);
-  }
-
-  public static autoTurn auto90right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 90);
-  }
-
-  public static autoTurn auto45right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 45);
-  }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
