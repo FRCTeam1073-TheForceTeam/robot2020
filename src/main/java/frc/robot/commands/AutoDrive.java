@@ -32,6 +32,7 @@ public class AutoDrive extends CommandBase {
         this.distance = distance;
 
         addRequirements((SubsystemBase)drivetrain);
+        addRequirements((SubsystemBase)bling);
     }
 
 
