@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import frc.robot.subsystems.instances.Collector;
 import frc.robot.subsystems.interfaces.CollectorInterface;
 
 public class CollectorControls extends CommandBase {
@@ -37,7 +38,7 @@ public class CollectorControls extends CommandBase {
     SmartDashboard.putBoolean("A", a=!a);
     if(OI.driverController.getAButtonPressed()){
       collect.raise();
-    } else if (OI.driverController.getBButtonPressed()){
+    } else if (OI.driverController.getBButtonPressed()) {
       collect.lower();
     }
   }

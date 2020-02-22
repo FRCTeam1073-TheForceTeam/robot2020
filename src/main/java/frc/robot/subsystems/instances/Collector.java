@@ -22,8 +22,8 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   
   
   public Collector() {
-    this.collectorSolenoidOut = new Solenoid(3);
-    this.collectorSolenoidIn = new Solenoid(4);
+    this.collectorSolenoidOut = new Solenoid(1, 3);
+    this.collectorSolenoidIn = new Solenoid(1, 4);
 
     this.collectorMotor = new WPI_TalonSRX(25);
     this.collectorMotor.configFactoryDefault();
@@ -82,5 +82,10 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   @Override
   public void unlockIntake(){
     isLocked = false;
+  }
+
+  public void shut() {
+    collectorSolenoidIn.set(false);
+    collectorSolenoidOut.set(false);
   }
 }
