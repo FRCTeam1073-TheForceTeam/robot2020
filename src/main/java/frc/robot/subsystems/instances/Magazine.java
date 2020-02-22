@@ -52,8 +52,10 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   @Override
   /**
    * updateCellCount()
-   * if a ball passes through the enterance, a power cell is added
-   * if a ball passes through the exit, a power cell is decreased
+   * If a ball passes through the entrance, a power cell is added
+   * The power cell number limit is 5. Param set to max of 6 in order to provide a warning.
+   * If a ball passes through the exit, a power cell is decreased
+   * 
    */ 
   public void updateCellCount() {
 
