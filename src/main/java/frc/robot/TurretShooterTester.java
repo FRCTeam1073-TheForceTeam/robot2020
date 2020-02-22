@@ -51,9 +51,11 @@ public class TurretShooterTester extends TimedRobot {
   public void robotInit() {
     OI.init();
     portTrackerCamera = new OMVPortTracker(1);
-    ((SubsystemBase) portTrackerCamera).register();
-    turret = new Turret();
-    ((SubsystemBase) turret).register();
+
+    // ((SubsystemBase) portTrackerCamera).register();
+    // turret = new Turret();
+    // ((SubsystemBase) turret).register();
+
     shooter = new Shooter();
     ((SubsystemBase) shooter).register();
     turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, false, 0.01);

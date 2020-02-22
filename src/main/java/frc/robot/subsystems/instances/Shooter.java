@@ -91,7 +91,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double hoodI = 4e-5;
     double hoodD = 0;
 
-    double hoodP2 = 1e-2;
+    double hoodP2 = 5e-2;
     double hoodI2 = 0;
     double hoodD2 = 0;
 
