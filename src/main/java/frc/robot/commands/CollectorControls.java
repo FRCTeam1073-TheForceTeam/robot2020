@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
@@ -28,9 +29,12 @@ public class CollectorControls extends CommandBase {
   
   }
 
+
+  boolean a=false;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putBoolean("A", a=!a);
     if(OI.driverController.getAButtonPressed()){
       collect.raise();
     } else if (OI.driverController.getBButtonPressed()){

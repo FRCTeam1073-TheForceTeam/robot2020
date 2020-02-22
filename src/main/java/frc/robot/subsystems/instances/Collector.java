@@ -11,24 +11,29 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.CollectorInterface;
 
 public class Collector extends SubsystemBase implements CollectorInterface {
   boolean isLocked = false;
   private WPI_TalonSRX collectorMotor;
-  private Solenoid collectorSolenoid;
+  private Solenoid collectorSolenoidOut, collectorSolenoidIn;
   
   
   public Collector() {
-    this.collectorSolenoid = new Solenoid(1);
-    this.collectorMotor = new WPI_TalonSRX(24);
+    this.collectorSolenoidOut = new Solenoid(3);
+    this.collectorSolenoidIn = new Solenoid(4);
+
+    this.collectorMotor = new WPI_TalonSRX(25);
     this.collectorMotor.configFactoryDefault();
     this.collectorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("CollectorOut", collectorSolenoidOut.get());
+    SmartDashboard.putBoolean("CollectorIn", collectorSolenoidIn.get());
     // This method will be called once per scheduler run
   }
 
@@ -56,11 +61,15 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   }
   @Override
   public void raise(){
-    collectorSolenoid.set(true);
+    collectorSolenoidOut.set(true);
+    collectorSolenoidIn.set(false);
+    SmartDashboard.putBoolean("CollectorRaise", true);
   }
   @Override
   public void lower(){
-    collectorSolenoid.set(false);
+    collectorSolenoidOut.set(false);
+    collectorSolenoidIn.set(true);
+    SmartDashboard.putBoolean("CollectorRaise", false);
   }
   @Override
   public void stop(){
