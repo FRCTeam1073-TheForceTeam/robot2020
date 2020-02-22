@@ -18,7 +18,7 @@ import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class Turret extends SubsystemBase implements TurretInterface {
   private WPI_TalonSRX turretRotator;
-  private final double ticksPerRadian = 1440 / (2 * Math.PI); // TODO: get from CAD
+  private final double ticksPerRadian = 14 * 4096 / (2 * Math.PI); // TODO: get from CAD
   private double range = 3;          // radians
   private double indexOffset = -1.0; // radians  TODO: get from CAD
   private boolean velocityMode = true;
