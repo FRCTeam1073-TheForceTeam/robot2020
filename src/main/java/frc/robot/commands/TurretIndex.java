@@ -20,14 +20,14 @@ public class TurretIndex extends CommandBase {
 
   public TurretIndex(TurretInterface turret_) {
     turret = turret_;
-    SmartDashboard.putBoolean("END :) ", false);
+    SmartDashboard.putBoolean("TURRET-INDEXING ", true);
     addRequirements((SubsystemBase) turret);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turret.deindex();
+    turret.resetTurret();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,9 +39,9 @@ public class TurretIndex extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("END :) ", true);
+    SmartDashboard.putBoolean("TURRET-INDEXING", false);
     turret.disable();
-    }
+  }
 
   // Returns true when the command should end.
   @Override

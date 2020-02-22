@@ -19,26 +19,21 @@ import frc.robot.subsystems.interfaces.TurretInterface;
 public class Turret extends SubsystemBase implements TurretInterface {
   private WPI_TalonSRX turretRotator;
   private final double ticksPerRadian = 9126.58;
-  private double range = 3;          // radians
+  private double range = 3;          // radians  TODO: get from CAD
   private double indexOffset = -1.0; // radians  TODO: get from CAD
+  private boolean disabled = true;
   private boolean velocityMode = true;
+
   private double velocityP = 0.2;
   private double velocityI = 0.01;
   private double velocityD = 0.0;
   private double velocityFF = 0.3;
 
-  private double positionP = 0.01;
+  private double positionP = 0.03;
   private double positionI = 0.001;
   private double positionD = 0.0;
 
-  private boolean disabled = false;
-
-  /* How to tell if the temperature sensor isn't working: if the robot
-  thinks its temperature is 100 gigakelvin (the maximum temperature of
-  a supernova) and the robot and surrounding continent haven't turned
-  into a writhing vortex of quark-gluon plasma, it's probably just a bug.*/
-
-  private double turretTemperature = 100e9;
+  private double turretTemperature = -1.0;
   private double turretAngle = 0;
   private double turretVelocity = 0;
   private long timestamp = System.currentTimeMillis();
@@ -48,44 +43,51 @@ public class Turret extends SubsystemBase implements TurretInterface {
   
   public Turret() {
     turretRotator = new WPI_TalonSRX(24);
-    turretRotator.configFactoryDefault();
-    turretRotator.setSafetyEnabled(false);
-    turretRotator.setNeutralMode(NeutralMode.Brake);
+    if (turretRotator.configFactoryDefault(30) != ErrorCode.OK) {
+      throw new RuntimeException("ERROR: Failed to configure turret default.");
+    }
+    turretRotator.setSafetyEnabled(false);    // TODO: Revisit this for motor safety setup.
+    turretRotator.setNeutralMode(NeutralMode.Coast);
     turretRotator.configPeakOutputForward(1);
     turretRotator.configPeakOutputReverse(-1);
-    turretRotator.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    configVelocityMode();
-    turretRotator.setSelectedSensorPosition(0);
-    turretRotator.setIntegralAccumulator(0);
+    if (turretRotator.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative) != ErrorCode.OK) {
+      throw new RuntimeException("ERROR! Failed to select turret feedback sensor.");
+    }
+
+    turretRotator.selectProfileSlot(0, 0);
     turretRotator.configClosedLoopPeriod(0, 10);
     turretRotator.configVelocityMeasurementWindow(8);
     turretRotator.configMotionAcceleration(velocityToTicks(1.0) * 4);
     turretRotator.configMotionCruiseVelocity(velocityToTicks(1.0));
-    turretRotator.selectProfileSlot(0, 0);
+   
+
+    configVelocityMode();
+    turretRotator.setSelectedSensorPosition(0);
+    
     if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
-      System.out.println("ERROR! Forward Turret Limit Switch not configured");
+      throw new RuntimeException("ERROR! Forward Turret Limit Switch not configured.");
     }
     if (turretRotator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
-      System.out.println("ERROR! Reverse Turret Limit Switch not configured");
+      throw new RuntimeException("ERROR! Reverse Turret Limit Switch not configured.");
     }
     if (turretRotator.configClearPositionOnLimitR(true, 30) != ErrorCode.OK) {
-      System.out.println("ERROR! Turret Postion limit is NOT set");
+      throw new RuntimeException("ERROR! Turret Postion limit is NOT set.");
     } 
-    SmartDashboard.putBoolean("Indexed = ", false);
+    SmartDashboard.putBoolean("Turret Indexed = ", false);
   }
   //left = forward
   //right = back?
   //TODO: MUST resolve with real hardware
   @Override
   public void periodic() {
-    turretAngle = (turretRotator.getSelectedSensorPosition() / ticksPerRadian) + indexOffset;
+    turretAngle = ticksToPosition(turretRotator.getSelectedSensorPosition());
     turretVelocity = ticksToVelocity(turretRotator.getSelectedSensorVelocity());
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
     rightLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
   
     if (rightLimitSwitch == true) {
-      SmartDashboard.putBoolean("Indexed = ", true);
+      SmartDashboard.putBoolean("Turret Indexed = ", true);
       indexed = true;
     }
     SmartDashboard.putNumber("Turret Encoder", turretRotator.getSelectedSensorPosition());
@@ -99,12 +101,6 @@ public class Turret extends SubsystemBase implements TurretInterface {
     SmartDashboard.putNumber("Turret Error D", turretRotator.getIntegralAccumulator());
 
     SmartDashboard.updateValues();
-
-    // SmartDashboard.putNumber("Motor Output",turretRotator.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Velocity error (aka how much it's HOLDING ITSELF BACK)",turretRotator.getClosedLoopError());
-    // SmartDashboard.putNumber("error", turretRotator.getClosedLoopError());
-    // System.out.println("error" + turretRotator.getClosedLoopError());
-    // This method will be called once per scheduler run
   }
 
   /**
@@ -121,25 +117,19 @@ public class Turret extends SubsystemBase implements TurretInterface {
     if (!isIndexed()) {
       return false;
     }
+
     if (disabled) {
       disabled = false;
-      turretRotator.setNeutralMode(NeutralMode.Coast);
+      turretRotator.setNeutralMode(NeutralMode.Brake);
     }
+
     if (velocityMode) {
       configPositionMode();
     }
-    /**
-     * Convert azimuth ang back into encoder ticks referencing the index offset 
-     */
-    // SmartDashboard.putBoolean("Actually Setting Position???", true);
-    //turretRotator.set(ControlMode.Position, ((azimuth + indexOffset) * ticksPerRadian)); 
-    turretRotator.set(ControlMode.MotionMagic, ((azimuth - indexOffset) * ticksPerRadian));
-    return true;
-  }
+  
+    turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth));
 
-  @Override
-  public void deindex(){
-    indexed = false;
+    return true;
   }
 
   /**
@@ -192,8 +182,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
   @Override
   public void disable() {
     disabled = true;
-    turretRotator.setNeutralMode(NeutralMode.Brake);
     turretRotator.set(ControlMode.Disabled, 0);
+    turretRotator.setNeutralMode(NeutralMode.Coast);
   }
 
   /**
@@ -216,15 +206,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public double getVelocity() {
     return turretVelocity;
   }
-
-  private int velocityToTicks(double vel) {
-    return (int)(vel * ticksPerRadian * 0.1);
-  }
   
-  private double ticksToVelocity(double ticks) {
-    return ticks / ticksPerRadian * 10;
-  }
-
   /**
    * Return true if the turret has been indexed.
    * 
@@ -238,7 +220,25 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   @Override
   public void resetTurret() {
-    turretRotator.setSelectedSensorPosition(0);
+    indexed = false;
+    disable();
+    configVelocityMode();
+  }
+
+  private int velocityToTicks(double vel) {
+    return (int)(vel * ticksPerRadian * 0.1);
+  }
+  
+  private double ticksToVelocity(double ticks) {
+    return ticks / ticksPerRadian * 10.0;
+  }
+
+  private int positionToTicks(double angle) {
+    return (int)((angle - indexOffset) * ticksPerRadian);
+  }
+
+  private double ticksToPosition(double ticks) {
+    return (ticks / ticksPerRadian) + indexOffset;
   }
 
   public void configVelocityMode() {
@@ -247,7 +247,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.config_kD(0, velocityD);
     turretRotator.config_kF(0, velocityFF);
     turretRotator.configMaxIntegralAccumulator(0, 500);
-    
+    turretRotator.setIntegralAccumulator(0);
+
     velocityMode = true;
   }
 
@@ -257,6 +258,8 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.config_kD(0, positionD);
     turretRotator.config_kF(0, 0);
     turretRotator.configMaxIntegralAccumulator(0, 500);
+    turretRotator.setIntegralAccumulator(0);
+
     velocityMode = false;
   }
 

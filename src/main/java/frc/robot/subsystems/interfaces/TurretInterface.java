@@ -77,10 +77,8 @@ public interface TurretInterface {
      */
     public boolean isIndexed();
 
-    public void deindex();
-
     /**
-     * Resets turret encoder.
+     * Disables the turret and resets the index flag so it needs to index again.
      */
     public void resetTurret();
 }
