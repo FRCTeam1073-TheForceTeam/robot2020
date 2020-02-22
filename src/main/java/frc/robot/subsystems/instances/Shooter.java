@@ -78,6 +78,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     shooterFlywheel2.follow(shooterFlywheel1);
     shooterFlywheel2.setInverted(true);
 
+
     // shooterFlywheel1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     // shooterFlywheel1.setSensorPhase(true);
@@ -90,6 +91,10 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double hoodI = 4e-5;
     double hoodD = 0;
 
+    double hoodP2 = 1e-2;
+    double hoodI2 = 0;
+    double hoodD2 = 0;
+
     // shooterFlywheel1.config_kP(0, P);
     // shooterFlywheel1.config_kI(0, I);
     // shooterFlywheel1.config_kD(0, D);
@@ -99,13 +104,14 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     // hoodIndexer = hood.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
     hoodEncoder = hood.getEncoder(EncoderType.kHallSensor, hoodEncoderTPR);
     hoodEncoder.setPosition(0);
-    // hoodEncoder2 = hood.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
-    // hoodEncoder2.setPosition(0);
+    hoodEncoder2 = hood.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
+    hoodEncoder2.setPosition(0);
+    hoodEncoder2.setInverted(true);
     hoodController = new CANPIDController(hood);
-    hoodController.setFeedbackDevice(hoodEncoder);
-    hoodController.setP(hoodP);
-    hoodController.setI(hoodI);
-    hoodController.setD(hoodD);
+    hoodController.setFeedbackDevice(hoodEncoder2);
+    hoodController.setP(hoodP2);
+    hoodController.setI(hoodI2);
+    hoodController.setD(hoodD2);
     hood.setClosedLoopRampRate(0.25);
   }
   
@@ -131,7 +137,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
       isHoodIndexed = !isHoodIndexed;
     }
     isHoodIndexed = (Math.abs(hoodInputPower) >= 0.025 && Math.abs(hoodEncoder.getVelocity()) <= 10);
-    SmartDashboard.putBoolean("neato", hoodIsIndexed());
+    SmartDashboard.putBoolean("Hood Indexed?", hoodIsIndexed());
     hoodInputPower = hood.getAppliedOutput();
     temperatures[0] = shooterFlywheel1.getTemperature();
     temperatures[1] = shooterFlywheel2.getTemperature();
@@ -142,7 +148,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
     SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
     SmartDashboard.putNumber("Position", hoodEncoder.getPosition());
-    // SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
+    SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
+    SmartDashboard.putNumber("Error", hoodEncoder.getPosition() - targetHoodAngle);
+
   }
 
   /**
@@ -223,6 +231,8 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     hoodEncoder.setPosition(hoodIndexAngle);
   }
 
+  double targetHoodAngle=0;
+
   /**
    * Set the target hood angle. The hood will move toward this angle and hold this
    * angle under closed loop control. This command is only valid if the hood has
@@ -241,6 +251,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double hoodAngle = kMotorRadiansPerHoodRadian * (angle - minAngle);
     hood.setIdleMode(IdleMode.kBrake);
     SmartDashboard.putNumber("angle", hoodAngle/(2*Math.PI));
+    targetHoodAngle=hoodAngle/(2*Math.PI);
     hoodController.setReference(hoodAngle / (2 * Math.PI), ControlType.kPosition);
     return true;
   }

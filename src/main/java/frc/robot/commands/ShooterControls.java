@@ -42,11 +42,13 @@ public class ShooterControls extends CommandBase {
   public void execute() {
     // speed = 0;
     // shooter.setFlywheelSpeed(speed);
-    double input = (0.5 * (shooter.getMinHoodAngle() + shooter.getMaxHoodAngle())
-        + 0.5 * (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * OI.driverController.getRawAxis(0));
-    if (OI.driverController.getAButtonPressed()) {
-      pow = 0.5 / pow;
-    }
+
+    // double input = (0.5 * (shooter.getMinHoodAngle() + shooter.getMaxHoodAngle())
+    //     + 0.5 * (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * OI.driverController.getRawAxis(0));
+    // if (OI.driverController.getAButtonPressed()) {
+    //   pow = 0.5 / pow;
+    // }
+
     //Math.abs(OI.driverController.getRawAxis(1)) * Math.PI * 3.5;
 
     // double aput = OI.driverController.getRawAxis(1);
@@ -64,10 +66,10 @@ public class ShooterControls extends CommandBase {
     // shooter.setHoodPower(0.1 * OI.driverController.getRawAxis(1));
     
     
-    // shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
-      // + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(1));
+    shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
+      + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(1));
 
-    shooter.setFlywheelPower(0.2 * pow * OI.driverController.getRawAxis(1));
+    // shooter.setFlywheelPower(0.2 * pow * OI.driverController.getRawAxis(1));
 
     // if (OI.driverController.getAButton()) {
     //   shooter.setHoodAngle(Math.PI * 1);
