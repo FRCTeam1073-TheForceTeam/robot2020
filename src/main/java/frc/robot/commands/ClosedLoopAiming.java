@@ -16,6 +16,10 @@ import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class ClosedLoopAiming extends CommandBase {
 
+  public enum CLAMode {
+    VELOCITY, POSITION
+  }
+
   TurretInterface turret;
   AdvancedTrackerInterface portTracker;
   ShooterInterface shooter;
@@ -23,14 +27,19 @@ public class ClosedLoopAiming extends CommandBase {
   private double azimuthTarget;
   private boolean temporary;
 
-  private double currentAzimuth = 0;
-  public double currentDistance = 0;
-  public double currentRange = 0;
-  public double currentElevation = 0;
+  private double currentAzimuth = 0.0;
+  public double currentDistance = 0.0;
+  public double currentRange = 0.0;
+  public double currentElevation = 0.0;
 
+  private double azimuthCorrection = 0.0;
   private double accelConstant = 0.1;
-  private double azimuthThreshold = 0;
+  private double azimuthThreshold = 0.0;
+  private double shooterVelocity = 0.0;
+  private double hoodAngle = 0.0;
+  private TrajectoryConfiguration targetTrajectory;
 
+  private CLAMode mode = CLAMode.VELOCITY;
   /**
    * When activated, will align turret and shooter to the port vision target
    * @param turret_ Turret susbsytem on the robot
@@ -40,10 +49,11 @@ public class ClosedLoopAiming extends CommandBase {
    */
 
   public ClosedLoopAiming(final TurretInterface turret_, final AdvancedTrackerInterface portTracker_,
-      final ShooterInterface shooter_, boolean temporary_, double azimuthThreshold_) {
+      final ShooterInterface shooter_, CLAMode mode_, boolean temporary_, double azimuthThreshold_) {
     turret = turret_;
     portTracker = portTracker_;
     shooter = shooter_;
+    mode = mode_;
     temporary = temporary_;
     azimuthThreshold = azimuthThreshold_;
     addRequirements((SubsystemBase) turret, (SubsystemBase) portTracker);
@@ -156,13 +166,19 @@ public class ClosedLoopAiming extends CommandBase {
     currentDistance = portTracker.getAdvancedTargets()[0].distance;
     currentRange = portTracker.getAdvancedTargets()[0].range;
     currentElevation = portTracker.getAdvancedTargets()[0].elevation;
-    double azimuthCorrection = (azimuthTarget - currentAzimuth) * accelConstant;
-    TrajectoryConfiguration targetTrajectory = getDoublePortConfiguration(currentRange, currentElevation);
-    double shooterVelocity = targetTrajectory.velocity;
-    double hoodAngle = targetTrajectory.angle;
+    if(mode == CLAMode.VELOCITY)
+      azimuthCorrection = (azimuthTarget - currentAzimuth) * accelConstant;
+    if(mode == CLAMode.POSITION)
+      azimuthCorrection = azimuthTarget + currentAzimuth;
+    targetTrajectory = getDoublePortConfiguration(currentRange, currentElevation);
+    shooterVelocity = targetTrajectory.velocity;
+    hoodAngle = targetTrajectory.angle;
     shooter.setHoodAngle(hoodAngle);
     shooter.setFlywheelSpeed(getFlywheelRotationRate(shooterVelocity));
-    turret.setVelocity(azimuthCorrection);
+    if(mode == CLAMode.VELOCITY)
+      turret.setVelocity(azimuthCorrection);
+    if(mode == CLAMode.POSITION)
+      turret.setPosition(azimuthCorrection);
   }
 
   /**
