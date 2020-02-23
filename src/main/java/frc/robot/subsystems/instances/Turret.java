@@ -109,6 +109,16 @@ public class Turret extends SubsystemBase implements TurretInterface {
     SmartDashboard.putNumber("Turret Velocity", turretVelocity);
     SmartDashboard.putNumber("Turret Output Power", turretRotator.getMotorOutputPercent());
 
+    if (turretRotator.getControlMode() == ControlMode.MotionMagic) {
+      SmartDashboard.putNumber("Turret Target", turretRotator.getClosedLoopTarget(0));
+      SmartDashboard.putNumber("Turret Traj Pos", turretRotator.getActiveTrajectoryPosition());
+      SmartDashboard.putNumber("Turret Traj Vel", turretRotator.getActiveTrajectoryVelocity());
+    } else {
+      SmartDashboard.putNumber("Turret Target", 0.0);
+      SmartDashboard.putNumber("Turret Traj Pos", 0.0);
+      SmartDashboard.putNumber("Turret Trag Vel", 0.0);
+    }
+
     SmartDashboard.putNumber("Turret Error P", turretRotator.getClosedLoopError());
     SmartDashboard.putNumber("Turret Error I", turretRotator.getErrorDerivative());
     SmartDashboard.putNumber("Turret Error D", turretRotator.getIntegralAccumulator());
@@ -275,6 +285,12 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.setIntegralAccumulator(0);
 
     velocityMode = false;
+  }
+
+  @Override
+  public boolean atPosition(double azimuth, double tolerance) {
+    // TODO Auto-generated method stub
+    return false;
   }
 
 }
