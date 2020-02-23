@@ -143,7 +143,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     temperatures[1] = shooterFlywheel2.getTemperature();
     hoodAngle = hoodEncoder.getPosition() * 2 * Math.PI;
     lastTimestamp = System.currentTimeMillis();
-    flywheelVelocity = shooterFlywheel1.getSelectedSensorVelocity() * 10 / flywheelTicksPerRevolution;
+    flywheelVelocity = shooterFlywheel1.getSelectedSensorVelocity() * 2 * Math.PI * 10 / flywheelTicksPerRevolution;
     SmartDashboard.putNumber("key", shooterFlywheel1.getMotorOutputPercent());
     SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
     SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
