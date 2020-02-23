@@ -38,7 +38,7 @@ public class ShooterIndex extends CommandBase {
   @Override
   public void execute() {
     curr = System.currentTimeMillis();
-    shooter.setHoodPower(-0.0275);
+    shooter.setHoodPower(-0.05 * OI.driverController.getRawAxis(1));
     SmartDashboard.putBoolean("signal", s = !s);
     SmartDashboard.putNumber("key", loops);
     SmartDashboard.putNumber("key3", (double) (curr-start));
@@ -59,6 +59,6 @@ public class ShooterIndex extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (curr - start) > 200 && shooter.hoodIsIndexed();
+    return false;//(curr - start) > 200 && shooter.hoodIsIndexed();
   }
 }

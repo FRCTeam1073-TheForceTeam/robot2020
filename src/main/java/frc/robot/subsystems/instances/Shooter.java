@@ -43,7 +43,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
   private static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
-  
   /**
    * Creates a new Shooter.
    */
@@ -52,7 +51,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     shooterFlywheel1 = new WPI_TalonFX(22);
     shooterFlywheel2 = new WPI_TalonFX(23);
 
-    hood = new CANSparkMax(24, MotorType.kBrushless);
+    hood = new CANSparkMax(25, MotorType.kBrushless);
     hood.clearFaults();
 
     shooterFlywheel1.configFactoryDefault();
@@ -83,15 +82,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
 
     // shooterFlywheel1.setSensorPhase(true);
 
-    double P = 0;
+    double P = 1.5e-1;
     double I = 0;
     double D = 0;
 
-    double hoodP = 1.5e-1;
+    double hoodP = 2e-1;
     double hoodI = 4e-5;
     double hoodD = 0;
 
-    double hoodP2 = 5e-2;
+    double hoodP2 = 2e-2;
     double hoodI2 = 0;
     double hoodD2 = 0;
 
@@ -99,7 +98,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     shooterFlywheel1.config_kI(0, I);
     shooterFlywheel1.config_kD(0, D);
 
-    // shooterFlywheel1.setSelectedSensorPosition(0);
+    shooterFlywheel1.setSelectedSensorPosition(0);
+    shooterFlywheel1.setIntegralAccumulator(0);
+    shooterFlywheel1.configClosedloopRamp(0.25);
 
     // hoodIndexer = hood.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
     hoodEncoder = hood.getEncoder(EncoderType.kHallSensor, hoodEncoderTPR);
@@ -108,10 +109,10 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     hoodEncoder2.setPosition(0);
     hoodEncoder2.setInverted(true);
     hoodController = new CANPIDController(hood);
-    hoodController.setFeedbackDevice(hoodEncoder2);
-    hoodController.setP(hoodP2);
-    hoodController.setI(hoodI2);
-    hoodController.setD(hoodD2);
+    hoodController.setFeedbackDevice(hoodEncoder);
+    hoodController.setP(hoodP);
+    hoodController.setI(hoodI);
+    hoodController.setD(hoodD);
     hood.setClosedLoopRampRate(0.25);
   }
   
@@ -136,7 +137,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     if (OI.driverController.getStartButtonPressed()) {
       isHoodIndexed = !isHoodIndexed;
     }
-    isHoodIndexed = (Math.abs(hoodInputPower) >= 0.025 && Math.abs(hoodEncoder.getVelocity()) <= 10);
+    isHoodIndexed = (Math.abs(hoodInputPower) >= 0.015 && Math.abs(hoodEncoder.getVelocity()) <= 10);
     SmartDashboard.putBoolean("Hood Indexed?", hoodIsIndexed());
     hoodInputPower = hood.getAppliedOutput();
     temperatures[0] = shooterFlywheel1.getTemperature();
@@ -144,12 +145,19 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     hoodAngle = hoodEncoder.getPosition() * 2 * Math.PI;
     lastTimestamp = System.currentTimeMillis();
     flywheelVelocity = shooterFlywheel1.getSelectedSensorVelocity() * 2 * Math.PI * 10 / flywheelTicksPerRevolution;
-    SmartDashboard.putNumber("key", shooterFlywheel1.getMotorOutputPercent());
-    SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
-    SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
+
+    SmartDashboard.putNumber("Flywheel Error P", shooterFlywheel1.getClosedLoopError());
+    SmartDashboard.putNumber("Flywheel Error P [RPM]",
+        shooterFlywheel1.getClosedLoopError() * 600 / flywheelTicksPerRevolution);
+    SmartDashboard.putNumber("Flywheel Error I", shooterFlywheel1.getIntegralAccumulator());
+    SmartDashboard.putNumber("Flywheel Error D", shooterFlywheel1.getErrorDerivative());
+
+    // SmartDashboard.putNumber("key", shooterFlywheel1.getMotorOutputPercent());
+    // SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
+    // SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
     SmartDashboard.putNumber("Position", hoodEncoder.getPosition());
-    SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
-    SmartDashboard.putNumber("Error", hoodEncoder.getPosition() - targetHoodAngle);
+    // SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
+    // SmartDashboard.putNumber("Error", hoodEncoder.getPosition() - targetHoodAngle);
 
   }
 

@@ -34,7 +34,7 @@ public class ShooterControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    shooter.resetHood();
   }
 
   double pow = 0.0;
@@ -48,21 +48,21 @@ public class ShooterControls extends CommandBase {
     // shooter.setFlywheelSpeed(speed);
       // double input = (0.5 * (shooter.getMinHoodAngle() + shooter.getMaxHoodAngle())
       //     + 0.5 * (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * OI.driverController.getRawAxis(0));
-    if (OI.driverController.getBumper(Hand.kLeft)) {
+    if (OI.operatorController.getBumper(Hand.kLeft)) {
       pow = 0.0;
-    } else if (OI.driverController.getAButtonPressed()) {
+    } else if (OI.operatorController.getAButtonPressed()) {
       pow = 0.25;
-    }else if (OI.driverController.getBButtonPressed()) {
+    }else if (OI.operatorController.getBButtonPressed()) {
       pow = 0.5;
-    } else if (OI.driverController.getXButtonPressed()) {
+    } else if (OI.operatorController.getXButtonPressed()) {
       pow = 0.75;
-    } else if (OI.driverController.getYButtonPressed()) {
+    } else if (OI.operatorController.getYButtonPressed()) {
       pow = 1;
     }
 
-    if (OI.driverController.getBumper(Hand.kRight)) {
+    if (OI.operatorController.getBumper(Hand.kRight)) {
       pow2 = 0.1;
-    } else if (OI.driverController.getStartButtonPressed()) {
+    } else if (OI.operatorController.getStartButtonPressed()) {
       pow2 = 1;
     }
     
@@ -83,11 +83,12 @@ public class ShooterControls extends CommandBase {
     // shooter.setHoodPower(0.1 * OI.driverController.getRawAxis(1));
     
     
-    // shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
-    // + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(1));
+    shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
+    + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(1));
 
-    value = pow2 * pow * OI.driverController.getRawAxis(1);
+    value = pow2 * pow * OI.operatorController.getRawAxis(1);
     shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
+    SmartDashboard.putNumber("Input RPM", value * shooter.getMaximumFlywheelSpeed() * 30 / Math.PI);
     SmartDashboard.putNumber("[Graph] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
     SmartDashboard.putNumber("[Graph] Estimated linear velocity of power cell (MPH)",
         shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);

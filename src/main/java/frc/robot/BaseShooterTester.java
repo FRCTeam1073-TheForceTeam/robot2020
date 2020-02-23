@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ShooterControls;
+import frc.robot.commands.ShooterIndex;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 /**
@@ -79,6 +80,7 @@ public class BaseShooterTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // (new ShooterIndex(shooter)).schedule(false);
   }
 
   /**
