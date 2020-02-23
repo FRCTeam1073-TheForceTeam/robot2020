@@ -38,7 +38,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static CANEncoder hoodEncoder2;
   private static CANPIDController hoodController;
 
-  private static final double flywheelTicksPerRevolution = 4096;
+  private static final double flywheelTicksPerRevolution = 2048;
   private static final int hoodEncoderTPR = 1;//2048;
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
@@ -95,9 +95,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double hoodI2 = 0;
     double hoodD2 = 0;
 
-    // shooterFlywheel1.config_kP(0, P);
-    // shooterFlywheel1.config_kI(0, I);
-    // shooterFlywheel1.config_kD(0, D);
+    shooterFlywheel1.config_kP(0, P);
+    shooterFlywheel1.config_kI(0, I);
+    shooterFlywheel1.config_kD(0, D);
 
     // shooterFlywheel1.setSelectedSensorPosition(0);
 
@@ -172,7 +172,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
    */
   @Override
   public void setFlywheelSpeed(double speed) {
-    shooterFlywheel1.set(ControlMode.Velocity, speed * 10 / flywheelTicksPerRevolution);
+    shooterFlywheel1.set(ControlMode.Velocity, speed * flywheelTicksPerRevolution * 0.1 / (2 * Math.PI));
   }
 
   /**
