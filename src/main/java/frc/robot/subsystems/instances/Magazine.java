@@ -7,10 +7,9 @@
 
 package frc.robot.subsystems.instances;
 
-//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.MagazineInterface;
 
@@ -18,24 +17,28 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /** 
    * Creates a new Magazine.
    */
-  private static int cellCount;//The cell count as determined by the trip of a distance sensor facing an opposite wall
-  //private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine. Will likely not have encoder.
-  private static DigitalInput entrance;
+  private static int cellCount;//The cell count as determined by the distance sensor facing upward
+  private static WPI_TalonSRX magMotor; //motor controls all belts on magazine. Will likely not have encoder
+  private static DigitalInput enterance;
   private static DigitalInput exit;
-  private boolean cellEntering, cellExiting;
+  
+
+
 
   public Magazine() {
-    //magMotor = new WPI_TalonSRX(26);//24 is temporary ID
+    magMotor = new WPI_TalonSRX(26);//24 is temporary ID
     cellCount = 0;
-//Initializes a digital input with channel
-    entrance = new DigitalInput(0);
-    exit = new DigitalInput(1);
+    enterance = new DigitalInput(1);
+    exit = new DigitalInput(2);
+    
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     updateCellCount();
+
   }
 
   @Override
@@ -45,40 +48,23 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * @param - double power: between 0 and 1. The power to the motor
    */
   public void run(double power) {
-    //magMotor.set(power);
-    
+    magMotor.set(power);
   }
-
   @Override
   /**
    * updateCellCount()
-   * If a ball passes through the entrance, a power cell is added
-   * The power cell number limit is 5. Param set to max of 6 in order to provide a warning.
-   * If a ball passes through the exit, a power cell is decreased
-   * 
-   */ 
+   * if a ball passes through the enterance, a power cell is added
+   * if a ball passes through the exit, a power cell is decreased
+   */
   public void updateCellCount() {
 
-    if (entrance.get() == true && cellEntering == false && cellCount < 6) {
+    if(enterance.get() == true){
       cellCount++;
-      cellEntering = true;
     }
-      
-    if (entrance.get() == false)
-      cellEntering = false;
-
-    if (exit.get() == true && cellExiting == false && cellCount > 0) {
+    if(exit.get() == true){
       cellCount--;
-      cellExiting = true;
     }
 
-    if (exit.get() == false)
-      cellExiting = false;
-
-    if (cellCount > 5)
-      System.out.println("Jack - stop! You have more than 5 power cells.");
-
-    SmartDashboard.putNumber("Cell Count", cellCount);
   }
   
   @Override
@@ -86,7 +72,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * getCellCount()
    * @return number of cells in the magazine
    */
-  public int getCellCount() {
+  public int getCellCount(){
     return cellCount;
   }
 }
