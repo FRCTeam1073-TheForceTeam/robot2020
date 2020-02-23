@@ -289,8 +289,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   @Override
   public boolean atPosition(double azimuth, double tolerance) {
-    // TODO Auto-generated method stub
-    return false;
+    return Math.abs(azimuth - getPosition()) <= tolerance;
   }
 
 }
