@@ -77,7 +77,6 @@ public interface TurretInterface {
      */
     public boolean isIndexed();
 
-
     /**
      * Returns true if the turret is at the given position within the given tolerance. 
      * Angle and tolerance in radians.
