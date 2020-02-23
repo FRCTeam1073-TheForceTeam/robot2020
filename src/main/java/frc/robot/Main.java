@@ -26,5 +26,6 @@ public final class Main {
     RobotBase.startRobot(Robot::new);
     // RobotBase.startRobot(VisionTester::new);
     // RobotBase.startRobot(RobotMercury::new);
+    // RobotBase.startRobot(MagazineTester::new);
   }
 }
