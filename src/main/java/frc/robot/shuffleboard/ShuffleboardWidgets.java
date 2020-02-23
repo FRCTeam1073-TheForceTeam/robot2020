@@ -163,11 +163,10 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     // only pulls data from the drivetrain if it exists
     if(drivetrain != null){
-      // Drivetrain Data INCOMPLETE
+      // Drivetrain Data COMPLETE
       leftEncoderValue = drivetrain.getLeftEncoder();
       rightEncoderValue = drivetrain.getRightEncoder();
-
-      // Gyro Datas COMPLETE
+        // Gyro Datas COMPLETE
       gyroAngleDegrees = drivetrain.getAngleDegrees();
       Pose2d pose = drivetrain.getRobotPose();
       robotX = pose.getTranslation().getX();
