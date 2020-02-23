@@ -192,7 +192,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   public double getMaximumFlywheelSpeed() {
     // Value needs to be determined experimentally
     // TODO: Test this.
-    return 600.0;
+    return 6400 * 2 * Math.PI / 60;
   }
 
   /**

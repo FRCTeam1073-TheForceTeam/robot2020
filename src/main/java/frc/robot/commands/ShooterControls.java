@@ -87,7 +87,7 @@ public class ShooterControls extends CommandBase {
     // + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(1));
 
     value = pow2 * pow * OI.driverController.getRawAxis(1);
-    shooter.setFlywheelPower(value);
+    shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
     SmartDashboard.putNumber("[Graph] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
     SmartDashboard.putNumber("[Graph] Estimated linear velocity of power cell (MPH)",
         shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
