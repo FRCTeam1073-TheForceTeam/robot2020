@@ -8,7 +8,9 @@
 package frc.robot.components;
 
 /*
-* Add your docs here.
+* An area to input a dep/indep variable to interpolate between
+* Draws a line to estimate the values in-between
+* Useful for both cameras and the cupola
 */
 
 public class InterpolatorTable {
