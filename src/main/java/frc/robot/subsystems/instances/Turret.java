@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
@@ -48,22 +47,33 @@ public class Turret extends SubsystemBase implements TurretInterface {
     }
     turretRotator.setSafetyEnabled(false);    // TODO: Revisit this for motor safety setup.
     turretRotator.setNeutralMode(NeutralMode.Coast);
-    turretRotator.configPeakOutputForward(1);
-    turretRotator.configPeakOutputReverse(-1);
+
     if (turretRotator.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative) != ErrorCode.OK) {
       throw new RuntimeException("ERROR! Failed to select turret feedback sensor.");
     }
+    turretRotator.setSelectedSensorPosition(0);
+    turretRotator.configClosedLoopPeriod(0, 10); // Only run as fast as we can get good velocity measurement.
+    turretRotator.configVelocityMeasurementWindow(8);
+
+    // Tighter deadband for neutral:
+    turretRotator.configNeutralDeadband(0.01);
+
+    // Maximum power levels
+    turretRotator.configPeakOutputForward(1);
+    turretRotator.configPeakOutputReverse(-1);
+    // Nominal power levels (for stiction)
+    turretRotator.configNominalOutputForward(0.0);
+    turretRotator.configNominalOutputReverse(0.0);
 
     turretRotator.selectProfileSlot(0, 0);
-    turretRotator.configClosedLoopPeriod(0, 10);
-    turretRotator.configVelocityMeasurementWindow(8);
+    turretRotator.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 10); // Debugging of motion magic trajectory
+    configVelocityMode();
+
+    // Trapezoidal profile and parameters:
     turretRotator.configMotionAcceleration(velocityToTicks(1.0) * 4);
     turretRotator.configMotionCruiseVelocity(velocityToTicks(1.0));
-   
+    turretRotator.configMotionSCurveStrength(0); 
 
-    configVelocityMode();
-    turretRotator.setSelectedSensorPosition(0);
-    
     if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR! Forward Turret Limit Switch not configured.");
     }
@@ -75,23 +85,26 @@ public class Turret extends SubsystemBase implements TurretInterface {
     } 
     SmartDashboard.putBoolean("Turret Indexed = ", false);
   }
-  //left = forward
-  //right = back?
-  //TODO: MUST resolve with real hardware
+  
+  // Right = reverse limit direction
+  // Left = foward limit direection
   @Override
   public void periodic() {
+    /// Sample States
     turretAngle = ticksToPosition(turretRotator.getSelectedSensorPosition());
     turretVelocity = ticksToVelocity(turretRotator.getSelectedSensorVelocity());
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
     rightLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
-  
+    leftLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
+
+    /// Detect Indexing Event
     if (rightLimitSwitch == true) {
       SmartDashboard.putBoolean("Turret Indexed = ", true);
       indexed = true;
     }
+
     SmartDashboard.putNumber("Turret Encoder", turretRotator.getSelectedSensorPosition());
-    leftLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
     SmartDashboard.putNumber("Turret Angle", turretAngle);
     SmartDashboard.putNumber("Turret Velocity", turretVelocity);
     SmartDashboard.putNumber("Turret Output Power", turretRotator.getMotorOutputPercent());
@@ -127,8 +140,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
       configPositionMode();
     }
   
-    turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth));
-
+    // Set position for trajectory generator:
+    double feedForward = 0.0; // This allows arbitrary FF to be injeted if needed.
+    turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
     return true;
   }
 
