@@ -8,11 +8,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.interfaces.*;
-import frc.robot.shuffleboard.*;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.CollectorControls;
+import frc.robot.commands.MagazineControls;
+import frc.robot.shuffleboard.ShuffleboardWidgets;
+import frc.robot.subsystems.instances.Collector;
+import frc.robot.subsystems.instances.Magazine;
+import frc.robot.subsystems.interfaces.CollectorInterface;
+import frc.robot.subsystems.interfaces.MagazineInterface;
+import frc.robot.subsystems.interfaces.WinchInterface;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -43,9 +49,9 @@ public class MagazineTester extends TimedRobot {
     //public static TurretControls turretControls;
     //public static TurretInterface turret;
     public static ShuffleboardWidgets widgets;
-    // public static Bling bling;
-    // public static BlingControls blingControls;
-    // public AutoDrive driveAuto;
+    //public static Bling bling;
+    //public static BlingControls blingControls;
+    //public AutoDrive driveAuto;
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
@@ -85,8 +91,9 @@ public class MagazineTester extends TimedRobot {
         // turretControls = new TurretControls(turret);
         // registerSubsystem((SubsystemBase) turret, turretControls);
 
-        // widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-        // widgets.register();
+        widgets = new ShuffleboardWidgets(null, null, null, magazine, null, (WinchInterface) null);
+        //Would normally be: (drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
+        widgets.register();
 
         // driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
     }
