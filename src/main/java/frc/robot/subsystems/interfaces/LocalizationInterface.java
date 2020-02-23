@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
  * This interface is provided by subsystems that provide localization of the
  * robot in either a global or local coordinate system.
  * 
- * The robot lcoation is provided as (X,Y,Theta) both translation and rotation.
+ * The robot location is provided as (X,Y,Theta) both translation and rotation.
  * The location is provided in meters for distance and radians in angle.
  * 
  * Each localization interface represents the position of the robot in some
