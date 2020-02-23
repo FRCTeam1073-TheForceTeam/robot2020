@@ -31,9 +31,10 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   private NetworkTableEntry leftEncoderEntry;
   double leftEncoderValue = 0.0;
-
   private NetworkTableEntry rightEncoderEntry;
   double rightEncoderValue = 0.0;
+  private NetworkTableEntry drivetrainSpeedEntry;
+  double drivetrainSpeed = 0.0;
 
   private NetworkTableEntry gyroAngleEntry;
   double gyroAngleDegrees = 0.0;
@@ -43,8 +44,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
   double robotY = 0.0;
   private NetworkTableEntry rotationEntry;
   double robotRotation = 0.0;
-
-  double drivetrainVelocity = 0.0;
 
   private NetworkTableEntry turretAngleEntry;
   double turretDegrees = 0.0;
@@ -127,6 +126,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     leftEncoderEntry.setDouble(leftEncoderValue);
     rightEncoderEntry.setDouble(rightEncoderValue);
+    drivetrainSpeedEntry.setDouble(drivetrainSpeed);
     gyroAngleEntry.setDouble(gyroAngleDegrees);
     xcoordinateEntry.setDouble(robotX);
     ycoordinateEntry.setDouble(robotY);
@@ -166,6 +166,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
       // Drivetrain Data COMPLETE
       leftEncoderValue = drivetrain.getLeftEncoder();
       rightEncoderValue = drivetrain.getRightEncoder();
+      drivetrainSpeed = Math.sqrt(Math.pow(drivetrain.getDrivetrainVelocity().vxMetersPerSecond, 2) + Math.pow(drivetrain.getDrivetrainVelocity().vyMetersPerSecond, 2));
         // Gyro Datas COMPLETE
       gyroAngleDegrees = drivetrain.getAngleDegrees();
       Pose2d pose = drivetrain.getRobotPose();
@@ -230,6 +231,11 @@ public class ShuffleboardWidgets extends SubsystemBase {
     rightEncoderEntry = tab
     .add("rightEncoder", rightEncoderValue)
     .withPosition(2, 0)
+    .withSize(2, 1)
+    .getEntry();
+    drivetrainSpeedEntry = tab
+    .add("drivetrainVelocity", drivetrainSpeed)
+    .withPosition(0, 6)
     .withSize(2, 1)
     .getEntry();
 
