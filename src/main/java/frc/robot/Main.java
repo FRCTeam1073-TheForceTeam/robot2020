@@ -24,8 +24,8 @@ public final class Main {
    */
   public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
-    //RobotBase.startRobot(VisionTester::new);
-    //RobotBase.startRobot(RobotMercury::new);
-    //RobotBase.startRobot(MagazineTester::new);
+    // RobotBase.startRobot(VisionTester::new);
+    // RobotBase.startRobot(RobotMercury::new);
+    // RobotBase.startRobot(MagazineTester::new);
   }
 }

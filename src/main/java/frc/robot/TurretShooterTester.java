@@ -15,9 +15,9 @@ import frc.robot.commands.ClosedLoopAiming;
 import frc.robot.commands.DriveControls;
 import frc.robot.commands.TurretControls;
 import frc.robot.components.InterpolatorTable;
+import frc.robot.commands.ClosedLoopAiming.CLAMode;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
-import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 import frc.robot.subsystems.interfaces.TurretInterface;
 /**
@@ -51,14 +51,12 @@ public class TurretShooterTester extends TimedRobot {
   public void robotInit() {
     OI.init();
     portTrackerCamera = new OMVPortTracker(1);
-
-    // ((SubsystemBase) portTrackerCamera).register();
-    // turret = new Turret();
-    // ((SubsystemBase) turret).register();
-
+    ((SubsystemBase) portTrackerCamera).register();
+    turret = new Turret();
+    ((SubsystemBase) turret).register();
     shooter = new Shooter();
     ((SubsystemBase) shooter).register();
-    turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, false, 0.01);
+    turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, CLAMode.VELOCITY, false, 0.01);
     registerSubsystem((SubsystemBase) turret, turretControls);
   }
 
