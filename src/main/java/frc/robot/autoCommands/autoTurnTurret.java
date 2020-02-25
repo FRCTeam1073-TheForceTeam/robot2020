@@ -42,7 +42,10 @@ public class autoTurnTurret extends CommandBase {
   public void execute() {
     currentTurretPosition = (turret.getPosition() * (1 / Math.PI) * 180);
     velocity = accelConstant * (rotation - (currentTurretPosition - initTurretPosition));
+
+    if (velocity <= maxVelocity){
     turret.setVelocity(velocity);
+    }
   }
 
   // Called once the command ends or is interrupted.
