@@ -8,12 +8,12 @@
 package frc.robot.subsystems.instances;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.wheelColor;
+import frc.robot.subsystems.interfaces.WheelColor;
 import frc.robot.subsystems.interfaces.ColorDetectorInterface;
 
 public class ColorDetector extends OpenMVBase implements ColorDetectorInterface {
   int[] wheelColorCounts;
-  wheelColor currColor;
+  WheelColor currColor;
 
 
   /**
@@ -22,7 +22,7 @@ public class ColorDetector extends OpenMVBase implements ColorDetectorInterface 
   public ColorDetector(int deviceID) {
     super(deviceID);
     wheelColorCounts = new int[4];
-    currColor = wheelColor.NULL;
+    currColor = WheelColor.NULL;
   }
 
   @Override
@@ -32,7 +32,7 @@ public class ColorDetector extends OpenMVBase implements ColorDetectorInterface 
   }
 
   @Override
-  public wheelColor getCenterColor() {
+  public WheelColor getCenterColor() {
     return currColor;
   }
 
@@ -43,7 +43,7 @@ public class ColorDetector extends OpenMVBase implements ColorDetectorInterface 
   }
 
   @Override
-  public int getRotationsTo(wheelColor color) {
+  public int getRotationsTo(WheelColor color) {
     // TODO Auto-generated method stub
     return 0;
   }

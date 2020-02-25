@@ -31,7 +31,6 @@ public class CompleteShooterTester extends TimedRobot {
   public static ShooterInterface shooter;
   public static ShooterIndex shooterIndex;
   public static ShooterControls shooterControls;
-  public static OI oi;
 
 
   /**
@@ -90,10 +89,11 @@ public class CompleteShooterTester extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    turretIndex = new TurretIndex(turret);
-    if (turretIndex != null) {
-      turretIndex.schedule();
-    }
+          // turretIndex = new TurretIndex(turret);
+          // if (turretIndex != null) {
+          //   turretIndex.schedule();
+          // }
+
     // shooterIndex = new ShooterIndex();
     // if (shooterIndex != null) {
     //   shooterIndex.schedule();
@@ -109,10 +109,11 @@ public class CompleteShooterTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (turretIndex != null) {
-      turretIndex.cancel();
-    }
-     // if (shooterIndex != null) {
+    // if (turretIndex != null) {
+    //   turretIndex.cancel();
+    // }
+
+    // if (shooterIndex != null) {
     //   shooterIndex.cancel();
     // }
   }

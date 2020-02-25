@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems.interfaces;
 
-import frc.robot.wheelColor;
+import frc.robot.subsystems.interfaces.WheelColor;
 
 /**
  * This subsystem utilizes a color sensor to determine the control panel's
@@ -19,7 +19,7 @@ public interface ColorDetectorInterface {
      * Get the color over the sensor
      * @return Center color, in wheelColor enum
      */
-    public wheelColor getCenterColor();
+    public WheelColor getCenterColor();
 
     /**
      * 
@@ -32,7 +32,7 @@ public interface ColorDetectorInterface {
      * @param color Color to rotate to, in wheelColor enum
      * @return Rotations of the control panel manipulator necessary to reach the target
      */
-    public int getRotationsTo(wheelColor color);
+    public int getRotationsTo(WheelColor color);
 
     /**
      * 
