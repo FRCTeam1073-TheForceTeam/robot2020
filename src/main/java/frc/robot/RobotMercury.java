@@ -80,7 +80,7 @@ public class RobotMercury extends TimedRobot {
     chooser.addOption("Turn", new autoTurn(drivetrain, 40, 40));
     SmartDashboard.putData("Autonomous Mode", chooser);
     */
-    driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
+    autoBlingA = new BlingA(drivetrain, bling);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
