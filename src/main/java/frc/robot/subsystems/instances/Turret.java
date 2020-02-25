@@ -24,7 +24,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private boolean disabled = true;
   private boolean velocityMode = true;
 
-  private double velocityP = 0.2;
+  private double velocityP = 0.25;
   private double velocityI = 0.01;
   private double velocityD = 0.0;
   private double velocityFF = 0.3;
@@ -67,14 +67,17 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.configNominalOutputForward(0.0);
     turretRotator.configNominalOutputReverse(0.0);
 
+    // Set current limits
+    turretRotator.configContinuousCurrentLimit(10);
+
     turretRotator.selectProfileSlot(0, 0);
     turretRotator.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
     turretRotator.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30); // Debugging of motion magic trajectory
     configVelocityMode();
 
     // Trapezoidal profile and parameters:
-    turretRotator.configMotionAcceleration(velocityToTicks(1.0) * 4, 30);
-    turretRotator.configMotionCruiseVelocity(velocityToTicks(1.0), 30);
+    turretRotator.configMotionAcceleration(velocityToTicks(0.5) * 4, 30);
+    turretRotator.configMotionCruiseVelocity(velocityToTicks(0.5), 30);
     turretRotator.configMotionSCurveStrength(0);
 
     if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
