@@ -16,6 +16,11 @@ package frc.robot.subsystems.interfaces;
 public interface ShooterInterface {
 
    /**
+    * Sets PID constants for the hood.
+    */
+   public void setHoodPID(double P, double I, double D);
+
+   /**
     * Return the timestamp of the last hood update.
     * @return
     */
@@ -28,6 +33,11 @@ public interface ShooterInterface {
      * @param speed in radians/second.
      */
    public void setFlywheelSpeed(double speed);
+
+   /**
+    * Set the flywheel power.
+    */
+   public void setFlywheelPower(double power);
 
    /**
     * Return the maximum flywheel speed.
@@ -114,5 +124,7 @@ public interface ShooterInterface {
     * @return
     */
    public boolean hoodIsIndexed();
+
+   public void setHoodPower(double pow);
 
 }

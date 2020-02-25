@@ -29,10 +29,10 @@ public class ClosedLoopAiming extends CommandBase {
   private double azimuthTarget;
   private boolean temporary;
 
-  private double currentAzimuth = 0.0;
-  public double currentDistance = 0.0;
-  public double currentRange = 0.0;
-  public double currentElevation = 0.0;
+  private double currentAzimuth = 0;
+  public double currentDistance = 0;
+  public double currentRange = 0;
+  public double currentElevation = 0;
 
   private double azimuthCorrection = 0.0;
   private double accelConstant = 1;
@@ -69,7 +69,6 @@ public class ClosedLoopAiming extends CommandBase {
   public static final double kRelativePortDistance = 0.873;
   private static final double kPowerCellRadius = 0.09;
   private static final double kFlywheelRadius = Units.inchesToMeters(2.5);
-
   //The distance after which the robot decides to switch to targeting only the outer port.
   public static final double distanceTargetingThreshold = 10;
  

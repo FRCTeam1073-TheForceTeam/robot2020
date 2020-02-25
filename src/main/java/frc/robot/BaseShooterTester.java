@@ -11,22 +11,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ClosedLoopAiming;
-import frc.robot.commands.DriveControls;
-import frc.robot.commands.TurretControls;
-import frc.robot.components.InterpolatorTable;
-import frc.robot.commands.ClosedLoopAiming.CLAMode;
+import frc.robot.commands.ShooterControls;
+import frc.robot.commands.ShooterIndex;
 import frc.robot.subsystems.instances.*;
-import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
 import frc.robot.subsystems.interfaces.ShooterInterface;
-import frc.robot.subsystems.interfaces.TurretInterface;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class TurretShooterTester extends TimedRobot {
+public class BaseShooterTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,30 +29,18 @@ public class TurretShooterTester extends TimedRobot {
    */
 
   
-  // public static DriveControls command;
-  // public static DrivetrainInterface subsystem;
-  public static AdvancedTrackerInterface portTrackerCamera;
-  public static CommandBase turretControls;
-  public static TurretInterface turret;
+  public static CommandBase shooterControls;
   public static ShooterInterface shooter;
-  // public NetworkTableEntry value_P;
-  // public NetworkTableEntry value_I;
-  // public NetworkTableEntry value_D;
-  // public NetworkTableEntry update;
 
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
-    portTrackerCamera = new OMVPortTracker(1);
-    ((SubsystemBase) portTrackerCamera).register();
-    turret = new Turret();
-    ((SubsystemBase) turret).register();
     shooter = new Shooter();
     ((SubsystemBase) shooter).register();
-    // turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, CLAMode.VELOCITY, false, 0.01);
-    registerSubsystem((SubsystemBase) turret, turretControls);
+    shooterControls = new ShooterControls(shooter);
+    registerSubsystem((SubsystemBase) shooter, shooterControls);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -97,6 +80,7 @@ public class TurretShooterTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // (new ShooterIndex(shooter)).schedule(false);
   }
 
   /**
