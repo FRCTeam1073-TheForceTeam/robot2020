@@ -48,10 +48,11 @@ public class RobotMercury extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  public AutoDrive driveAuto;
+  public bling1 driveAuto;
   public static Bling bling;
   public static BlingControls blingControls;
   public static SendableChooser<Command> chooser;
+  public static autoDriveForward AutoDriveForward;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -60,7 +61,8 @@ public class RobotMercury extends TimedRobot {
     chooser = new SendableChooser<Command>();
 
     OI.init();
-
+  // 69, 118, 42
+  // 42, 42, 122
     bling = new Bling();
     blingControls = new BlingControls(bling);
     registerSubsystem((SubsystemBase) bling, blingControls);
@@ -69,11 +71,12 @@ public class RobotMercury extends TimedRobot {
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
+    driveAuto = new bling1(drivetrain);
 
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 30));
+    /* chooser.setDefaultOption("Drive Forward", autoDriveForward(drivetrain, 30));
     chooser.addOption("Turn", new autoTurn(drivetrain, 40, 40));
     SmartDashboard.putData("Autonomous Mode", chooser);
+    */
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
