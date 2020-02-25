@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -46,12 +47,9 @@ public class Robot extends TimedRobot {
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static BlingControls blingControls;
-<<<<<<< Updated upstream
-  public AutoDrive driveAuto;
-=======
+  // public AutoDrive driveAuto;
   public static CommandBase driveAuto;
   public static SendableChooser<Command> chooser;
->>>>>>> Stashed changes
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -96,16 +94,12 @@ public class Robot extends TimedRobot {
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-<<<<<<< Updated upstream
-    driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
-=======
     driveAuto = autoTurn.auto90left(drivetrain);
 
     chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 30));
     chooser.addOption("Turn", new autoTurn(drivetrain, 40, 40));
     chooser.addOption("Turn Turret", new autoTurnTurret(turret, 40, 40));
     SmartDashboard.putData("Autonomous Mode", chooser);
->>>>>>> Stashed changes
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
