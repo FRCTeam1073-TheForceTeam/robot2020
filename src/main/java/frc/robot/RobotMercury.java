@@ -8,9 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.instances.DrivetrainMercury;
@@ -47,11 +51,14 @@ public class RobotMercury extends TimedRobot {
   public AutoDrive driveAuto;
   public static Bling bling;
   public static BlingControls blingControls;
+  public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
+    chooser = new SendableChooser<Command>();
+
     OI.init();
 
     bling = new Bling();
@@ -63,6 +70,10 @@ public class RobotMercury extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
+
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 30));
+    chooser.addOption("Turn", new autoTurn(drivetrain, 40, 40));
+    SmartDashboard.putData("Autonomous Mode", chooser);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
