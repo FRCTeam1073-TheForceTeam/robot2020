@@ -5,11 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems.interfaces;
 
 /**
  * Add your docs here.
  */
-public enum wheelColor {
+public enum WheelColor {
     NULL, BLUE, GREEN, RED, YELLOW;
 }
