@@ -20,6 +20,7 @@ public class Lighting extends OpenMVBase implements LightingInterface{
         super(deviceId);
         ledPWM = new PWM(0);
         ledPWM.setRaw(0);
+        ledPWM.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
     }
 
     /**

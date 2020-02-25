@@ -30,6 +30,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static WPI_TalonFX shooterFlywheel1;
   private static WPI_TalonFX shooterFlywheel2;
   private static CANSparkMax hood;
+  private static CANSparkMax trigger;
   private static CANDigitalInput hoodIndexer;
   private static CANEncoder hoodEncoder;
   private static CANPIDController hoodController;
@@ -43,11 +44,13 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   public Shooter() {
     shooterFlywheel1 = new WPI_TalonFX(22);
     shooterFlywheel2 = new WPI_TalonFX(23);
-    hood = new CANSparkMax(24, MotorType.kBrushless);
+    hood = new CANSparkMax(25, MotorType.kBrushless);
+    trigger = new CANSparkMax(27, MotorType.kBrushless);
 
     shooterFlywheel1.configFactoryDefault();
     shooterFlywheel2.configFactoryDefault();
     hood.restoreFactoryDefaults();
+    trigger.restoreFactoryDefaults();
 
     shooterFlywheel1.setSafetyEnabled(false);
     shooterFlywheel2.setSafetyEnabled(false);
@@ -128,6 +131,11 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   @Override
   public void setFlywheelSpeed(double speed) {
     shooterFlywheel1.set(ControlMode.Velocity, speed * 10 / flywheelTicksPerRevolution);
+  }
+
+  @Override
+  public void setTriggerPower(double power) {
+    trigger.set(power);
   }
 
   /**

@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 import edu.wpi.first.hal.CANData;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
 
 public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterface {
@@ -75,6 +76,12 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       computeElevation(targets[0]);
       computeDistance(targets[0]);
       computeRange(targets[0]);
+      SmartDashboard.putNumber("tracking cx", targets[0].cx);
+      SmartDashboard.putNumber("tracking cy", targets[0].cy);
+      SmartDashboard.putNumber("tracking quality", targets[0].quality);
+      SmartDashboard.putNumber("tracking azimuth", targets[0].azimuth);
+      SmartDashboard.putNumber("tracking distance", targets[0].distance);
+
 
       // System.out.println("Advanced Tracking...");
       

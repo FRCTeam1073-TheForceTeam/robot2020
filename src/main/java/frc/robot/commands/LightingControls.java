@@ -33,7 +33,7 @@ public class LightingControls extends CommandBase {
   @Override
   public void execute() {
     if (OI.driverController.getAButton()) {
-    lighting.setLEDLevel(0.1);
+      lighting.setLEDLevel(0.1);
     }
     else {
       lighting.setLEDLevel(0.0);

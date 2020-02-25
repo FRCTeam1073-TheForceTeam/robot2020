@@ -13,56 +13,64 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.instances.OpenMVBase;
-import frc.robot.commands.LightingControls;
+import frc.robot.subsystems.instances.Shooter;
 import frc.robot.commands.PointTurret;
+import frc.robot.commands.ShooterControls;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
-import frc.robot.commands.WaitForTurret;
+import frc.robot.commands.ClosedLoopAiming.CLAMode;
 import frc.robot.subsystems.instances.Lighting;
+import frc.robot.commands.ClosedLoopAiming;
+import frc.robot.commands.LightingControls;
 import frc.robot.subsystems.instances.OMVPortTracker;
 import frc.robot.subsystems.instances.Turret;
+import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
 import frc.robot.OI;
 
 // THIS WILL FAIL ULTIMATELY UNTIL ENCODER VALUES ARE FIGURED OUT
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class TurretControlTester extends TimedRobot {
-
 
   // public static OpenMVBase portTrackerCamera;
   public static Turret turret;
   public static SequentialCommandGroup turretGroup;
   public static OI oi;
   public static Lighting lights;
-
+  public static Shooter shooter;
+  public static OpenMVBase portTrackerCamera;
 
   /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
   @Override
   public void robotInit() {
-    SmartDashboard.putBoolean("test", true);
     OI.init();
-    // OpenMVBase camera = new OpenMVBase(1);
-    // OpenMVBase portTrackerCamera = new OMVPortTracker(1);
-    // portTrackerCamera.register();
+    portTrackerCamera = new OMVPortTracker(8);
+    portTrackerCamera.register();
     turret = new Turret();
     turret.register();
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
     lights = new Lighting(0);
     lights.register();
-    CommandScheduler.getInstance().setDefaultCommand((Subsystem)lights, new LightingControls(lights));
+    CommandScheduler.getInstance().setDefaultCommand((Subsystem) lights, new LightingControls(lights));
+    shooter = new Shooter();
+    shooter.register();
+    CommandScheduler.getInstance().setDefaultCommand((Subsystem) shooter, new ShooterControls(shooter));
+
   }
 
   /*
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
    * <p>This runs after the mode specific periodic functions, but before
    * LiveWindow and SmartDashboard integrated updating.
@@ -86,7 +94,8 @@ public class TurretControlTester extends TimedRobot {
   }
 
   /**
-   * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
    */
   @Override
   public void autonomousInit() {
@@ -101,13 +110,14 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.1), new PointTurret(turret, -0.6, 0.1), new PointTurret(turret, 0.0, 0.1));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.1), new ClosedLoopAiming(turret,
+            (AdvancedTrackerInterface) portTrackerCamera, shooter, lights, CLAMode.VELOCITY, false, 0.1));
     //, new WaitForTurret(turret, 0.1, 0.1));
     if (turretGroup != null) {
       turretGroup.schedule();
     }
     if (lights != null){
-      lights.setLEDLevel(0.1);
+      lights.setLEDLevel(1.0);
     }
   }
 
@@ -130,6 +140,6 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-
+    
   }
 }
