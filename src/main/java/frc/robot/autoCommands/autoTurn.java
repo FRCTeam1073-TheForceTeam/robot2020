@@ -7,7 +7,6 @@
 
 package frc.robot.autoCommands;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,8 +19,8 @@ public class autoTurn extends CommandBase {
   private double velocity;
   private double rotation;
   private double accelConstant = 0.0;
-  Pose2d initPose;
-  Pose2d currentPose;
+  private double initPose;
+  private double currentPose;
 
   /**
    * Creates a new autoTurn.
@@ -72,15 +71,15 @@ public class autoTurn extends CommandBase {
   @Override
   public void initialize() {
 
-    initPose = drivetrain.getRobotPose();
+    initPose = drivetrain.getRobotPose().getRotation().getDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    currentPose = drivetrain.getRobotPose();
-    velocity = accelConstant * (rotation - currentPose.minus(initPose).getRotation().getRadians());
+    currentPose = drivetrain.getRobotPose().getRotation().getDegrees();
+    velocity = accelConstant * (rotation - (currentPose - initPose));
     drivetrain.setVelocity(-velocity, velocity);
   }
 
@@ -94,7 +93,6 @@ public class autoTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    return currentPose.minus(initPose).getRotation().getRadians() >= rotation;
+    return ((currentPose - initPose) >= rotation);
   }
 }

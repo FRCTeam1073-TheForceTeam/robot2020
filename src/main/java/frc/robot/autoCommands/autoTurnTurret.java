@@ -15,8 +15,11 @@ public class autoTurnTurret extends CommandBase {
 
   TurretInterface turret;
   private double rotation;
+  private double velocity;
   private double maxVelocity;
   private double initTurretPosition;
+  private double currentTurretPosition;
+  private double accelConstant;
 
   /**
    * Creates a new autoTurnTurret.
@@ -24,6 +27,7 @@ public class autoTurnTurret extends CommandBase {
   public autoTurnTurret(TurretInterface turret, double rotation, double maxVelocity) {
     this.turret = turret;
     this.rotation = rotation;
+    this.maxVelocity = maxVelocity;
     addRequirements((SubsystemBase)turret);
   }
 
@@ -36,16 +40,20 @@ public class autoTurnTurret extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    currentTurretPosition = (turret.getPosition() * (1 / Math.PI) * 180);
+    velocity = accelConstant * (rotation - (currentTurretPosition - initTurretPosition));
+    turret.setVelocity(velocity);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    turret.setVelocity(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return ((currentTurretPosition - initTurretPosition) >= rotation);
   }
 }
