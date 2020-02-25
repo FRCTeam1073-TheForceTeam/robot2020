@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.*;
 
 /**The class - Defines all the variables used*/
-public class ShuffleboardWidgets extends SubsystemBase {
+public class ShuffleboardWidgetsMercury extends SubsystemBase {
 
   ShuffleboardTab tab;
 

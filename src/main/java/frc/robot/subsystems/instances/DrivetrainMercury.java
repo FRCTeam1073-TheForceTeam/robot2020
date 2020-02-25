@@ -23,6 +23,8 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
     private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 
+    private boolean winchEngaged;
+
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6477);
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
@@ -110,6 +112,8 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
         SmartDashboard.clearPersistent("P");
         SmartDashboard.clearPersistent("I");
         SmartDashboard.clearPersistent("D");*/
+
+        winchEngaged = false;
     }
 
     /**
@@ -244,5 +248,33 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
 
     public ChassisSpeeds getDrivetrainVelocity() {
         return kinematics.toChassisSpeeds(getWheelSpeeds());
+    }
+
+    public boolean isWinchEngaged(){
+        return winchEngaged;
+    }
+    
+    public int isFwdLimitSwitchClosedLeft() {
+        return leftMotorLeader.isFwdLimitSwitchClosed();
+    }
+
+    public int isRevLimitSwitchClosedLeft() {
+        return leftMotorLeader.isRevLimitSwitchClosed();
+    }
+
+    public int isFwdLimitSwitchClosedRight() {
+        return rightMotorLeader.isFwdLimitSwitchClosed();
+    }
+
+    public int isRevLimitSwitchClosedRight() {
+        return rightMotorLeader.isRevLimitSwitchClosed();
+    }
+
+    public void engageWinch() {
+
+    }
+
+    public void engageDrivetrain() {
+        
     }
 }
