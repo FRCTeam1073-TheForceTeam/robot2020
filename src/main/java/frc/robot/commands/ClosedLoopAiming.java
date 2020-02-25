@@ -36,8 +36,6 @@ public class ClosedLoopAiming extends CommandBase {
   private double azimuthThreshold = 0;
 
   private double azimuthCorrection = 0.0;
-  private double accelConstant = 0.1;
-  private double azimuthThreshold = 0.0;
   private double shooterVelocity = 0.0;
   private double hoodAngle = 0.0;
   private TrajectoryConfiguration targetTrajectory;
