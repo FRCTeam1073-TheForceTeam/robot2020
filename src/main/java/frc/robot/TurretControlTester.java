@@ -17,6 +17,7 @@ import frc.robot.commands.PointTurret;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
 import frc.robot.commands.WaitForTurret;
+import frc.robot.subsystems.instances.Lighting;
 import frc.robot.subsystems.instances.OMVPortTracker;
 import frc.robot.subsystems.instances.Turret;
 import frc.robot.OI;
@@ -36,6 +37,7 @@ public class TurretControlTester extends TimedRobot {
   public static Turret turret;
   public static SequentialCommandGroup turretGroup;
   public static OI oi;
+  public static Lighting lights;
 
 
   /**
@@ -52,6 +54,8 @@ public class TurretControlTester extends TimedRobot {
     turret = new Turret();
     turret.register();
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
+    lights = new Lighting(0);
+    lights.register();
   }
 
   /*
@@ -71,6 +75,8 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    turret.disable();
+    lights.setLEDLevel(0.0);
   }
 
   @Override
@@ -93,10 +99,13 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.1, 0.1));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.1));
     //, new WaitForTurret(turret, 0.1, 0.1));
     if (turretGroup != null) {
       turretGroup.schedule();
+    }
+    if (lights != null){
+      lights.setLEDLevel(0.1);
     }
   }
 

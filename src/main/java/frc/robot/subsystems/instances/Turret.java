@@ -9,6 +9,7 @@ package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class Turret extends SubsystemBase implements TurretInterface {
-  private WPI_TalonSRX turretRotator;
+  private TalonSRX turretRotator;
   private final double ticksPerRadian = 9126.58;
   private double range = 3;          // radians  TODO: get from CAD
   private double indexOffset = -1.0; // radians  TODO: get from CAD
@@ -28,7 +29,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private double velocityD = 0.0;
   private double velocityFF = 0.3;
 
-  private double positionP = 0.03;
+  private double positionP = 0.05;
   private double positionI = 0.001;
   private double positionD = 0.0;
 
@@ -41,19 +42,20 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private boolean indexed = false;
   
   public Turret() {
-    turretRotator = new WPI_TalonSRX(24);
+    //turretRotator = new WPI_TalonSRX(24);
+    turretRotator = new TalonSRX(24);
     if (turretRotator.configFactoryDefault(30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR: Failed to configure turret default.");
     }
-    turretRotator.setSafetyEnabled(false);    // TODO: Revisit this for motor safety setup.
+    // turretRotator.setSafetyEnabled(false);    // TODO: Revisit this for motor safety setup.
     turretRotator.setNeutralMode(NeutralMode.Coast);
 
-    if (turretRotator.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative) != ErrorCode.OK) {
+    if (turretRotator.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR! Failed to select turret feedback sensor.");
     }
     turretRotator.setSelectedSensorPosition(0);
-    turretRotator.configClosedLoopPeriod(0, 10); // Only run as fast as we can get good velocity measurement.
-    turretRotator.configVelocityMeasurementWindow(8);
+    turretRotator.configClosedLoopPeriod(0, 5); // Only run as fast as we can get good velocity measurement.
+    turretRotator.configVelocityMeasurementWindow(4);
 
     // Tighter deadband for neutral:
     turretRotator.configNeutralDeadband(0.01);
@@ -66,13 +68,14 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.configNominalOutputReverse(0.0);
 
     turretRotator.selectProfileSlot(0, 0);
-    turretRotator.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 10); // Debugging of motion magic trajectory
+    turretRotator.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
+    turretRotator.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30); // Debugging of motion magic trajectory
     configVelocityMode();
 
     // Trapezoidal profile and parameters:
-    turretRotator.configMotionAcceleration(velocityToTicks(1.0) * 4);
-    turretRotator.configMotionCruiseVelocity(velocityToTicks(1.0));
-    turretRotator.configMotionSCurveStrength(0); 
+    turretRotator.configMotionAcceleration(velocityToTicks(1.0) * 4, 30);
+    turretRotator.configMotionCruiseVelocity(velocityToTicks(1.0), 30);
+    turretRotator.configMotionSCurveStrength(0);
 
     if (turretRotator.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR! Forward Turret Limit Switch not configured.");
@@ -116,7 +119,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     } else {
       SmartDashboard.putNumber("Turret Target", 0.0);
       SmartDashboard.putNumber("Turret Traj Pos", 0.0);
-      SmartDashboard.putNumber("Turret Trag Vel", 0.0);
+      SmartDashboard.putNumber("Turret Traj Vel", 0.0);
     }
 
     SmartDashboard.putNumber("Turret Error P", turretRotator.getClosedLoopError());
@@ -141,11 +144,12 @@ public class Turret extends SubsystemBase implements TurretInterface {
       return false;
     }
 
+    // Enable if needed.
     if (disabled) {
-      disabled = false;
-      turretRotator.setNeutralMode(NeutralMode.Brake);
+      enable();
     }
 
+    // Reconfigure mode if needed.
     if (velocityMode) {
       configPositionMode();
     }
@@ -155,7 +159,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     System.out.println(positionToTicks(azimuth));
     double feedForward = 0.0; // This allows arbitrary FF to be injected if needed.
     //turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
-    turretRotator.set(ControlMode.Position, positionToTicks(azimuth));
+    turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth));
     return true;
   }
 
@@ -189,8 +193,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   @Override
   public boolean setVelocity(double angular_rate) {
     if (disabled) {
-      disabled = false;
-      turretRotator.setNeutralMode(NeutralMode.Brake);
+      enable();
     }
 
     if (!velocityMode) {
@@ -266,6 +269,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
 
   private double ticksToPosition(double ticks) {
     return (ticks / ticksPerRadian) + indexOffset;
+  }
+
+  private void enable() {
+    disabled = false;
+    turretRotator.setNeutralMode(NeutralMode.Brake);
   }
 
   public void configVelocityMode() {
