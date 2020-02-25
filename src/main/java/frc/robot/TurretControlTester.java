@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.instances.OpenMVBase;
+import frc.robot.commands.LightingControls;
 import frc.robot.commands.PointTurret;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
@@ -56,6 +57,7 @@ public class TurretControlTester extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
     lights = new Lighting(0);
     lights.register();
+    CommandScheduler.getInstance().setDefaultCommand((Subsystem)lights, new LightingControls(lights));
   }
 
   /*
@@ -99,8 +101,7 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret));
-    //, new PointTurret(turret, 0.0, 0.1));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.1), new PointTurret(turret, -0.6, 0.1), new PointTurret(turret, 0.0, 0.1));
     //, new WaitForTurret(turret, 0.1, 0.1));
     if (turretGroup != null) {
       turretGroup.schedule();

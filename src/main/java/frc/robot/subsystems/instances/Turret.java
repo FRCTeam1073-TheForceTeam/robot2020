@@ -32,6 +32,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private double positionP = 0.05;
   private double positionI = 0.001;
   private double positionD = 0.0;
+  private double positionFF = 1.0;
 
   private double turretTemperature = -1.0;
   private double turretAngle = 0;
@@ -161,7 +162,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     System.out.println("setPosition is happening");
     System.out.println(positionToTicks(azimuth));
     double feedForward = 0.0; // This allows arbitrary FF to be injected if needed.
-    //turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
+    // turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
     turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth));
     return true;
   }
@@ -294,7 +295,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.config_kP(0, positionP);
     turretRotator.config_kI(0, positionI);
     turretRotator.config_kD(0, positionD);
-    turretRotator.config_kF(0, 0);
+    turretRotator.config_kF(0, positionFF);
     turretRotator.configMaxIntegralAccumulator(0, 500);
     turretRotator.setIntegralAccumulator(0);
 
