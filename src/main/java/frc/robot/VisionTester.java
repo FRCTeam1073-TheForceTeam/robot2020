@@ -9,8 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.instances.OpenMVBase;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
+import frc.robot.subsystems.interfaces.LightingInterface;
 import frc.robot.subsystems.instances.OMVPortTracker;
 
 /**
@@ -22,6 +22,7 @@ import frc.robot.subsystems.instances.OMVPortTracker;
 public class VisionTester extends TimedRobot {
 
   public static AdvancedTrackerInterface portTrackerCamera;
+  public static LightingInterface lighting;
 
 
   /**
@@ -55,7 +56,7 @@ public class VisionTester extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    portTrackerCamera.setLEDLevel(0);
+    lighting.setLEDLevel(0);
   }
 
   @Override
@@ -78,7 +79,7 @@ public class VisionTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    portTrackerCamera.setLEDLevel(0.5);
+    lighting.setLEDLevel(0.5);
   }
 
   /**
