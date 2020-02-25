@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.instances.OpenMVBase;
 import frc.robot.commands.PointTurret;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
+import frc.robot.commands.WaitForTurret;
 import frc.robot.subsystems.instances.OMVPortTracker;
 import frc.robot.subsystems.instances.Turret;
 import frc.robot.OI;
@@ -42,6 +44,7 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    SmartDashboard.putBoolean("test", true);
     OI.init();
     // OpenMVBase camera = new OpenMVBase(1);
     // OpenMVBase portTrackerCamera = new OMVPortTracker(1);
@@ -90,8 +93,8 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0));
-    // new WatiForTurret(turret, azimuth));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.1, 0.1));
+    //, new WaitForTurret(turret, 0.1, 0.1));
     if (turretGroup != null) {
       turretGroup.schedule();
     }

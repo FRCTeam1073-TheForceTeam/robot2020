@@ -151,8 +151,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
     }
   
     // Set position for trajectory generator:
-    double feedForward = 0.0; // This allows arbitrary FF to be injeted if needed.
-    turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
+    System.out.println("setPosition is happening");
+    System.out.println(positionToTicks(azimuth));
+    double feedForward = 0.0; // This allows arbitrary FF to be injected if needed.
+    //turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
+    turretRotator.set(ControlMode.Position, positionToTicks(azimuth));
     return true;
   }
 

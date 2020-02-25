@@ -42,12 +42,17 @@ public class TurretControls extends CommandBase {
 
     // System.out.println(Robot.turret.getPosition());
     double velocity = OI.driverController.getRawAxis(5);
-    turret.setVelocity(velocity);
+    turret.setVelocity(deadzone(velocity) * 2.5);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  private double deadzone(double input){
+    if(Math.abs(input) < 0.1) return 0.0;
+    else return input;
   }
 }
