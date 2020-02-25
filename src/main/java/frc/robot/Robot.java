@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.autoCommands.*;
+//import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-    driveAuto = autoTurn.auto90left(drivetrain);
+    //driveAuto = autoTurn.auto90left(drivetrain);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
