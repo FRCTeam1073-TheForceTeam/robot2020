@@ -23,4 +23,6 @@ public final class Constants {
     public static final double MIN_DISTANCE_INIT_LINE = 0.46;
     //the maximum velocity the turret can turn at
     public static final double MAX_TURRET_VELOCITY = 100.0;
+    //the maximum velocity the hood can move at
+    public static final double MAX_HOOD_VELOCITY = 100.0;
 }

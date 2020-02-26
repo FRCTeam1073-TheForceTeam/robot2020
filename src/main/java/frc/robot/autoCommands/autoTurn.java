@@ -38,7 +38,7 @@ public class autoTurn extends CommandBase {
     this(drivetrain, rotation, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
-   public static autoTurn auto135left(DrivetrainInterface drivetrain) {
+  public static autoTurn auto135left(DrivetrainInterface drivetrain) {
     return new autoTurn(drivetrain, -135);
   }
   
@@ -46,11 +46,11 @@ public class autoTurn extends CommandBase {
     return new autoTurn(drivetrain, -90);
   }
 
-    public static autoTurn auto45left(DrivetrainInterface drivetrain) {
+  public static autoTurn auto45left(DrivetrainInterface drivetrain) {
     return new autoTurn(drivetrain, -45);
   }
 
-    public static autoTurn auto45right(DrivetrainInterface drivetrain) {
+  public static autoTurn auto45right(DrivetrainInterface drivetrain) {
     return new autoTurn(drivetrain, 45);
   }
   
@@ -83,6 +83,9 @@ public class autoTurn extends CommandBase {
 
     if (velocity <= maxVelocity){
     drivetrain.setVelocity(-velocity, velocity);
+    }
+    else {
+      drivetrain.setVelocity(-maxVelocity, maxVelocity);
     }
   }
 

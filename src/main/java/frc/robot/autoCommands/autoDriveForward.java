@@ -61,6 +61,9 @@ public class autoDriveForward extends CommandBase {
     if (velocity <= maxVelocity){
     drivetrain.setVelocity(velocity, velocity);
     }
+    else {
+      drivetrain.setVelocity(maxVelocity, maxVelocity);
+    }
   }
 
   // Called once the command ends or is interrupted.
