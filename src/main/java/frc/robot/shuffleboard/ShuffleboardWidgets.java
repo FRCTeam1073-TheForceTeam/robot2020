@@ -76,7 +76,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   private NetworkTableEntry isWinchEngagedEntry;
   boolean isWinchEngaged = false;
-  
 
   private NetworkTableEntry batteryVoltageEntry;
   double batteryVoltage = 0.0;
