@@ -34,11 +34,13 @@ public class autoDriveForward extends CommandBase {
     addRequirements((SubsystemBase)drivetrain);
   }
 
+  // creates an autoDriveForward where you don't have to input the maxVelocity
   public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
 
     this(drivetrain, distance, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
+  // creates an autoDriveForward where it only drives off of the initiation line
   public autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
 
     return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_DRIVETRAIN_VELOCITY);
@@ -58,6 +60,7 @@ public class autoDriveForward extends CommandBase {
     currentPose = drivetrain.getRobotPose();
     velocity = accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm());
 
+    // secures that it doesn't try to go faster than it's able to
     if (velocity <= maxVelocity){
     drivetrain.setVelocity(velocity, velocity);
     }
@@ -70,6 +73,7 @@ public class autoDriveForward extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
+    // stops the drivetrain
     drivetrain.setVelocity(0, 0);
   }
 

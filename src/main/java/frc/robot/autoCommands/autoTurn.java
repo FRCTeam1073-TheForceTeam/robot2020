@@ -33,11 +33,13 @@ public class autoTurn extends CommandBase {
     addRequirements((SubsystemBase)drivetrain);
   }
 
+  //  creates an autoTurn where you don't have to input the maximum speed
   public autoTurn(DrivetrainInterface drivetrain, double rotation) {
 
     this(drivetrain, rotation, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
+  // the following autoTurns are just set to certain angles
   public static autoTurn auto135left(DrivetrainInterface drivetrain) {
     return new autoTurn(drivetrain, -135);
   }
@@ -70,7 +72,6 @@ public class autoTurn extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     initPose = drivetrain.getRobotPose().getRotation().getDegrees();
   }
 
@@ -81,6 +82,7 @@ public class autoTurn extends CommandBase {
     currentPose = drivetrain.getRobotPose().getRotation().getDegrees();
     velocity = accelConstant * (rotation - (currentPose - initPose));
 
+    // makes sure it doesn't try to go faster than it's able to
     if (velocity <= maxVelocity){
     drivetrain.setVelocity(-velocity, velocity);
     }
@@ -93,6 +95,7 @@ public class autoTurn extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
+    // stops the drivetrain
     drivetrain.setVelocity(0, 0);
   }
 

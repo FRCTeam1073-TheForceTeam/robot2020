@@ -27,14 +27,17 @@ public class autoSetFlywheel extends CommandBase {
     addRequirements((SubsystemBase)shooter);
   }
 
+  // creates an autoSetFlywheel where you don't have to input the maximum speed
   public autoSetFlywheel(ShooterInterface shooter, double velocity) {
     this(shooter, velocity, shooter.getMaximumFlywheelSpeed());
   }
 
+  // creates an autoSetFlywheel that sets the flywheel to its maximum speed
   public static autoSetFlywheel autoFlywheelMax(ShooterInterface shooter) {
     return new autoSetFlywheel(shooter, shooter.getMaximumFlywheelSpeed(), shooter.getMaximumFlywheelSpeed());
   }
 
+  // creates an autoSetFlywheel that stops the flywheel
   public static autoSetFlywheel autoFlywheelOff(ShooterInterface shooter) {
     return new autoSetFlywheel(shooter, 0.0, shooter.getMaximumFlywheelSpeed());
   }
@@ -47,6 +50,8 @@ public class autoSetFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    // secures that the flywheel doesn't try to go faster than it's able to
     if (velocity <= maxVelocity){
       shooter.setFlywheelSpeed(velocity);
     }

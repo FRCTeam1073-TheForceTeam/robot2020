@@ -32,6 +32,7 @@ public class autoSetHood extends CommandBase {
     addRequirements((SubsystemBase)shooter);
   }
 
+  // creates an autoSetHood where you don't have to input the maximum speed
   public autoSetHood(ShooterInterface shooter, double rotation) {
     this(shooter, rotation, Constants.MAX_HOOD_VELOCITY);
   }
@@ -48,6 +49,7 @@ public class autoSetHood extends CommandBase {
     currentHoodPosition = (shooter.getHoodAngle() * (1 / Math.PI) * 180);
     velocity = accelConstant * (rotation - (currentHoodPosition - initHoodPosition));
 
+    // secures that it doesn't try to go faster than it's able to
     if (velocity <= maxVelocity){
     shooter.setHoodVelocity(velocity);
     }
@@ -59,6 +61,8 @@ public class autoSetHood extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
+    // stops the hood
     shooter.setHoodVelocity(0);
   }
 

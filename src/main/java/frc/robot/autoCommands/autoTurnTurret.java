@@ -32,6 +32,7 @@ public class autoTurnTurret extends CommandBase {
     addRequirements((SubsystemBase)turret);
   }
 
+  // creates an autoTurnTurret where you don't have to input the maximum speed
   public autoTurnTurret(TurretInterface turret, double rotation) {
     this(turret, rotation, Constants.MAX_TURRET_VELOCITY);
   }
@@ -48,6 +49,7 @@ public class autoTurnTurret extends CommandBase {
     currentTurretPosition = (turret.getPosition() * (1 / Math.PI) * 180);
     velocity = accelConstant * (rotation - (currentTurretPosition - initTurretPosition));
 
+    // secures that it doesn't try to go faster than it's able to
     if (velocity <= maxVelocity){
     turret.setVelocity(velocity);
     }
@@ -59,6 +61,8 @@ public class autoTurnTurret extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    
+    // stops the turret
     turret.setVelocity(0);
   }
 
