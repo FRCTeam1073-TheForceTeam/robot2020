@@ -55,7 +55,8 @@ public class BlingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    bling.LEDRainbow();
+    /* gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
@@ -72,6 +73,7 @@ public class BlingControls extends CommandBase {
         bling.setPatternRGBAll(0, 0, 0);
       }
     }
+    */
   }
   
   

@@ -101,4 +101,29 @@ public class Bling extends SubsystemBase implements BlingInterface {
   public AddressableLEDBuffer getM_LEDBuffer() {
     return m_ledBuffer;
   }
+
+  public void LEDRainbow() {
+    int numLEDs = m_ledBuffer.getLength();
+    for (int i = 0; i < numLEDs; i++) {
+      if ((i % 6) == 0) {
+        // Sets first LED then every 6 after it red
+        m_ledBuffer.setRGB(i, 255, 0, 0);
+      } else if (((i + 1) % 6) == 0) {
+        // Sets second LED then every 6 after it orange
+        m_ledBuffer.setRGB(i, 240, 94, 35);
+      } else if (((i + 2) % 6) == 0) {
+        // Sets third LED then every 6 after it yellow
+        m_ledBuffer.setRGB(i, 252, 227, 0);
+      } else if (((i + 3) % 6) == 0) {
+        // Sets fourth LED then every 6 after it green
+        m_ledBuffer.setRGB(i, 0, 255, 0);
+      } else if (((i + 4) % 6) == 0) {
+        // Sets fifth LED then every 6 after it blue
+        m_ledBuffer.setRGB(i, 0, 0, 255);
+      } else if (((i + 5) % 6) == 0) {
+        // Sets sixth LED then every 6 after it purple
+        m_ledBuffer.setRGB(i, 230, 230, 250);
+      }
+    }
+  }
 }

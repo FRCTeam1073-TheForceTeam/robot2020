@@ -63,9 +63,6 @@ public class RobotMercury extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
-
-    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface)drivetrain);
-    widgets.register();
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
