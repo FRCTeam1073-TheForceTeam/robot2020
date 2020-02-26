@@ -27,7 +27,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private double velocityP = 0.25;
   private double velocityI = 0.01;
   private double velocityD = 0.0;
-  private double velocityFF = 0.3;
+  private double velocityFF = 0.4;
 
   private double positionP = 0.05;
   private double positionI = 0.001;

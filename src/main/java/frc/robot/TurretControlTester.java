@@ -16,6 +16,7 @@ import frc.robot.subsystems.instances.OpenMVBase;
 import frc.robot.subsystems.instances.Shooter;
 import frc.robot.commands.PointTurret;
 import frc.robot.commands.ShooterControls;
+import frc.robot.commands.ShooterIndex;
 import frc.robot.commands.TurretControls;
 import frc.robot.commands.TurretIndex;
 import frc.robot.commands.ClosedLoopAiming.CLAMode;
@@ -60,7 +61,7 @@ public class TurretControlTester extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
     lights = new Lighting(0);
     lights.register();
-    CommandScheduler.getInstance().setDefaultCommand((Subsystem) lights, new LightingControls(lights));
+    // CommandScheduler.getInstance().setDefaultCommand((Subsystem) lights, new LightingControls(lights));
     shooter = new Shooter();
     shooter.register();
     CommandScheduler.getInstance().setDefaultCommand((Subsystem) shooter, new ShooterControls(shooter));
@@ -110,8 +111,9 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.1), new ClosedLoopAiming(turret,
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.2), new ClosedLoopAiming(turret,
             (AdvancedTrackerInterface) portTrackerCamera, shooter, lights, CLAMode.VELOCITY, false, 0.1));
+    (new ShooterIndex(shooter)).schedule();
     //, new WaitForTurret(turret, 0.1, 0.1));
     if (turretGroup != null) {
       turretGroup.schedule();

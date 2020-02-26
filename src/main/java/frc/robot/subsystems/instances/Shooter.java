@@ -89,7 +89,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double I = 0;
     double D = 0;
 
-    double hoodP = 2e-1;
+    double hoodP = 1.8e-1;
     double hoodI = 4e-5;
     double hoodD = 0;
 
@@ -260,9 +260,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
    */
   @Override
   public boolean setHoodAngle(double angle) {
-    if (false) {
-      return false;
-    }
+    angle = Math.min(maxAngle, Math.max(minAngle, angle));
     isHoodDisabled = false;
     double hoodAngle = kMotorRadiansPerHoodRadian * (angle - minAngle);
     hood.setIdleMode(IdleMode.kBrake);
