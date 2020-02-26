@@ -9,6 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
@@ -46,11 +48,13 @@ public class Robot extends TimedRobot {
   public static Bling bling;
   public static BlingControls blingControls;
   public static CommandBase driveAuto;
+  // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
+
     OI.init();
 
     bling = new Bling();
@@ -89,7 +93,7 @@ public class Robot extends TimedRobot {
     widgets.register();
 
     driveAuto = autoTurn.auto90left(drivetrain);
-  }
+    }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
     subsystem.register();
