@@ -8,7 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -48,7 +48,8 @@ public class RobotMercury extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  public static BlingA autoBlingA;
+
+  public static BlingB autoBlingB;
   public static Bling bling;
   public static BlingControls blingControls;
   public static SendableChooser<Command> chooser;
@@ -61,26 +62,26 @@ public class RobotMercury extends TimedRobot {
     chooser = new SendableChooser<Command>();
 
     OI.init();
-  // 69, 118, 42
-  // 42, 42, 122
+    
     bling = new Bling();
     blingControls = new BlingControls(bling);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+    bling.register();
+    // registerSubsystem((SubsystemBase) bling, blingControls);
 
     drivetrain = new DrivetrainMercury();
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    autoBlingA = new BlingA(drivetrain, bling);
+    //autoBlingA = new BlingA(drivetrain, bling);
 
-    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface)drivetrain);
-    widgets.register();
+    //widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface)drivetrain);
+    //widgets.register();
 
-    /* chooser.setDefaultOption("Drive Forward", autoDriveForward(drivetrain, 30));
-    chooser.addOption("Turn", new autoTurn(drivetrain, 40, 40));
+    chooser.setDefaultOption("Unicorn Breath", new BlingA(bling));
+    chooser.addOption("Medium Blue", new BlingB(bling));
     SmartDashboard.putData("Autonomous Mode", chooser);
-    */
-    autoBlingA = new BlingA(drivetrain, bling);
+  
+    // autoBlingB = new BlingB(bling);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -115,8 +116,8 @@ public class RobotMercury extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if(autoBlingA != null){
-      autoBlingA.schedule();
+     if(chooser.getSelected() != null){
+      chooser.getSelected().schedule();
     }
   }
 

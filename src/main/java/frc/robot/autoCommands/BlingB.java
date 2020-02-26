@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.BlingInterface;
 
-public class BlingA extends CommandBase {
+public class BlingB extends CommandBase {
     BlingInterface bling;
     // Bling bling;
     private boolean done;
@@ -19,7 +19,7 @@ public class BlingA extends CommandBase {
   /**
    * Creates a new autoDriveForward.
    */
-  public BlingA(BlingInterface bling) {
+  public BlingB(BlingInterface bling) {
     this.bling = bling;
     addRequirements((SubsystemBase)bling);
 
@@ -34,8 +34,8 @@ public class BlingA extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      bling.setPatternRGBAll(69, 118, 42);
-      if (time > 60) {
+      bling.setPatternRGBAll(42, 42, 122);
+      if (time > 600) {
           done = true;
       } else {
           done = false;
