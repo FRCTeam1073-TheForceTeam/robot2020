@@ -59,7 +59,7 @@ public class RobotMercury extends TimedRobot {
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-    chooser = new SendableChooser<Command>();
+    // chooser = new SendableChooser<Command>();
 
     OI.init();
     
