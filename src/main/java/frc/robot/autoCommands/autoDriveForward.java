@@ -36,12 +36,12 @@ public class autoDriveForward extends CommandBase {
 
   public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
 
-    this(drivetrain, distance, Constants.MAX_VELOCITY);
+    this(drivetrain, distance, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
   public autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
 
-    return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_VELOCITY);
+    return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
   // Called when the command is initially scheduled.

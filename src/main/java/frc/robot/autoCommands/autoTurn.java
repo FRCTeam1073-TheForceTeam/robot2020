@@ -35,7 +35,7 @@ public class autoTurn extends CommandBase {
 
   public autoTurn(DrivetrainInterface drivetrain, double rotation) {
 
-    this(drivetrain, rotation, Constants.MAX_VELOCITY);
+    this(drivetrain, rotation, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
    public static autoTurn auto135left(DrivetrainInterface drivetrain) {

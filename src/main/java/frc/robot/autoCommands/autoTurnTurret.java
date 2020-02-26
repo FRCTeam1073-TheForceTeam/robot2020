@@ -9,6 +9,7 @@ package frc.robot.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class autoTurnTurret extends CommandBase {
@@ -31,6 +32,9 @@ public class autoTurnTurret extends CommandBase {
     addRequirements((SubsystemBase)turret);
   }
 
+  public autoTurnTurret(TurretInterface turret, double rotation) {
+    this(turret, rotation, Constants.MAX_TURRET_VELOCITY);
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
