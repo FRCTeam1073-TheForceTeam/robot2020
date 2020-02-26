@@ -34,7 +34,7 @@ public class BlingB extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      bling.setPatternRGBAll(42, 42, 122);
+      bling.LEDRainbow();
       if (time > 600) {
           done = true;
       } else {

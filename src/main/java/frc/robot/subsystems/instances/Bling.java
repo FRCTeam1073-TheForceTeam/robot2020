@@ -124,6 +124,7 @@ public class Bling extends SubsystemBase implements BlingInterface {
         // Sets sixth LED then every 6 after it purple
         m_ledBuffer.setRGB(i, 230, 230, 250);
       }
+      m_led.setData(m_ledBuffer);
     }
   }
 }
