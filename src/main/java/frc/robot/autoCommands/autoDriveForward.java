@@ -62,7 +62,7 @@ public class autoDriveForward extends CommandBase {
 
     // secures that it doesn't try to go faster than it's able to
     if (velocity <= maxVelocity){
-    drivetrain.setVelocity(velocity, velocity);
+      drivetrain.setVelocity(velocity, velocity);
     }
     else {
       drivetrain.setVelocity(maxVelocity, maxVelocity);
