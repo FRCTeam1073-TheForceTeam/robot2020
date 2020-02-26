@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static BlingControls blingControls;
-  // public AutoDrive driveAuto;
   public static CommandBase driveAuto;
   public static SendableChooser<Command> chooser;
   
@@ -55,7 +54,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-    chooser = new SendableChooser<Command>();
 
     OI.init();
 
@@ -94,13 +92,7 @@ public class Robot extends TimedRobot {
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-    driveAuto = autoTurn.auto90left(drivetrain);
-
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 30));
-    chooser.addOption("Turn", new autoTurn(drivetrain, 40, 40));
-    chooser.addOption("Turn Turret", new autoTurnTurret(turret, 40, 40));
-    SmartDashboard.putData("Autonomous Mode", chooser);
-  }
+    }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
     subsystem.register();
