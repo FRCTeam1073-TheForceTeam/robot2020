@@ -57,6 +57,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         odometry = new DifferentialDriveOdometry(getAngleRadians());
 
         engageDrivetrain();
+
     }
 
     /**
