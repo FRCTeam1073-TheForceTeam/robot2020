@@ -35,11 +35,11 @@ public class BlingB extends CommandBase {
   @Override
   public void execute() {
       bling.LEDRainbow();
-      //if (time > 600) {
-      //    done = true;
-      //} else {
-      //    done = false;
-      //}
+      if (time > 6000) {
+          done = true;
+      } else {
+          done = false;
+      }
       done = false;
       time = time + 1;
   }
