@@ -48,7 +48,8 @@ public class RobotMercury extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-  public static BlingA autoBlingA;
+//  public static BlingA autoBlingA;
+
   public static BlingB autoBlingB;
   public static Bling bling;
   public static BlingControls blingControls;
@@ -73,16 +74,16 @@ public class RobotMercury extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     autoBlingB = new BlingB(bling);
+    //autoBlingA = new BlingA(drivetrain, bling);
 
     //widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface)drivetrain);
     //widgets.register();
 
-    /* chooser.setDefaultOption("Unicorn Breath", new BlingA(bling));
-    chooser.addOption("Rainbow", new BlingB(bling));
+    chooser.setDefaultOption("Unicorn Breath", new BlingA(bling));
+    chooser.addOption("Medium Blue", new BlingB(bling));
     SmartDashboard.putData("Autonomous Mode", chooser);
-
-    */
   
+    // autoBlingB = new BlingB(bling);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
