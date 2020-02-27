@@ -19,7 +19,7 @@ public class autoDriveForward extends CommandBase {
   private double maxVelocity;
   private double velocity;
   private double distance;
-  private double accelConstant = 0.0;
+  private double accelConstant = 0.5;
   Pose2d initPose;
   Pose2d currentPose;
 

@@ -20,7 +20,7 @@ public class autoSetHood extends CommandBase {
   private double maxVelocity;
   private double initHoodPosition;
   private double currentHoodPosition;
-  private double accelConstant;
+  private double accelConstant = 0.5;
 
   /**
    * Creates a new autoSetHood.
@@ -40,13 +40,13 @@ public class autoSetHood extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initHoodPosition = (shooter.getHoodAngle() * (1 / Math.PI) * 180);
+    initHoodPosition = shooter.getHoodAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentHoodPosition = (shooter.getHoodAngle() * (1 / Math.PI) * 180);
+    currentHoodPosition = shooter.getHoodAngle();
     velocity = accelConstant * (rotation - (currentHoodPosition - initHoodPosition));
 
     // ensures that it doesn't try to go faster than it's able to

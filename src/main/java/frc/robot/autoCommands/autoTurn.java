@@ -18,7 +18,7 @@ public class autoTurn extends CommandBase {
   private double maxVelocity;
   private double velocity;
   private double rotation;
-  private double accelConstant = 0.0;
+  private double accelConstant = 0.5;
   private double initPose;
   private double currentPose;
 
@@ -28,7 +28,7 @@ public class autoTurn extends CommandBase {
   public autoTurn(DrivetrainInterface drivetrain, double rotation, double maxVelocity) {
 
     this.drivetrain = drivetrain;
-    this.rotation = rotation * (Math.PI / 180);
+    this.rotation = rotation;
     this.maxVelocity = maxVelocity;
     addRequirements((SubsystemBase)drivetrain);
   }
