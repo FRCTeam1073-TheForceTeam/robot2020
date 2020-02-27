@@ -86,6 +86,7 @@ public class Bling extends SubsystemBase implements BlingInterface {
     }
     m_led.setData(m_ledBuffer);
   }
+  
   public void setLED(int i, int r, int g, int b) {
     m_ledBuffer.setRGB(i, r, g, b);
     m_led.setData(m_ledBuffer);
@@ -113,29 +114,30 @@ public class Bling extends SubsystemBase implements BlingInterface {
     for (int i = 0; i < numLEDs; i++) {
       
       if (((i + move_rainbow) % 12) == 0 || ((i + move_rainbow) % 12) == 1) {
-        // Sets first LED then every 6 after it red
+        // Sets first LED, then sets every 6 after it "red"
         m_ledBuffer.setRGB(i, 255, 0, 0);
       } 
         else if (((i + 2 + move_rainbow) % 12) == 0 || ((i + 2 + move_rainbow) % 12) == 1) {
-        // Sets second LED then every 6 after it orange
+        // Sets second LED, then sets every 6 after it "orange"
         m_ledBuffer.setRGB(i, 255, 69, 0);
       } 
         else if (((i + 4 + move_rainbow) % 12) == 0 || ((i + 4 + move_rainbow) % 12) == 1) {
-        // Sets third LED then every 6 after it yellow
+        // Sets third LED, then sets every 6 after it "yellow"
         m_ledBuffer.setRGB(i, 252, 227, 0);
       } 
         else if (((i + 6 + move_rainbow) % 12) == 0 || ((i + 6 + move_rainbow) % 12) == 1) {
-        // Sets fourth LED then every 6 after it green
+        // Sets fourth LED, then sets every 6 after it "green"
         m_ledBuffer.setRGB(i, 0, 255, 0);
       } 
         else if (((i + 8 + move_rainbow) % 12) == 0 || ((i + 8 + move_rainbow) % 12) == 1) {
-        // Sets fifth LED then every 6 after it blue
+        // Sets fifth LED, then sets every 6 after it "blue"
         m_ledBuffer.setRGB(i, 0, 0, 255);
       } 
         else if (((i + 10 + move_rainbow) % 12) == 0 || ((i + 10 + move_rainbow) % 12) == 1) {
-        // Sets sixth LED then every 6 after it purple
+        // Sets sixth LED, then sets every 6 after it "purple"
         m_ledBuffer.setRGB(i, 128, 0, 128);
       }
+      
       if (counter_rainbow < 100) {
         counter_rainbow++;
       } 
