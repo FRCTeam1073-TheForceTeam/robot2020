@@ -50,7 +50,7 @@ public class autoTurnTurret extends CommandBase {
     velocity = accelConstant * (rotation - (currentTurretPosition - initTurretPosition));
 
     // ensures that it doesn't try to go faster than it's able to
-    turret.setVelocity(java.lang.Math.min(velocity, maxVelocity));
+    turret.setVelocity(Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.

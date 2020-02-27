@@ -61,7 +61,7 @@ public class autoDriveForward extends CommandBase {
     velocity = accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm());
 
     // ensures that it doesn't try to go faster than it's able to
-    drivetrain.setVelocity(java.lang.Math.min(velocity, maxVelocity), java.lang.Math.min(velocity, maxVelocity));
+    drivetrain.setVelocity(Math.min(velocity, maxVelocity), Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.
