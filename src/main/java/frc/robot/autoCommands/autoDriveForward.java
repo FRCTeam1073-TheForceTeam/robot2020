@@ -27,7 +27,6 @@ public class autoDriveForward extends CommandBase {
    * Creates a new autoDriveForward.
    */
   public autoDriveForward(DrivetrainInterface drivetrain, double distance, double maxVelocity) {
-
     this.drivetrain = drivetrain;
     this.distance = distance;
     this.maxVelocity = maxVelocity;
@@ -36,27 +35,23 @@ public class autoDriveForward extends CommandBase {
 
   // creates an autoDriveForward where you don't have to input the maxVelocity
   public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
-
     this(drivetrain, distance, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
   // creates an autoDriveForward where it only drives off of the initiation line
   public autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
-
     return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     initPose = drivetrain.getRobotPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     currentPose = drivetrain.getRobotPose();
     velocity = accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm());
 
@@ -75,7 +70,6 @@ public class autoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
     return currentPose.minus(initPose).getTranslation().getNorm() >= distance;
   }
 }

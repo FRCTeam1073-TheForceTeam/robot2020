@@ -26,7 +26,6 @@ public class autoTurn extends CommandBase {
    * Creates a new autoTurn.
    */
   public autoTurn(DrivetrainInterface drivetrain, double rotation, double maxVelocity) {
-
     this.drivetrain = drivetrain;
     this.rotation = rotation;
     this.maxVelocity = maxVelocity;
@@ -35,51 +34,19 @@ public class autoTurn extends CommandBase {
 
   //  creates an autoTurn where you don't have to input the maximum speed
   public autoTurn(DrivetrainInterface drivetrain, double rotation) {
-
     this(drivetrain, rotation, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
-  // the following autoTurns are just set to certain angles
-  public static autoTurn auto135left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -135);
-  }
-  
-  public static autoTurn auto90left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -90);
-  }
-
-  public static autoTurn auto45left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -45);
-  }
-
-  public static autoTurn auto45right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 45);
-  }
-  
-  public static autoTurn auto90right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 90);
-  }
-  
-  public static autoTurn auto135right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 135);
-  }
-  
-  public static autoTurn auto180(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 180);
-  }
-
-  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initPose = drivetrain.getRobotPose().getRotation().getDegrees();
+    initPose = drivetrain.getRobotPose().getRotation().getRadians();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    currentPose = drivetrain.getRobotPose().getRotation().getDegrees();
+    currentPose = drivetrain.getRobotPose().getRotation().getRadians();
     velocity = accelConstant * (rotation - (currentPose - initPose));
 
     // ensures it doesn't try to go faster than it's able to
