@@ -50,6 +50,7 @@ public class RobotMercury extends TimedRobot {
   public static ShuffleboardWidgets widgets;
 
   public static BlingB autoBlingB;
+  public static BlingA autoBlingA;
   public static Bling bling;
   public static BlingControls blingControls;
   public static SendableChooser<Command> chooser;
