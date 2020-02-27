@@ -14,7 +14,10 @@ public class Bling extends SubsystemBase implements BlingInterface {
   public AddressableLEDBuffer m_ledBuffer;
   public XboxController driverController;
 
-  int time = 0;
+  private int time = 0;
+  private int counter_rainbow = 0;
+  private int move_rainbow = 0;
+
 
   public Bling() {
     m_led = new AddressableLED(7);
@@ -105,24 +108,30 @@ public class Bling extends SubsystemBase implements BlingInterface {
   public void LEDRainbow() {
     int numLEDs = m_ledBuffer.getLength();
     for (int i = 0; i < numLEDs; i++) {
-      if ((i % 6) == 0) {
+      if (((i + move_rainbow) % 12) == 0 || ((i + move_rainbow) % 12) == 1) {
         // Sets first LED then every 6 after it red
         m_ledBuffer.setRGB(i, 255, 0, 0);
-      } else if (((i + 1) % 6) == 0) {
+      } else if (((i + 2 + move_rainbow) % 12) == 0 || ((i + 2 + move_rainbow) % 12) == 1) {
         // Sets second LED then every 6 after it orange
-        m_ledBuffer.setRGB(i, 240, 94, 35);
-      } else if (((i + 2) % 6) == 0) {
+        m_ledBuffer.setRGB(i, 255, 69, 0);
+      } else if (((i + 4 + move_rainbow) % 12) == 0 || ((i + 4 + move_rainbow) % 12) == 1) {
         // Sets third LED then every 6 after it yellow
         m_ledBuffer.setRGB(i, 252, 227, 0);
-      } else if (((i + 3) % 6) == 0) {
+      } else if (((i + 6 + move_rainbow) % 12) == 0 || ((i + 6 + move_rainbow) % 12) == 1) {
         // Sets fourth LED then every 6 after it green
         m_ledBuffer.setRGB(i, 0, 255, 0);
-      } else if (((i + 4) % 6) == 0) {
+      } else if (((i + 8 + move_rainbow) % 12) == 0 || ((i + 8 + move_rainbow) % 12) == 1) {
         // Sets fifth LED then every 6 after it blue
         m_ledBuffer.setRGB(i, 0, 0, 255);
-      } else if (((i + 5) % 6) == 0) {
+      } else if (((i + 10 + move_rainbow) % 12) == 0 || ((i + 10 + move_rainbow) % 12) == 1) {
         // Sets sixth LED then every 6 after it purple
-        m_ledBuffer.setRGB(i, 230, 230, 250);
+        m_ledBuffer.setRGB(i, 128, 0, 128);
+      }
+      if (counter_rainbow < 100) {
+        counter_rainbow++;
+      } else {
+        move_rainbow++;
+        counter_rainbow = 1;
       }
       m_led.setData(m_ledBuffer);
     }
