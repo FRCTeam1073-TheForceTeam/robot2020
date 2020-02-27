@@ -20,7 +20,7 @@ public class autoTurnTurret extends CommandBase {
   private double maxVelocity;
   private double initTurretPosition;
   private double currentTurretPosition;
-  private double accelConstant;
+  private double accelConstant = 0.5;
 
   /**
    * Creates a new autoTurnTurret.
@@ -40,13 +40,13 @@ public class autoTurnTurret extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initTurretPosition = (turret.getPosition() * (1 / Math.PI) * 180);
+    initTurretPosition = turret.getPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentTurretPosition = (turret.getPosition() * (1 / Math.PI) * 180);
+    currentTurretPosition = turret.getPosition();
     velocity = accelConstant * (rotation - (currentTurretPosition - initTurretPosition));
 
     // ensures that it doesn't try to go faster than it's able to
