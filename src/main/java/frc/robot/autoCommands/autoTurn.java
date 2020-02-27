@@ -18,7 +18,7 @@ public class autoTurn extends CommandBase {
   private double maxVelocity;
   private double velocity;
   private double rotation;
-  private double accelConstant = 0.0;
+  private double accelConstant = 0.5;
   private double initPose;
   private double currentPose;
 
@@ -26,67 +26,38 @@ public class autoTurn extends CommandBase {
    * Creates a new autoTurn.
    */
   public autoTurn(DrivetrainInterface drivetrain, double rotation, double maxVelocity) {
-
     this.drivetrain = drivetrain;
-    this.rotation = rotation * (Math.PI / 180);
+    this.rotation = rotation;
     this.maxVelocity = maxVelocity;
     addRequirements((SubsystemBase)drivetrain);
   }
 
+  //  creates an autoTurn where you don't have to input the maximum speed
   public autoTurn(DrivetrainInterface drivetrain, double rotation) {
-
-    this(drivetrain, rotation, Constants.MAX_VELOCITY);
+    this(drivetrain, rotation, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
-   public static autoTurn auto135left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -135);
-  }
-  
-  public static autoTurn auto90left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -90);
-  }
-
-    public static autoTurn auto45left(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, -45);
-  }
-
-    public static autoTurn auto45right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 45);
-  }
-  
-  public static autoTurn auto90right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 90);
-  }
-  
-  public static autoTurn auto135right(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 135);
-  }
-  
-  public static autoTurn auto180(DrivetrainInterface drivetrain) {
-    return new autoTurn(drivetrain, 180);
-  }
-
-  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    initPose = drivetrain.getRobotPose().getRotation().getDegrees();
+    initPose = drivetrain.getRobotPose().getRotation().getRadians();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    currentPose = drivetrain.getRobotPose().getRotation().getDegrees();
+    currentPose = drivetrain.getRobotPose().getRotation().getRadians();
     velocity = accelConstant * (rotation - (currentPose - initPose));
-    drivetrain.setVelocity(-velocity, velocity);
+
+    // ensures it doesn't try to go faster than it's able to
+    drivetrain.setVelocity( - Math.min(velocity, maxVelocity), Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
+    // stops the drivetrain
     drivetrain.setVelocity(0, 0);
   }
 
