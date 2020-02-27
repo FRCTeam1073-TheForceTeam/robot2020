@@ -20,23 +20,13 @@ public class autoShootingCommandGroup extends SequentialCommandGroup {
   DrivetrainInterface drivetrain;
   ShooterInterface shooter;
   TurretInterface turret;
-  double drivetrainRotation;
-  double drivetrainDistance;
-  double turretRotation;
-  double hoodRotation;
-  double flywheelVelocity;
 
   /**
    * Creates a new autoShootingCommandGroup.
    */
-  public autoShootingCommandGroup(double drivetrainRotation, double drivetrainDistance, double turretRotation, double hoodRotation, double flywheelVelocity) {
+  public autoShootingCommandGroup(double drivetrainRotation, double drivetrainDistance, double turretRotation,
+      double hoodRotation, double flywheelVelocity) {
     super();
-
-    this.drivetrainRotation = drivetrainRotation;
-    this.drivetrainDistance = drivetrainDistance;
-    this.turretRotation = turretRotation;
-    this.hoodRotation = hoodRotation;
-    this.flywheelVelocity = flywheelVelocity;
 
     addCommands(
       new autoTurn(drivetrain, drivetrainRotation),
@@ -49,9 +39,5 @@ public class autoShootingCommandGroup extends SequentialCommandGroup {
 
       new autoSetFlywheel(shooter, flywheelVelocity)
     );
-  }
-
-  public static autoShootingCommandGroup autoShootingMidOfField(){
-    return new autoShootingCommandGroup(0.0, 0.0, 0.0, 0.0, 0.0);
   }
 }

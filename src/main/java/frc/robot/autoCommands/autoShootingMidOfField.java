@@ -12,14 +12,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class autoShootingAlignedWithTarget extends SequentialCommandGroup {
+public class autoShootingMidOfField extends SequentialCommandGroup {
 
   /**
    * Creates a new autoShootingAlignedWithTarget.
    */
   
-  public autoShootingAlignedWithTarget() {
+  public autoShootingMidOfField() {
     super();
-    new autoShootingCommandGroup(0.0, 0.762, 0.0, (2 * Math.PI) / 3, 0.5);
+    new autoShootingCommandGroup(0.42662799, 1.8414562104, 0, 0, 0);
   }
 }
