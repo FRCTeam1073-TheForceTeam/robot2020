@@ -49,13 +49,8 @@ public class autoSetHood extends CommandBase {
     currentHoodPosition = (shooter.getHoodAngle() * (1 / Math.PI) * 180);
     velocity = accelConstant * (rotation - (currentHoodPosition - initHoodPosition));
 
-    // secures that it doesn't try to go faster than it's able to
-    if (velocity <= maxVelocity){
-    shooter.setHoodVelocity(velocity);
-    }
-    else {
-      shooter.setHoodVelocity(maxVelocity);
-    }
+    // ensures that it doesn't try to go faster than it's able to
+    shooter.setHoodVelocity(java.lang.Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.

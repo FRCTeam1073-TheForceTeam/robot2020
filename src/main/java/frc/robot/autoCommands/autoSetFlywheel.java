@@ -51,13 +51,8 @@ public class autoSetFlywheel extends CommandBase {
   @Override
   public void execute() {
 
-    // secures that the flywheel doesn't try to go faster than it's able to
-    if (velocity <= maxVelocity){
-      shooter.setFlywheelSpeed(velocity);
-    }
-    else {
-      shooter.setFlywheelSpeed(maxVelocity);
-    }
+    // ensures that the flywheel doesn't try to go faster than it's able to
+    shooter.setFlywheelSpeed(java.lang.Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.
