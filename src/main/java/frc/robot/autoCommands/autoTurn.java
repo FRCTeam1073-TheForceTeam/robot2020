@@ -50,7 +50,7 @@ public class autoTurn extends CommandBase {
     velocity = accelConstant * (rotation - (currentPose - initPose));
 
     // ensures it doesn't try to go faster than it's able to
-    drivetrain.setVelocity( - Math.min(velocity, maxVelocity), java.lang.Math.min(velocity, maxVelocity));
+    drivetrain.setVelocity( - Math.min(velocity, maxVelocity), Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.
