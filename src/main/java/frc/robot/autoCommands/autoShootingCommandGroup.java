@@ -24,14 +24,13 @@ public class autoShootingCommandGroup extends SequentialCommandGroup {
   /**
    * Creates a new autoShootingCommandGroup.
    */
-  public autoShootingCommandGroup(double drivetrainRotation, double drivetrainDistance, double turretRotation,
-      double hoodRotation, double flywheelVelocity) {
+  public autoShootingCommandGroup(double targetX, double targetY, double turretRotation, double hoodRotation,
+      double flywheelVelocity) {
     super();
 
     addCommands(
-      new autoTurn(drivetrain, drivetrainRotation),
+      new autoDriveToPoint(0, 0, targetX, targetY)
 
-      new autoDriveForward(drivetrain, drivetrainDistance)
       .alongWith(
         new autoTurnTurret(turret, turretRotation),
         new autoSetHood(shooter, hoodRotation)

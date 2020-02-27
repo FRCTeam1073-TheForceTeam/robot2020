@@ -20,6 +20,6 @@ public class autoShootingMidOfField extends SequentialCommandGroup {
   
   public autoShootingMidOfField() {
     super();
-    new autoShootingCommandGroup(0.42662799, 1.8414562104, 0, 0, 0);
+    new autoShootingCommandGroup(0.762, 1.6764, 0, 0, 0);
   }
 }
