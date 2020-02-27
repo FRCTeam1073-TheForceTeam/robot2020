@@ -48,7 +48,6 @@ public class RobotMercury extends TimedRobot {
   public static TurretControls turretControls;
   public static TurretInterface turret;
   public static ShuffleboardWidgets widgets;
-//  public static BlingA autoBlingA;
 
   public static BlingB autoBlingB;
   public static Bling bling;
@@ -73,7 +72,6 @@ public class RobotMercury extends TimedRobot {
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    autoBlingB = new BlingB(bling);
     //autoBlingA = new BlingA(drivetrain, bling);
 
     //widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface)drivetrain);
@@ -122,6 +120,7 @@ public class RobotMercury extends TimedRobot {
       autoBlingB.schedule();
     }
     /* if(chooser.getSelected() != null){
+     if(chooser.getSelected() != null){
       chooser.getSelected().schedule();
     }
     */
