@@ -65,7 +65,7 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_led.setData(m_ledBuffer);
   }
   
-  // alternateHSV() has the same functionality as alternateRGB() except with HSV
+  // alternateHSV() has the same functionality as alternateRGB() except with HSV (hue, saturation + value)
   public void alternateHSV(int min, int number, int h1, int s1, int v1, int h2, int s2, int v2) {
     int max = min + number;
     for (int i = min; i < (max); i = i + 2) {
@@ -81,9 +81,11 @@ public class Bling extends SubsystemBase implements BlingInterface {
   // rangeHSV() same as rangeRGB() except using HSV values
   public void rangeHSV(int min, int number, int h, int s, int v) {
     int max = min + number;
+    
     for (int i = min; i < (max); i++) {
       m_ledBuffer.setHSV(i, h, s, v);
     }
+
     m_led.setData(m_ledBuffer);
   }
   
