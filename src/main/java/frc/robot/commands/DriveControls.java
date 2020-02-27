@@ -15,42 +15,44 @@ import frc.robot.subsystems.interfaces.DrivetrainInterface;
  * Add your docs here.
  */
 public class DriveControls extends CommandBase {
-    DrivetrainInterface drivetrain;
 
-    public DriveControls(DrivetrainInterface drivetrain_) {
-        drivetrain = drivetrain_;
+    DrivetrainInterface drivetrain;
+    private double amount;
+    private double forward;
+    private double rotation;
+    private double value;
+
+    public DriveControls(DrivetrainInterface drivetrain) {
+        this.drivetrain = drivetrain;
         addRequirements((SubsystemBase)drivetrain);
     }
 
-
     // starts the robot
     public void initialize() {
-
     }
 
     // executes actions defined here
     public void execute() {
-        double amt = 1 - OI.driverController.getRawAxis(2);
-        double fwd = deadzone(OI.driverController.getRawAxis(1) * amt);
-        double rot = deadzone(OI.driverController.getRawAxis(4) * amt);
-        drivetrain.setPower(fwd + rot, fwd - rot);
-        if (OI.driverController.getAButtonPressed()) {
+        amount = OI.driverController.getRawAxis(2) * 0.75;
+        forward = deadzone(OI.driverController.getRawAxis(1) * (0.25 + amount));
+        rotation = deadzone(OI.driverController.getRawAxis(4) * (0.25 + amount));
+        drivetrain.setPower(forward + rotation, forward - rotation);
+        /*if (OI.driverController.getAButtonPressed()) {
             drivetrain.resetRobotOdometry();
-        }
+        }*/
     }
     
-    public double deadzone(double val) {
+    public double deadzone(double value) {
         double zone = 0.1;
-        if (Math.abs(val) < zone) {
+        if (Math.abs(value) < zone) {
             return 0;
         } else {
-            return val;
+            return value;
         }
     }
 
     // ends the actions from execute when returned true
     public boolean isFinished() {
         return false;
-
     }
 }
