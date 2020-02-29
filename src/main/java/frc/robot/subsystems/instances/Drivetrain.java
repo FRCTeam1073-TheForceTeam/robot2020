@@ -19,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
     private ADXRS450_Gyro gyro;
@@ -195,6 +196,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorFollower.setNeutralMode(NeutralMode.Brake);
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
 
+        leftMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        leftMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+
         leftMotorLeader.configPeakOutputForward(1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
         rightMotorLeader.configPeakOutputReverse(-1.0);
@@ -202,8 +208,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         leftMotorLeader.setInverted(true);
 
-        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
@@ -249,6 +255,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.configPeakOutputReverse(-1.0);
         rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
+
+        leftMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        leftMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
 
         leftMotorLeader.setInverted(true);
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
