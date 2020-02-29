@@ -120,12 +120,7 @@ public class DriveControls extends CommandBase {
         drivetrain.setPower(limit(addMultiplier(leftOutput)), limit(addMultiplier(rightOutput)));
 
         // ensures that the driver doesn't accidentally reset the odometry but makes it an option
-        // TODO change buttons based on final driver controller layout
-        if (OI.driverController.getAButtonPressed() 
-            && OI.driverController.getBButtonPressed() 
-            && OI.driverController.getXButtonPressed() 
-            && OI.driverController.getYButtonPressed()) {
-
+        if (OI.driverController.getStartButtonPressed()&&OI.driverController.getBackButtonPressed()) {
                 drivetrain.resetRobotOdometry();
         }
     }
