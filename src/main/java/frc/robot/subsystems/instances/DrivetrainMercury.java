@@ -245,4 +245,10 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
     public ChassisSpeeds getDrivetrainVelocity() {
         return kinematics.toChassisSpeeds(getWheelSpeeds());
     }
+
+    @Override
+    public void setRotationalVelocity(double left, double right) {
+        // TODO Auto-generated method stub
+
+    }
 }

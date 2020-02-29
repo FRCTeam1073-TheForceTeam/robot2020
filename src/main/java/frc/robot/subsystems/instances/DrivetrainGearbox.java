@@ -247,4 +247,10 @@ public class DrivetrainGearbox extends SubsystemBase implements DrivetrainInterf
     public int isRevLimitSwitchClosedRight() {
         return 0;
     }
+
+    @Override
+    public void setRotationalVelocity(double left, double right) {
+        // TODO Auto-generated method stub
+
+    }
 }
