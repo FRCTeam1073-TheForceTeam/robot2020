@@ -31,15 +31,24 @@ public class CollectorControls extends CommandBase {
   }
 
 
-  boolean a=false;
+  boolean a = false;
+  boolean isRaised = true;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     SmartDashboard.putBoolean("A", a=!a);
-    if(OI.driverController.getAButtonPressed()){
+    if (OI.driverController.getAButtonPressed()){
       collect.raise();
+      isRaised = true;
     } else if (OI.driverController.getBButtonPressed()) {
       collect.lower();
+      isRaised = false;
+    }
+
+    if (isRaised == false) {
+      collect.collect();
+    } else {
+      collect.stop();
     }
   }
 

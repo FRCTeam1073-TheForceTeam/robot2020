@@ -25,15 +25,15 @@ public class Collector extends SubsystemBase implements CollectorInterface {
     this.collectorSolenoidOut = new Solenoid(1, 3);
     this.collectorSolenoidIn = new Solenoid(1, 4);
 
-    this.collectorMotor = new WPI_TalonSRX(25);
+    this.collectorMotor = new WPI_TalonSRX(27);
     this.collectorMotor.configFactoryDefault();
     this.collectorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("CollectorOut", collectorSolenoidOut.get());
-    SmartDashboard.putBoolean("CollectorIn", collectorSolenoidIn.get());
+    // SmartDashboard.putBoolean("CollectorOut", collectorSolenoidOut.get());
+    // SmartDashboard.putBoolean("CollectorIn", collectorSolenoidIn.get());
     // This method will be called once per scheduler run
   }
 
@@ -53,11 +53,11 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   }
   @Override
   public void collect(){
-    run(1.0, CollectorDirection.IN);
+    run(0.7, CollectorDirection.IN);
   }
   @Override
   public void purge(){
-    run(1.0, CollectorDirection.OUT);
+    run(0.7, CollectorDirection.OUT);
   }
   @Override
   public void raise(){
