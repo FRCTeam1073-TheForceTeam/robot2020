@@ -10,60 +10,60 @@ package frc.robot.autoCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.interfaces.TurretInterface;
+import frc.robot.subsystems.interfaces.ShooterInterface;
 
-public class autoTurnTurret extends CommandBase {
+public class autoSetHood extends CommandBase {
 
-  TurretInterface turret;
+  ShooterInterface shooter;
   private double rotation;
   private double velocity;
   private double maxVelocity;
-  private double initTurretPosition;
-  private double currentTurretPosition;
+  private double initHoodPosition;
+  private double currentHoodPosition;
   private double accelConstant = 0.5;
 
   /**
-   * Creates a new autoTurnTurret.
+   * Creates a new autoSetHood.
    */
-  public autoTurnTurret(TurretInterface turret, double rotation, double maxVelocity) {
-    this.turret = turret;
+  public autoSetHood(ShooterInterface shooter, double rotation, double maxVelocity) {
+    this.shooter = shooter;
     this.rotation = rotation;
     this.maxVelocity = maxVelocity;
-    addRequirements((SubsystemBase)turret);
+    addRequirements((SubsystemBase)shooter);
   }
 
-  // creates an autoTurnTurret where you don't have to input the maximum speed
-  public autoTurnTurret(TurretInterface turret, double rotation) {
-    this(turret, rotation, Constants.MAX_TURRET_VELOCITY);
+  // creates an autoSetHood where you don't have to input the maximum speed
+  public autoSetHood(ShooterInterface shooter, double rotation) {
+    this(shooter, rotation, Constants.MAX_HOOD_VELOCITY);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initTurretPosition = turret.getPosition();
+    initHoodPosition = shooter.getHoodAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentTurretPosition = turret.getPosition();
-    velocity = accelConstant * (rotation - (currentTurretPosition - initTurretPosition));
+    currentHoodPosition = shooter.getHoodAngle();
+    velocity = accelConstant * (rotation - (currentHoodPosition - initHoodPosition));
 
     // ensures that it doesn't try to go faster than it's able to
-    turret.setVelocity(Math.min(velocity, maxVelocity));
+    shooter.setHoodVelocity(Math.min(velocity, maxVelocity));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
-    // stops the turret
-    turret.setVelocity(0);
+
+    // stops the hood
+    shooter.setHoodVelocity(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((currentTurretPosition - initTurretPosition) >= rotation);
+    return ((currentHoodPosition - initHoodPosition) >= rotation);
   }
 }
