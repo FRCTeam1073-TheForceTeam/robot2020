@@ -121,7 +121,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeAzimuth(AdvancedTrackerInterface.AdvancedTargetData data) {
-    if(data.cx == 0) data.azimuth = 0;
+    if(data.quality == 0) data.azimuth = 0;
     else data.azimuth = -(centerX - data.cx) * azimuthConv;
   }
 
@@ -130,7 +130,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeElevation(AdvancedTrackerInterface.AdvancedTargetData data) {
-    if(data.cy == 0) data.elevation = 0;
+    if(data.quality == 0) data.elevation = 0;
     else data.elevation = (centerY - data.cy) * elevationConv + baseElev;
   }
 
