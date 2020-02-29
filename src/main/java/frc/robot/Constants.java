@@ -25,4 +25,6 @@ public final class Constants {
     public static final double MAX_TURRET_VELOCITY = 100.0;
     //the maximum velocity the hood can move at
     public static final double MAX_HOOD_VELOCITY = 100.0;
+    //the deadzone for the raw axis of the controller
+    public static final double CONTROLLER_DEADZONE = 0.1;
 }
