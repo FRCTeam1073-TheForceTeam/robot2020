@@ -16,7 +16,9 @@ public interface DrivetrainInterface {
 
     public void resetRobotOdometry();
 
-    public void setVelocity(double left, double right);
+    public void setRotationalVelocity(double left, double right);
+
+    public void setVelocity(double forward, double rotation);
 
     public void setPower(double left, double right);
 
