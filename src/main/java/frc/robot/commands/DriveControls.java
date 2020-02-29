@@ -117,7 +117,7 @@ public class DriveControls extends CommandBase {
         arcadeCompute();
 
         // passes the final axis values into the drivetrain
-        drivetrain.setPower(limit(addMultiplier(leftOutput)), limit(addMultiplier(rightOutput)));
+        drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
 
         // ensures that the driver doesn't accidentally reset the odometry but makes it an option
         if (OI.driverController.getStartButtonPressed()&&OI.driverController.getBackButtonPressed()) {
