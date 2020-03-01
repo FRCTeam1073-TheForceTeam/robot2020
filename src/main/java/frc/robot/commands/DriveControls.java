@@ -66,7 +66,7 @@ public class DriveControls extends CommandBase {
      * @param axisValue
      * @return axisValue with the default throttle multiplier
      */
-    private double addMultiplier(double axisValue){
+    private double addMultiplier(double axisValue) {
         return addMultiplier(axisValue, multiplier);
     }
 
@@ -86,8 +86,8 @@ public class DriveControls extends CommandBase {
     * converts forward and rotation into Arcade Drive mode
     */
     private void arcadeCompute() {
+        rotation *= -1;
         double maxInput = Math.copySign(Math.max(Math.abs(forward), Math.abs(rotation)), forward);
-
 		if (forward >= 0.0) {
 			if (rotation >= 0.0) {
 				leftOutput = maxInput;
@@ -109,18 +109,19 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        multiplier = deadzone(OI.driverController.getRawAxis(2) * 0.75);
+        multiplier = deadzone(OI.driverController.getRawAxis(3));
 
         forward = deadzone(OI.driverController.getRawAxis(1));
         rotation = deadzone(OI.driverController.getRawAxis(4));
 
         arcadeCompute();
 
+
         // passes the final axis values into the drivetrain
         drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
 
         // ensures that the driver doesn't accidentally reset the odometry but makes it an option
-        if (OI.driverController.getStartButtonPressed()&&OI.driverController.getBackButtonPressed()) {
+        if (OI.driverController.getStartButtonPressed() && OI.driverController.getBackButtonPressed()) {
                 drivetrain.resetRobotOdometry();
         }
     }
