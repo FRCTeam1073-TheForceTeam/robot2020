@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
+//import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -43,12 +44,14 @@ public class Robot extends TimedRobot {
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static BlingControls blingControls;
-  public AutoDrive driveAuto;
+  public static CommandBase driveAuto;
+  // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
+
     OI.init();
 
     bling = new Bling();
@@ -81,18 +84,20 @@ public class Robot extends TimedRobot {
 
     turret = new Turret();
     turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase)turret, turretControls);
+    registerSubsystem((SubsystemBase) turret, turretControls);
 
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-    driveAuto = new AutoDrive(drivetrain, bling, 0.5, 4);
+    //driveAuto = autoTurn.auto90left(drivetrain);
+
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
     subsystem.register();
-    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);    
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);
   }
+
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -148,6 +153,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
@@ -159,6 +165,4 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
 
   }
-  
-  
 }

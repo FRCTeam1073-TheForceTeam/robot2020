@@ -77,10 +77,18 @@ public interface TurretInterface {
      */
     public boolean isIndexed();
 
-    public void deindex();
+    /**
+     * Returns true if the turret is at the given position within the given tolerance. 
+     * Angle and tolerance in radians.
+     * 
+     * @param azimuth - Azimuth angle in radians.
+     * @param tolerance - Tolerance in radians.
+     * @return
+     */
+    public boolean atPosition(double azimuth, double tolerance);
 
     /**
-     * Resets turret encoder.
+     * Disables the turret and resets the index flag so it needs to index again.
      */
     public void resetTurret();
 }

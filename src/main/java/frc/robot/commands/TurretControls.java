@@ -7,11 +7,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
-import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class TurretControls extends CommandBase {
@@ -39,12 +37,13 @@ public class TurretControls extends CommandBase {
     // double angle = Math.atan2(targetY - robotY, targetX - robotX);
     // double angle = OI.driverController.getRawAxis(0) * 10; 
     // double adjustedAngle = angle - Robot.drivetrain.getAngleRadians().getRadians();
-    
+  
+  
     //Robot.turret.setPosition(angle);
 
     // System.out.println(Robot.turret.getPosition());
     double velocity = OI.driverController.getRawAxis(5);
-    turret.setVelocity(velocity * 0.1);
+    turret.setVelocity(velocity);
   }
 
   // Returns true when the command should end.

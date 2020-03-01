@@ -9,11 +9,10 @@ package frc.robot.shuffleboard;
 
 import java.util.Map;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
-import frc.robot.subsystems.instances.Drivetrain;
 import frc.robot.subsystems.interfaces.*;
 
 /**The class - Defines all the variables used*/
@@ -32,9 +31,10 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
   private NetworkTableEntry leftEncoderEntry;
   double leftEncoderValue = 0.0;
-
   private NetworkTableEntry rightEncoderEntry;
   double rightEncoderValue = 0.0;
+  private NetworkTableEntry drivetrainSpeedEntry;
+  double drivetrainSpeed = 0.0;
 
   private NetworkTableEntry gyroAngleEntry;
   double gyroAngleDegrees = 0.0;
@@ -44,8 +44,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
   double robotY = 0.0;
   private NetworkTableEntry rotationEntry;
   double robotRotation = 0.0;
-
-  double drivetrainVelocity = 0.0;
 
   private NetworkTableEntry turretAngleEntry;
   double turretDegrees = 0.0;
@@ -79,18 +77,21 @@ public class ShuffleboardWidgets extends SubsystemBase {
   private NetworkTableEntry isWinchEngagedEntry;
   boolean isWinchEngaged = false;
 
+  private NetworkTableEntry batteryVoltageEntry;
+  double batteryVoltage = 0.0;
+
   DrivetrainInterface drivetrain;
   TurretInterface turret;
   ShooterInterface shooter;
   MagazineInterface magazine;
   LiftInterface lift;
   WinchInterface winch;
-
+  
   /**The constructor - creates the shuffleboard tab - gets the interfaces' methods to be able to display it - calls the method ShuffleboardView()*/
   public ShuffleboardWidgets(DrivetrainInterface drivetrain, TurretInterface turret, ShooterInterface shooter, MagazineInterface magazine, LiftInterface lift, WinchInterface winch) {
 
-    //creates the tab in shuffleboard called Telemetry
-    tab = Shuffleboard.getTab("Telemetry");
+    //creates the tab in shuffleboard called Robot2020
+    tab = Shuffleboard.getTab("Robot2020");
 
     this.drivetrain = drivetrain;
     this.turret = turret;
@@ -125,6 +126,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     leftEncoderEntry.setDouble(leftEncoderValue);
     rightEncoderEntry.setDouble(rightEncoderValue);
+    drivetrainSpeedEntry.setDouble(drivetrainSpeed);
     gyroAngleEntry.setDouble(gyroAngleDegrees);
     xcoordinateEntry.setDouble(robotX);
     ycoordinateEntry.setDouble(robotY);
@@ -149,6 +151,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
     isPinnedEntry.setBoolean(isPinned);
     isWinchEngagedEntry.setBoolean(isWinchEngaged);
 
+    batteryVoltageEntry.setDouble(batteryVoltage);
+
     Shuffleboard.update();
     // PID_testing();
     
@@ -157,39 +161,62 @@ public class ShuffleboardWidgets extends SubsystemBase {
   /**sets variables to data from the interfaces - gets called periodically*/
   private void ShuffleboardInformation() {
 
-    // Drivetrain Data INCOMPLETE
-    leftEncoderValue = drivetrain.getLeftEncoder();
-    rightEncoderValue = drivetrain.getRightEncoder();
-    // Gyro Datas COMPLETE
-    gyroAngleDegrees = drivetrain.getAngleDegrees();
-    Pose2d pose = drivetrain.getRobotPose();
-    robotX = pose.getTranslation().getX();
-    robotY = pose.getTranslation().getY();
-    robotRotation = pose.getRotation().getDegrees();
+    // only pulls data from the drivetrain if it exists
+    if(drivetrain != null){
+      // Drivetrain Data COMPLETE
+      leftEncoderValue = drivetrain.getLeftEncoder();
+      rightEncoderValue = drivetrain.getRightEncoder();
+      drivetrainSpeed = Math.sqrt(Math.pow(drivetrain.getDrivetrainVelocity().vxMetersPerSecond, 2) + Math.pow(drivetrain.getDrivetrainVelocity().vyMetersPerSecond, 2));
+        // Gyro Datas COMPLETE
+      gyroAngleDegrees = drivetrain.getAngleDegrees();
+      Pose2d pose = drivetrain.getRobotPose();
+      robotX = pose.getTranslation().getX();
+      robotY = pose.getTranslation().getY();
+      robotRotation = pose.getRotation().getDegrees();
+    }
 
-    // Turret Data COMPLETE
-    turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
-    turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
+    // only pulls data from the turret if it exists
+    if(turret != null){
+      // Turret Data COMPLETE
+      turretDegrees = turret.getPosition() * (1 / Math.PI) * 180;
+      turretVelocity = turret.getVelocity() * (1 / Math.PI) * 180;
+    }
 
-    // Shooter Data COMPLETE
-    flywheelVelocity = shooter.getFlywheelSpeed() * (1 / Math.PI) * 180;
-    flywheelTemperature = shooter.getInternalTemperature();
-    hoodDegrees = shooter.getHoodAngle() * (1 / Math.PI) * 180;
-    hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180;
+    // only pulls data from the shooter if it exists
+    if(shooter != null){
+      // Shooter Data COMPLETE
+      flywheelVelocity = shooter.getFlywheelSpeed() * (1 / Math.PI) * 180;
+      flywheelTemperature = shooter.getInternalTemperature();
+      hoodDegrees = shooter.getHoodAngle() * (1 / Math.PI) * 180;
+      hoodVelocity = shooter.getHoodVelocity() * (1 / Math.PI) * 180;
+    }
 
-    // Magazine Data COMPLETE
-    cellCount = magazine.getCellCount();
+    // only pulls data from the magazine if it exists
+    if(magazine != null){
+      // Magazine Data COMPLETE
+      cellCount = magazine.getCellCount();
+    }
 
-    // Climbing Data COMPLETE
-    isBrakeset = lift.isBrakeSet();
-    isLiftFullyExtended = lift.isLiftFullyExtended();
-    isLiftFullyRetracted = lift.isLiftFullyRetracted();
-    liftExtension = lift.liftExtension();
-    isPinned = lift.isPinned();
+    // only pulls data from the lift if it exists
+    if(lift != null){
+      // Lift Data COMPLETE
+      isBrakeset = lift.isBrakeSet();
+      isLiftFullyExtended = lift.isLiftFullyExtended();
+      isLiftFullyRetracted = lift.isLiftFullyRetracted();
+      liftExtension = lift.liftExtension();
+      isPinned = lift.isPinned();
+    }
 
-    isWinchEngaged = winch.isWinchEngaged();
+    // only pulls data from the winch if it exists
+    if(winch != null){
+      // Winch Data Complete
+      isWinchEngaged = winch.isWinchEngaged();
+    }
 
     // Wheel of Fortune Data MISSING
+
+    // General Robot
+    batteryVoltage = RobotController.getBatteryVoltage();
 
   }
 
@@ -204,6 +231,11 @@ public class ShuffleboardWidgets extends SubsystemBase {
     rightEncoderEntry = tab
     .add("rightEncoder", rightEncoderValue)
     .withPosition(2, 0)
+    .withSize(2, 1)
+    .getEntry();
+    drivetrainSpeedEntry = tab
+    .add("drivetrainVelocity", drivetrainSpeed)
+    .withPosition(0, 6)
     .withSize(2, 1)
     .getEntry();
 
@@ -315,8 +347,16 @@ public class ShuffleboardWidgets extends SubsystemBase {
     .withPosition(0, 3)
     .withSize(2, 1)
     .getEntry();
+
+    batteryVoltageEntry = tab
+    .add("batteryVoltage", batteryVoltage)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 14))
+    .withPosition(0, 4)
+    .withSize(2, 2)
+    .getEntry();
       
-    }
+  }
 
     /*public void PID_testing() {
 

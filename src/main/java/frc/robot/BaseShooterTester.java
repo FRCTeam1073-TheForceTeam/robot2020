@@ -8,47 +8,44 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.instances.OpenMVBase;
-import frc.robot.commands.PointTurret;
-import frc.robot.commands.TurretControls;
-import frc.robot.commands.TurretIndex;
-import frc.robot.subsystems.instances.OMVPortTracker;
-import frc.robot.subsystems.instances.Turret;
-import frc.robot.OI;
-
-// THIS WILL FAIL ULTIMATELY UNTIL ENCODER VALUES ARE FIGURED OUT
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ShooterControls;
+import frc.robot.commands.ShooterIndex;
+import frc.robot.subsystems.instances.*;
+import frc.robot.subsystems.interfaces.ShooterInterface;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class TurretControlTester extends TimedRobot {
-
-
-  // public static OpenMVBase portTrackerCamera;
-  public static Turret turret;
-  public static SequentialCommandGroup turretGroup;
-  public static OI oi;
-
+public class BaseShooterTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+  
+  public static CommandBase shooterControls;
+  public static ShooterInterface shooter;
+
+  // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
-    // OpenMVBase camera = new OpenMVBase(1);
-    // OpenMVBase portTrackerCamera = new OMVPortTracker(1);
-    // portTrackerCamera.register();
-    turret = new Turret();
-    turret.register();
-    CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
+    shooter = new Shooter();
+    ((SubsystemBase) shooter).register();
+    shooterControls = new ShooterControls(shooter);
+    registerSubsystem((SubsystemBase) shooter, shooterControls);
+  }
+
+  public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
+    subsystem.register();
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);
   }
 
   /*
@@ -63,15 +60,8 @@ public class TurretControlTester extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
-  /**
-   * This function is called once each time the robot enters Disabled mode.
-   */
   @Override
   public void disabledInit() {
-  }
-
-  @Override
-  public void disabledPeriodic() {
   }
 
   /**
@@ -90,11 +80,7 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0));
-    // new WatiForTurret(turret, azimuth));
-    if (turretGroup != null) {
-      turretGroup.schedule();
-    }
+    // (new ShooterIndex(shooter)).schedule(false);
   }
 
   /**
@@ -102,7 +88,6 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
   }
 
   @Override
@@ -116,6 +101,11 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+
+  }
+
+  @Override
+  public void disabledPeriodic() {
 
   }
 }

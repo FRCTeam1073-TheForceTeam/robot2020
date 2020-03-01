@@ -7,9 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Robot;
 import frc.robot.subsystems.instances.Bling;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
@@ -20,18 +18,19 @@ public class AutoDrive extends CommandBase {
     DrivetrainInterface drivetrain;
     Bling bling;
     private double velocity = 0;
-    private double distance = Units.inchesToMeters(18);
+//    private double distance = Units.inchesToMeters(18);
     private boolean isFinished = false;
-    private double distanceTraveled = 0.0;
+//    private double distanceTraveled = 0.0;
     private int time = 0;
 
     public AutoDrive(DrivetrainInterface drivetrain_, Bling bling_, double velocity, final double distance) {
         drivetrain = drivetrain_;
         bling = bling_;
         this.velocity = velocity;
-        this.distance = distance;
+ //       this.distance = distance;
 
         addRequirements((SubsystemBase)drivetrain);
+        addRequirements((SubsystemBase)bling);
     }
 
 

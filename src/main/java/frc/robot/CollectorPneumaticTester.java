@@ -7,50 +7,45 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.instances.OpenMVBase;
-import frc.robot.commands.PointTurret;
-import frc.robot.commands.TurretControls;
-import frc.robot.commands.TurretIndex;
-import frc.robot.subsystems.instances.OMVPortTracker;
-import frc.robot.subsystems.instances.Turret;
-import frc.robot.OI;
-
-// THIS WILL FAIL ULTIMATELY UNTIL ENCODER VALUES ARE FIGURED OUT
-
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.commands.*;
+import frc.robot.subsystems.instances.*;
+import frc.robot.subsystems.interfaces.*;
+import frc.robot.shuffleboard.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class TurretControlTester extends TimedRobot {
-
-
-  // public static OpenMVBase portTrackerCamera;
-  public static Turret turret;
-  public static SequentialCommandGroup turretGroup;
-  public static OI oi;
-
+public class CollectorPneumaticTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+  public static CollectorInterface collector;
+  public static CommandBase collectorControls;
+  
+  // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
-    // OpenMVBase camera = new OpenMVBase(1);
-    // OpenMVBase portTrackerCamera = new OMVPortTracker(1);
-    // portTrackerCamera.register();
-    turret = new Turret();
-    turret.register();
-    CommandScheduler.getInstance().setDefaultCommand((Subsystem) turret, new TurretControls(turret));
+
+    collector = new Collector();
+    ((SubsystemBase) collector).register();
+    collectorControls = new CollectorControls(collector);
+    registerSubsystem((SubsystemBase) collector, collectorControls);
   }
 
+  public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
+    subsystem.register();
+    CommandScheduler.getInstance().setDefaultCommand(subsystem, command);    
+  }
   /*
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -79,6 +74,10 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
+    //if(driveAuto != null){
+    //  driveAuto.schedule();
+    //}
   }
 
   /**
@@ -86,15 +85,12 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
+    //CommandScheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit() {
-    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0));
-    // new WatiForTurret(turret, azimuth));
-    if (turretGroup != null) {
-      turretGroup.schedule();
-    }
   }
 
   /**
@@ -102,7 +98,6 @@ public class TurretControlTester extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
   }
 
   @Override
@@ -118,4 +113,6 @@ public class TurretControlTester extends TimedRobot {
   public void testPeriodic() {
 
   }
+  
+  
 }
