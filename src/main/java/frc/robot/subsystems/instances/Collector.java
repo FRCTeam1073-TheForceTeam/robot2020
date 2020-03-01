@@ -22,8 +22,8 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   
   
   public Collector() {
-    this.collectorSolenoidOut = new Solenoid(1, 3);
-    this.collectorSolenoidIn = new Solenoid(1, 4);
+    this.collectorSolenoidOut = new Solenoid(1, 6);
+    this.collectorSolenoidIn = new Solenoid(1, 0);
 
     this.collectorMotor = new WPI_TalonSRX(27);
     this.collectorMotor.configFactoryDefault();
