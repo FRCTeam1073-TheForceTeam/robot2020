@@ -34,7 +34,6 @@ public class BlingTester extends TimedRobot {
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-
     OI.init();
 
     bling = new Bling();

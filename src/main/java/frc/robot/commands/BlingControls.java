@@ -22,17 +22,16 @@ import frc.robot.subsystems.interfaces.BlingInterface;
 
 public class BlingControls extends CommandBase {
   int burst_done;
+  int gameDataBlinkCount;
   int burstCount;
   int time;
+  int time_burst;
   int time_blinkyLEDs;
   int leds_from_middle;
   double match_time;
   int move;
   String gameData;
   BlingInterface bling;
-  static Color red = new Color (255, 0, 0);
-  static Color green = new Color (0, 255, 0);
-  static Color blue = new Color (0, 0, 255);  
 
   /**
    * Creates a new BlingControls.
@@ -46,27 +45,27 @@ public class BlingControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    time_burst = 0;
     burst_done = 0;
     time = 0;
     time_blinkyLEDs = 0;
     leds_from_middle = 0;
     move = 0;
+    gameDataBlinkCount = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // bling.LEDRainbow();
+    
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
     // if (burst_done == 0) {
-    //   burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
-    //   bling.setPatternRGBAll(0, 0, 0);
+      // burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+    //   //bling.setPatternRGBAll(0, 0, 0);
     // } else {
-      // if (0 < match_time && match_time < 30) {
-      //   blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
-      // } else {
+      if (gameDataBlinkCount < 5) {
         if (gameData.equals("R")) {
           blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
         } else if (gameData.equals("G")) {
@@ -74,29 +73,17 @@ public class BlingControls extends CommandBase {
         } else if (gameData.equals("B")) {
           blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
         } else if (gameData.equals("Y")) {
-          blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 220, 0);
+          blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
         } else {
-          bling.setPatternRGBAll(0, 0, 0);
+          // TODO: Add other bling commands
+          bling.LEDRainbow();
         }
-
-    // bling.setLEDData();
-
-    SmartDashboard.putString("Game Data", gameData);
-
-
-        // driverControlledLEDs(8, 4);
-        // blinkyLights(14, 3, 255, 255, 255);
-        // movingLEDs(19, 7);
-        // bling.setPatternRGBAll(0, 0, 0);
-      // }
-    //}
+      } else {
+        // TODO: Add other bling commands
+        bling.LEDRainbow();
+      }
+    // }
   }
-  
-  
-
-//  public void GameData() {
-//    if (Robot.gameData.getGameData() returns "A")
-//  }
 
   // burst() lights LEDs from the middle out  
   public void burst(int length, int r, int g, int b) {    
@@ -104,15 +91,14 @@ public class BlingControls extends CommandBase {
     int middle1 = (int) (Math.floor((length / 2)));
     int middle2 = (int) (Math.ceil((length / 2)));
     
-    
-    if ((leds_from_middle + middle2) < (length - 1) && time < 15) {
+    if ((leds_from_middle + middle2) < (length - 1) && time_burst < 15) {
       // If there are still more LEDs to change and it is not yet time to change
       // Wait until the 2000th time
-      time = time + 1;
+      time_burst = time_burst + 1;
     } else if ((leds_from_middle + middle2) < (length - 1)) {
       // If it is time to change and there are still more LEDs to change
       // Reset the time
-      time = 0;
+      time_burst = 0;
       // Moves the LEDs out from the center by one light
       leds_from_middle = leds_from_middle + 1;
       // Sets the LEDs
@@ -121,7 +107,7 @@ public class BlingControls extends CommandBase {
     } else {
       // Resets the time and says that the burst is finished
       burst_done = 1;
-      time = 0;
+      time_burst = 0;
       bling.setPatternRGBAll(0, 0, 0);
     }
   }
@@ -157,6 +143,7 @@ public class BlingControls extends CommandBase {
     } else {
       // Resets the time counter
       time_blinkyLEDs = 0;
+      gameDataBlinkCount = gameDataBlinkCount + 1;
     }
   }
 
