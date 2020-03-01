@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,19 +31,16 @@ public class CollectorControls extends CommandBase {
   
   }
 
-
-  boolean a = false;
   boolean isRaised = true;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("A", a=!a);
-    if (OI.driverController.getAButtonPressed()){
-      collect.raise();
-      isRaised = true;
-    } else if (OI.driverController.getBButtonPressed()) {
+    if (OI.driverController.getBumper(Hand.kRight)) {
       collect.lower();
       isRaised = false;
+    } else {
+      collect.raise();
+      isRaised = true;
     }
 
     if (isRaised == false) {
