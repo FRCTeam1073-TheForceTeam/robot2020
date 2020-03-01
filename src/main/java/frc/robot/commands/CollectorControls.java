@@ -7,13 +7,15 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
-import frc.robot.subsystems.instances.Collector;
 import frc.robot.subsystems.interfaces.CollectorInterface;
+import static frc.robot.subsystems.interfaces.CollectorInterface.CollectorDirection;
 
 public class CollectorControls extends CommandBase {
   CollectorInterface collect;
@@ -33,6 +35,7 @@ public class CollectorControls extends CommandBase {
 
   boolean isRaised = true;
   // Called every time the scheduler runs while the command is scheduled.
+  double pow = 1;
   @Override
   public void execute() {
     if (OI.driverController.getBumper(Hand.kRight)) {
@@ -42,6 +45,14 @@ public class CollectorControls extends CommandBase {
       collect.raise();
       isRaised = true;
     }
+
+    // if (OI.driverController.getAButtonPressed()){
+    //   collect.raise();
+    //   isRaised = true;
+    // } else if (OI.driverController.getBButtonPressed()) {
+    //   collect.lower();
+    //   isRaised = false;
+    // }
 
     if (isRaised == false) {
       collect.collect();
