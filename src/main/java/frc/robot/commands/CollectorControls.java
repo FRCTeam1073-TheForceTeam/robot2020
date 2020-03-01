@@ -33,27 +33,17 @@ public class CollectorControls extends CommandBase {
   
   }
 
-
-  boolean a = false;
   boolean isRaised = true;
   // Called every time the scheduler runs while the command is scheduled.
   double pow = 1;
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("A", a = !a);
-    pow = 0.5 + 0.5 * OI.driverController.getTriggerAxis(Hand.kLeft);
-    if (OI.driverController.getAButton()) {
-      collect.run(pow, CollectorDirection.OUT);
-    } else if (OI.driverController.getBButton()) {
-      collect.run(pow, CollectorDirection.IN);
-    } else {
-      collect.run(0.0, CollectorDirection.IN);
-    }
-
-    if (OI.driverController.getXButton()) {
-      collect.raise();
-    } else if (OI.driverController.getYButton()) {
+    if (OI.driverController.getBumper(Hand.kRight)) {
       collect.lower();
+      isRaised = false;
+    } else {
+      collect.raise();
+      isRaised = true;
     }
 
     // if (OI.driverController.getAButtonPressed()){
