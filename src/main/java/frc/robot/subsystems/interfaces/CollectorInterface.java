@@ -10,9 +10,27 @@ package frc.robot.subsystems.interfaces;
 /**
  * Add your docs here.
  */
-public interface CollectorInterface {
 
-    void run(double speed, String direction);
+
+public interface CollectorInterface {
+    enum CollectorDirection {
+        IN,
+        OUT
+    }
+        
+    void run(double speed, CollectorDirection direction);
+
+    void collect();
+
+    void purge();
+
+    void raise();
+
+    void lower();
+
+    void stop();
 
     void lockIntake();
+
+    void unlockIntake();
 }
