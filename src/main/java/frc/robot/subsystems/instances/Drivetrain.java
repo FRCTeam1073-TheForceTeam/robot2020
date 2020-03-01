@@ -41,7 +41,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
 
-    // Solenoid solenoid = new Solenoid(6);
+    Solenoid winch = new Solenoid(1, 7);
+    Solenoid drivetrain = new Solenoid(1, 1);
 
     private boolean winchEngaged;
 
@@ -247,6 +248,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // rightMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
         // rightMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
 
+        winch.set(true);
+        drivetrain.set(false);
         // solenoid.set(true);
 
         winchEngaged = true;
@@ -307,6 +310,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.setSelectedSensorPosition(0);
         leftMotorLeader.setIntegralAccumulator(0);
         rightMotorLeader.setIntegralAccumulator(0);
+
+        winch.set(false);
+        drivetrain.set(true);
         
         winchEngaged = false;
     }
