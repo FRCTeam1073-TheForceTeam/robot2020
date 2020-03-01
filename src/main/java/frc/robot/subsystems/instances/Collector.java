@@ -17,7 +17,7 @@ import frc.robot.subsystems.interfaces.CollectorInterface;
 
 public class Collector extends SubsystemBase implements CollectorInterface {
   boolean isLocked = false;
-  private WPI_TalonSRX collectorMotor;
+  public WPI_TalonSRX collectorMotor;
   private Solenoid collectorSolenoidOut, collectorSolenoidIn;
   
   

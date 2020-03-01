@@ -41,6 +41,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
 
+    // public Solenoid solenoid1 = new Solenoid(1, 3);
+    // public Solenoid solenoid2 = new Solenoid(1, 4);
+
     // Solenoid solenoid = new Solenoid(6);
 
     private boolean winchEngaged;

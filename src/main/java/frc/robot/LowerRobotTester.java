@@ -31,8 +31,8 @@ public class LowerRobotTester extends TimedRobot {
   public static DrivetrainInterface drivetrain;
   public static CollectorControls collectorControls;
   public static CollectorInterface collector;
-  public static Bling bling;
-  public static BlingControls blingControls;
+  // public static Bling bling;
+  // public static BlingControls blingControls;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -41,9 +41,9 @@ public class LowerRobotTester extends TimedRobot {
 
     OI.init();
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+    // bling = new Bling();
+    // blingControls = new BlingControls(bling);
+    // registerSubsystem((SubsystemBase) bling, blingControls);
 
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
