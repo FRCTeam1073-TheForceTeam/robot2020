@@ -13,4 +13,5 @@ public interface BlingInterface {
     public void setLEDs2(int i, int i2, int r, int g, int b);
     public AddressableLEDBuffer getM_LEDBuffer();
     public void LEDRainbow();
+    public void setLEDData();
 }
