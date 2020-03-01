@@ -31,4 +31,6 @@ public interface DrivetrainInterface {
     public void setPID(double P, double I, double D);
        
     public ChassisSpeeds getDrivetrainVelocity();
+
+    public double[] getOrientation();
 }
