@@ -94,7 +94,7 @@ public class ShooterControls extends CommandBase {
         shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
     SmartDashboard.putNumber("[Value] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
     SmartDashboard.putNumber("[Value] Estimated linear velocity of power cell (MPH)",
-        shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0+3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
+        shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
     SmartDashboard.putNumber("[Graph] TalonFX 22 motor temperature (degs. C)", shooter.getInternalTemperature()[0]);
     SmartDashboard.putNumber("[Graph] TalonFX 23 motor temperature (degs. C)", shooter.getInternalTemperature()[1]);
     SmartDashboard.putNumber("[Value] TalonFX 22 motor temperature (degs. C)", shooter.getInternalTemperature()[0]);
