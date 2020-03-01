@@ -19,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
     private ADXRS450_Gyro gyro;
@@ -34,12 +35,13 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private static WPI_TalonFX rightMotorLeader;
     private static WPI_TalonFX leftMotorFollower;
     private static WPI_TalonFX rightMotorFollower;
+    private final double wheelDiameter = Units.inchesToMeters(4);
     //private static LimitSwitchNormal limitSwitch;
 
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
 
-    Solenoid solenoid = new Solenoid(6);
+    // Solenoid solenoid = new Solenoid(6);
 
     private boolean winchEngaged;
 
@@ -48,8 +50,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // Fun Fact: It's pronounced "ph-WHE-nix"
         
         leftMotorLeader = new WPI_TalonFX(12);
-        rightMotorLeader = new WPI_TalonFX(13);
         leftMotorFollower = new WPI_TalonFX(14);
+        rightMotorLeader = new WPI_TalonFX(13);
         rightMotorFollower = new WPI_TalonFX(15);
 
         gyro = new ADXRS450_Gyro();
@@ -70,6 +72,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         return -gyroAngle;
     }
 
+    /**
+     * Returns angle in radians, as is proper.
+     */
     public Rotation2d getAngleRadians() {
         // Rotrwation?
         return Rotation2d.fromDegrees(-gyroAngle);
@@ -80,7 +85,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     double lastGyroValue = 0;
     double totalGyroDrift = 0;
 
-    /** It's a function! */
     @Override
     public void periodic() {
         // This method will be called once per sceduler run
@@ -99,19 +103,22 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
             gyroDriftValue = rawGyroAngle - lastGyroValue;
         }
         gyroAngle = rawGyroAngle - gyroDriftValue - totalGyroDrift;
-        
+
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
     }
 
+    /**
+     * Returns a Pose2d object containing the translation and rotation components of the robot's position.
+     */
     public Pose2d getRobotPose() {
         return robotPose;
     }
 
     /**
      * Warning: resetting robot odometry will mean the robot will have ABSOLUTELY NO
-     * IDEA where it is. Use with care.
+     * IDEA where it is. At all. Use with care.
      */
     public void resetRobotOdometry() {
         odometry.resetPosition(new Pose2d(), getAngleRadians());
@@ -127,11 +134,26 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
     private double leftPower = 0, rightPower = 0;
 
-    public void setVelocity(double left, double right) {
-        leftMotorLeader.set(ControlMode.Velocity, left * 3500);
-        rightMotorLeader.set(ControlMode.Velocity, right * 3500);
+    /**
+     * Sets motor rotational speeds in radians/second.
+     * @param left The left motor speed.
+     * @param right The right motor speed.
+     */
+    public void setRotationalVelocity(double left, double right) {
+        leftMotorLeader.set(ControlMode.Velocity, left * 2048 * 0.1 / (2 * Math.PI));
+        rightMotorLeader.set(ControlMode.Velocity, right * 2048 * 0.1 / (2 * Math.PI));
         leftPower = left;
         rightPower = right;
+        //System.out.println("x");
+    }
+
+    /**
+     * Sets the robot velocity.
+     * @param forward The forward speed in meters/second
+     * @param rotation The robot's rotational speed in radians/second
+     */
+    public void setVelocity(double forward, double rotation) {
+        setRotationalVelocity(forward * 2 / wheelDiameter, forward * 2 / wheelDiameter);
         //System.out.println("x");
     }
 
@@ -195,6 +217,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorFollower.setNeutralMode(NeutralMode.Brake);
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
 
+        leftMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        leftMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+
         leftMotorLeader.configPeakOutputForward(1.0);
         leftMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
@@ -204,10 +231,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
-        leftMotorLeader.setInverted(true);
+        // leftMotorLeader.setInverted(true);
 
-        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
@@ -230,7 +257,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         // rightMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
         // rightMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
 
-        solenoid.set(true);
+        // solenoid.set(true);
 
         winchEngaged = true;
     }
@@ -260,7 +287,13 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
-        leftMotorLeader.setInverted(true);
+        leftMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        leftMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+        rightMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
+
+        leftMotorLeader.setInverted(false);
+
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         leftMotorLeader.setSensorPhase(true);
@@ -275,13 +308,15 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorLeader.config_kD(0, D);
         rightMotorLeader.config_kD(0, D);
 
+        leftMotorFollower.follow(leftMotorLeader);
+        leftMotorFollower.setInverted(false);
+        rightMotorFollower.follow(rightMotorLeader);
+        rightMotorFollower.setInverted(false);
 
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
         leftMotorLeader.setIntegralAccumulator(0);
         rightMotorLeader.setIntegralAccumulator(0);
-
-        solenoid.set(false);
         
         winchEngaged = false;
     }
