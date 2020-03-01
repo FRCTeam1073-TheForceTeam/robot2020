@@ -58,8 +58,9 @@ public class DriveControls extends CommandBase {
      * @return axisValue with throttle multiplier
      */
     private double addMultiplier(double axisValue, double multiplier_) {
-        return axisValue * (0.25 + multiplier_);
+        return axisValue * (0.25 + multiplier_ * 0.75);
     }
+
 
     /**
      * adds the default throttle multiplier to the axis value
@@ -113,6 +114,8 @@ public class DriveControls extends CommandBase {
 
         forward = deadzone(OI.driverController.getRawAxis(1));
         rotation = deadzone(OI.driverController.getRawAxis(4));
+
+        rotation *= -1;
 
         arcadeCompute();
 
