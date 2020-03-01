@@ -1,7 +1,7 @@
 package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -15,18 +15,21 @@ import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
-    private PigeonIMU gyro;
+    private ADXRS450_Gyro gyro;
     private DifferentialDriveOdometry odometry;
 
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6477);
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
     // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
-    private double ticksPerMeter = 0.5 * (74842 + 75252) / Units.feetToMeters(6);
+    private double ticksPerMeter = ((52352 + 56574 + 54036 + 56452 + 53588 + 57594) / 6.0) / Units.feetToMeters(10);
     // ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonFX leftMotorLeader;
     private static WPI_TalonFX rightMotorLeader;
@@ -52,8 +55,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader = new WPI_TalonFX(13);
         rightMotorFollower = new WPI_TalonFX(15);
 
-        gyro = new PigeonIMU(6);
-        gyro.setFusedHeading(0);
+        gyro = new ADXRS450_Gyro();
+        gyro.calibrate();
         odometry = new DifferentialDriveOdometry(getAngleRadians());
 
         engageDrivetrain();
@@ -87,7 +90,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     public void periodic() {
         // This method will be called once per sceduler run
         // new DifferentialDriveWheelSpeeds()
-        double rawGyroAngle = gyro.getFusedHeading();
+        double rawGyroAngle = gyro.getAngle();
         if (leftPower == 0 && rightPower == 0 && !hasRobotStopped) {
             hasRobotStopped = true;
             lastGyroValue = rawGyroAngle;
@@ -123,7 +126,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         robotPose = new Pose2d();
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
-        gyro.setFusedHeading(0);
+        gyro.reset();
         gyroAngle = 0;
         gyroDriftValue = 0;
         totalGyroDrift = 0;
@@ -170,7 +173,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftMotorLeader.getSelectedSensorPosition() / ticksPerMeter,
-                -rightMotorLeader.getSelectedSensorPosition() / ticksPerMeter);
+                rightMotorLeader.getSelectedSensorPosition() / ticksPerMeter);
     }
 
     public double getLeftEncoder() {
@@ -332,12 +335,5 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
     public int isRevLimitSwitchClosedRight() {
         return rightMotorLeader.isRevLimitSwitchClosed();
-    }
-
-    @Override
-    public double[] getOrientation() {
-        double[] orientation = { 0, 0, 0 };
-        gyro.getYawPitchRoll(orientation);
-        return orientation;
     }
 }
