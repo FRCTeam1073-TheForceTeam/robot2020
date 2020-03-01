@@ -26,6 +26,10 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_led.start();
   }
 
+  public void setLEDData() {
+    m_led.setData(m_ledBuffer);
+  }
+
   // setPatternRGBAll sets the LEDs all to one color
   public void setPatternRGBAll(int r, int g, int b) {
     for (var i = 0; i < (m_ledBuffer.getLength()); i++) {
@@ -99,12 +103,6 @@ public class Bling extends SubsystemBase implements BlingInterface {
     m_ledBuffer.setRGB(i2, r, g, b);
     m_led.setData(m_ledBuffer);
   }
-
-  public void setLEDFromColor(int i) {
-    Color blue = Color.kBlue;
-    m_ledBuffer.setLED(i, blue);
-  }
-
   public AddressableLEDBuffer getM_LEDBuffer() {
     return m_ledBuffer;
   }
