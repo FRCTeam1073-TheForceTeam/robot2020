@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.commands.BlingControls;
 import frc.robot.subsystems.interfaces.BlingInterface;
+import frc.robot.subsystems.interfaces.WinchInterface;
 
 
 public class BlingControls extends CommandBase {
@@ -32,6 +33,7 @@ public class BlingControls extends CommandBase {
   int move;
   String gameData;
   BlingInterface bling;
+  WinchInterface winch;
 
   /**
    * Creates a new BlingControls.
@@ -61,28 +63,41 @@ public class BlingControls extends CommandBase {
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
-    // if (burst_done == 0) {
-      // burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
-    //   //bling.setPatternRGBAll(0, 0, 0);
-    // } else {
+    if (burst_done == 0) {
+      burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+      // bling.setPatternRGBAll(0, 0, 0);
+    } else {
       if (gameDataBlinkCount < 5) {
         if (gameData.equals("R")) {
           blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
+
         } else if (gameData.equals("G")) {
           blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 255, 0);
+
         } else if (gameData.equals("B")) {
           blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+
         } else if (gameData.equals("Y")) {
           blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
+
         } else {
           // TODO: Add other bling commands
-          bling.LEDRainbow();
+          
+          // The first two LEDs turn white if the winch is engaged
+          if (winch.isWinchEngaged()) {
+            bling.rangeRGB(0, 2, 255, 255, 255);
+          } else {
+            bling.rangeRGB(0, 2, 0, 0, 0);
+          }
+
+          // Changes the number and color of LEDS 3-9 based on the battery voltage
+          batteryBling(3, 6, 8, 12.5);
         }
       } else {
         // TODO: Add other bling commands
-        bling.LEDRainbow();
+        
       }
-    // }
+    }
   }
 
   // burst() lights LEDs from the middle out  
