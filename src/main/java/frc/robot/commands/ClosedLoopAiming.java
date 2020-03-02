@@ -35,10 +35,10 @@ public class ClosedLoopAiming extends CommandBase {
   public double currentElevation = 0;
 
   private double azimuthCorrection = 0.0;
-  private double accelConstant = 1;
+  private double accelConstant = 1.5;
   private double azimuthThreshold = 0.0;
   private double shooterVelocity = 0.0;
-  private double hoodAngle = 0.0;
+  private double hoodAngle = 0.0; 
   private TrajectoryConfiguration targetTrajectory;
 
   private CLAMode mode = CLAMode.VELOCITY;

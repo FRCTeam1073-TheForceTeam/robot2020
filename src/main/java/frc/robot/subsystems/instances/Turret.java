@@ -18,7 +18,7 @@ import frc.robot.subsystems.interfaces.TurretInterface;
 
 public class Turret extends SubsystemBase implements TurretInterface {
   private TalonSRX turretRotator;
-  private final double ticksPerRadian = 6441.318; //TODO find non-estimated ratio
+  private final double ticksPerRadian = 6441.318;
   private double range = 3;          // radians  TODO: get from CAD
   private double indexOffset = -.752; // radians  TODO: get from CAD
   private boolean disabled = true;
