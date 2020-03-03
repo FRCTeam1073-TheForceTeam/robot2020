@@ -55,6 +55,7 @@ public class BlingControls extends CommandBase {
     leds_from_middle = 0;
     move = 0;
     gameDataBlinkCount = 0;
+    SmartDashboard.putBoolean("Winch", winch.isWinchEngaged());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -81,18 +82,17 @@ public class BlingControls extends CommandBase {
         blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
 
       } else {
-        // // TODO: Add other bling commands
+        // TODO: Add other bling commands
           
-        // // The first two LEDs turn white if the winch is engaged
+        // The first two LEDs turn white if the winch is engaged
         if (winch.isWinchEngaged()) {
-          SmartDashboard.putString("unicorns", "YES!");
           bling.rangeRGB(0, 2, 255, 255, 255);
         } else {
           bling.rangeRGB(0, 2, 0, 0, 0);
         }
 
-        // // Changes the number and color of LEDS 3-9 based on the battery voltage
-        // batteryBling(3, 6, 8, 12.5);
+        // Changes the number and color of LEDS 3-9 based on the battery voltage
+        batteryBling(2, 6, 8, 12.5);
       }
     }
   }

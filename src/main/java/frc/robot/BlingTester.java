@@ -38,13 +38,13 @@ public class BlingTester extends TimedRobot {
   public void robotInit() {
     OI.init();
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
-    registerSubsystem((SubsystemBase) bling, blingControls);
-
     drivetrain = new Drivetrain();
     driveControls = new DriveControls(drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
+
+    bling = new Bling();
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    registerSubsystem((SubsystemBase) bling, blingControls);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
