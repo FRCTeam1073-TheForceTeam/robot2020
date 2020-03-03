@@ -28,6 +28,8 @@ public class BlingTester extends TimedRobot {
 
   public static Bling bling;
   public static BlingControls blingControls;
+  public static Drivetrain drivetrain;
+  public static DriveControls driveControls;
   // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -37,8 +39,12 @@ public class BlingTester extends TimedRobot {
     OI.init();
 
     bling = new Bling();
-    blingControls = new BlingControls(bling);
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     registerSubsystem((SubsystemBase) bling, blingControls);
+
+    drivetrain = new Drivetrain();
+    driveControls = new DriveControls(drivetrain);
+    registerSubsystem((SubsystemBase) drivetrain, driveControls);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {

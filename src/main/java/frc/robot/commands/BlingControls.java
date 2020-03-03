@@ -38,9 +38,10 @@ public class BlingControls extends CommandBase {
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_) {
+  public BlingControls(BlingInterface bling_, WinchInterface winch_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
+    this.winch = winch_;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -48,7 +49,7 @@ public class BlingControls extends CommandBase {
   @Override
   public void initialize() {
     time_burst = 0;
-    burst_done = 0;
+    burst_done = 1;
     time = 0;
     time_blinkyLEDs = 0;
     leds_from_middle = 0;
@@ -64,38 +65,34 @@ public class BlingControls extends CommandBase {
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
-      burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+      // burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
       // bling.setPatternRGBAll(0, 0, 0);
     } else {
-      if (gameDataBlinkCount < 5) {
-        if (gameData.equals("R")) {
-          blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
+      if (gameData.equals("R") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
 
-        } else if (gameData.equals("G")) {
-          blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 255, 0);
+      } else if (gameData.equals("G") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 255, 0);
 
-        } else if (gameData.equals("B")) {
-          blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+      } else if (gameData.equals("B") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
 
-        } else if (gameData.equals("Y")) {
-          blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
+      } else if (gameData.equals("Y") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
 
-        } else {
-          // TODO: Add other bling commands
-          
-          // The first two LEDs turn white if the winch is engaged
-          if (winch.isWinchEngaged()) {
-            bling.rangeRGB(0, 2, 255, 255, 255);
-          } else {
-            bling.rangeRGB(0, 2, 0, 0, 0);
-          }
-
-          // Changes the number and color of LEDS 3-9 based on the battery voltage
-          batteryBling(3, 6, 8, 12.5);
-        }
       } else {
-        // TODO: Add other bling commands
-        
+        // // TODO: Add other bling commands
+          
+        // // The first two LEDs turn white if the winch is engaged
+        if (winch.isWinchEngaged()) {
+          SmartDashboard.putString("unicorns", "YES!");
+          bling.rangeRGB(0, 2, 255, 255, 255);
+        } else {
+          bling.rangeRGB(0, 2, 0, 0, 0);
+        }
+
+        // // Changes the number and color of LEDS 3-9 based on the battery voltage
+        // batteryBling(3, 6, 8, 12.5);
       }
     }
   }

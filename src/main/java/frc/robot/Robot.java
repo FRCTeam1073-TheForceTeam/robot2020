@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
    */
 
   public static DriveControls driveControls;
-  public static DrivetrainInterface drivetrain;
+  public static Drivetrain drivetrain;
   public static CollectorControls collectorControls;
   public static CollectorInterface collector;
   public static HookControls hookControls;
@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     OI.init();
 
     bling = new Bling();
-    blingControls = new BlingControls(bling);
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     registerSubsystem((SubsystemBase) bling, blingControls);
 
     drivetrain = new Drivetrain();

@@ -5,12 +5,14 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.interfaces.WinchInterface;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -44,7 +46,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     Solenoid winch = new Solenoid(1, 7);
     Solenoid drivetrain = new Solenoid(1, 1);
 
-    private boolean winchEngaged;
+    private boolean winchEngaged = false;
 
     public Drivetrain() {
         // Setting up motors
@@ -60,7 +62,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         odometry = new DifferentialDriveOdometry(getAngleRadians());
 
         engageDrivetrain();
-
     }
 
     /**
@@ -108,6 +109,17 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
         robotPose = odometry.update(getAngleRadians(), wheelSpeeds.leftMetersPerSecond,
                 wheelSpeeds.rightMetersPerSecond);
+        
+        // TODO: See what controls are actually going to be used
+        if (OI.driverController.getYButtonPressed()) {
+            engageWinch();
+        }
+        
+        if (OI.driverController.getAButtonPressed()) {
+            engageDrivetrain();
+        }
+
+        SmartDashboard.putBoolean("Winch Engaged", isWinchEngaged());
     }
 
     /**
