@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -213,6 +215,10 @@ public class ClosedLoopAiming extends CommandBase {
   public TrajectoryConfiguration trajectoryConfigurationFromAngle(double angle, double portRange, double portHeight) {
     return new TrajectoryConfiguration(angle, getVelocity(angle, portRange, portHeight));
   }
+
+  public boolean GetTrackerStatus() {
+    return !isFinished();
+  } 
 
   class TrajectoryConfiguration {
     double velocity = 0;
