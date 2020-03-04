@@ -27,14 +27,12 @@ public class ClosedLoopAiming extends CommandBase {
   AdvancedTrackerInterface portTracker;
   ShooterInterface shooter;
   LightingInterface lights;
+  AdvancedTrackerInterface.AdvancedTargetData currentTarget;
+
+  private String trackerStatus;
 
   private double azimuthTarget;
   private boolean temporary;
-
-  private double currentAzimuth = 0;
-  public double currentDistance = 0;
-  public double currentRange = 0;
-  public double currentElevation = 0;
 
   private double azimuthCorrection = 0.0;
   private double accelConstant = 1.5;
@@ -63,6 +61,7 @@ public class ClosedLoopAiming extends CommandBase {
     mode = mode_;
     temporary = temporary_;
     azimuthThreshold = azimuthThreshold_;
+    trackerStatus = "";
     addRequirements((SubsystemBase) turret, (SubsystemBase) portTracker);
   }
 
@@ -169,23 +168,42 @@ public class ClosedLoopAiming extends CommandBase {
   @Override
   public void execute() {
     lights.setLEDLevel(1);
-    currentAzimuth = portTracker.getAdvancedTargets()[0].azimuth;
-    currentDistance = portTracker.getAdvancedTargets()[0].distance;
-    currentRange = portTracker.getAdvancedTargets()[0].range;
-    currentElevation = portTracker.getAdvancedTargets()[0].elevation;
-    if(mode == CLAMode.VELOCITY)
-      azimuthCorrection = (azimuthTarget - currentAzimuth) * accelConstant;
-    if(mode == CLAMode.POSITION)
-      azimuthCorrection = azimuthTarget + currentAzimuth;
-    targetTrajectory = getDoublePortConfiguration(currentRange, currentElevation);
-    shooterVelocity = targetTrajectory.velocity;
-    hoodAngle = targetTrajectory.angle;
-    shooter.setHoodAngle(hoodAngle);
-    // shooter.setFlywheelSpeed(getFlywheelRotationRate(shooterVelocity));
-    if(mode == CLAMode.VELOCITY)
-      turret.setVelocity(azimuthCorrection);
-    if(mode == CLAMode.POSITION)
-      turret.setPosition(azimuthCorrection);
+    AdvancedTrackerInterface.AdvancedTargetData[] targets;
+    targets = portTracker.getAdvancedTargets();
+    if(targets.length > 0) {                //makes sure we have a viable target
+      currentTarget = targets[0];     
+      if(currentTarget.quality >= 50){      //filters targets for high quality
+        if(mode == CLAMode.VELOCITY){
+          azimuthCorrection = (azimuthTarget - currentTarget.azimuth)* accelConstant;
+        }
+        if(mode == CLAMode.POSITION){
+          azimuthCorrection = azimuthTarget + currentTarget.azimuth;
+        }
+        targetTrajectory = getDoublePortConfiguration(currentTarget.range, currentTarget.elevation);
+        shooterVelocity = targetTrajectory.velocity;
+        hoodAngle = targetTrajectory.angle;
+        shooter.setHoodAngle(hoodAngle);
+        // shooter.setFlywheelSpeed(getFlywheelRotationRate(shooterVelocity));
+        if(mode == CLAMode.VELOCITY){
+          turret.setVelocity(azimuthCorrection);
+        }
+        if(mode == CLAMode.POSITION){
+          turret.setPosition(azimuthCorrection);
+        }
+        trackerStatus = "Tracking";
+      }
+      else {
+        trackerStatus = "Low Quality";
+        if(mode == CLAMode.VELOCITY){
+          azimuthCorrection = (azimuthTarget - currentTarget.azimuth)* accelConstant * 0.5;
+          turret.setVelocity(azimuthCorrection);
+        }
+      }
+    }
+    else {
+      trackerStatus = "Target Not Found";
+      turret.disable();
+    }
   }
 
   /**
@@ -201,24 +219,25 @@ public class ClosedLoopAiming extends CommandBase {
   @Override
   public void end(final boolean interrupted) {
     turret.disable();
+    trackerStatus = "Disabled";
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (temporary)
-      return Math.abs(azimuthTarget - currentAzimuth) < azimuthThreshold;
+      return Math.abs(azimuthTarget - currentTarget.azimuth) < azimuthThreshold;
     else
       return false;
+  }
+
+  public String GetTrackerStatus(){
+    return trackerStatus;
   }
   
   public TrajectoryConfiguration trajectoryConfigurationFromAngle(double angle, double portRange, double portHeight) {
     return new TrajectoryConfiguration(angle, getVelocity(angle, portRange, portHeight));
   }
-
-  public boolean GetTrackerStatus() {
-    return !isFinished();
-  } 
 
   class TrajectoryConfiguration {
     double velocity = 0;

@@ -55,5 +55,4 @@ public interface AdvancedTrackerInterface {
      * Return timestamp of last update.
      */
     public long getLastAdvancedTargetUpdate();
-
 }
