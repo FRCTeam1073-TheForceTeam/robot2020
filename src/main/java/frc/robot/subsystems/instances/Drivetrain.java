@@ -43,8 +43,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private Pose2d robotPose = new Pose2d();
     private double gyroAngle = 0;
 
-    Solenoid winch = new Solenoid(1, 7);
-    Solenoid drivetrain = new Solenoid(1, 1);
+    Solenoid winch = new Solenoid(1, 1);
+    Solenoid drivetrain = new Solenoid(1, 7);
 
     private boolean winchEngaged = false;
 
@@ -236,8 +236,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
 
         leftMotorLeader.configPeakOutputForward(1.0);
+        leftMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
+        leftMotorFollower.configPeakOutputReverse(-1.0);
+        rightMotorLeader.configPeakOutputForward(1.0);
         rightMotorLeader.configPeakOutputReverse(-1.0);
+        rightMotorFollower.configPeakOutputForward(1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -250,6 +254,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.follow(leftMotorLeader);
         rightMotorFollower.follow(leftMotorLeader);
 
+        leftMotorLeader.setInverted(false);
+        leftMotorFollower.setInverted(false);
         rightMotorLeader.setInverted(true);
         rightMotorFollower.setInverted(true);
         
@@ -298,12 +304,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
         rightMotorFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 28, 33, 0.25));
 
-        leftMotorLeader.setInverted(false);
-
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
+
         double P = 0.05;
         double I = 0;
         double D = 0;
@@ -318,6 +324,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorFollower.setInverted(false);
         rightMotorFollower.follow(rightMotorLeader);
         rightMotorFollower.setInverted(false);
+        leftMotorLeader.setInverted(false);
+        rightMotorLeader.setInverted(false);
 
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
