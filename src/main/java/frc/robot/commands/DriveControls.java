@@ -47,7 +47,7 @@ public class DriveControls extends CommandBase {
         if (Math.abs(rawAxisValue) < deadzone) {
             return 0;
         } else {
-            return rawAxisValue;
+            return (Math.signum(rawAxisValue) / (1 - deadzone)) * (Math.abs(rawAxisValue) - deadzone);
         }
     }
 

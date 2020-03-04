@@ -9,7 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
-//import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -20,38 +19,23 @@ import frc.robot.shuffleboard.*;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class BlingTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
 
-  public static DriveControls driveControls;
-  public static Drivetrain drivetrain;
-  public static CollectorControls collectorControls;
-  public static CollectorInterface collector;
-  public static HookControls hookControls;
-  public static HookInterface hook;
-  public static LiftControls liftControls;
-  public static LiftInterface lift;
-  public static MagazineControls magazineControls;
-  public static MagazineInterface magazine;
-  public static ShooterControls shooterControls;
-  public static Shooter shooter;
-  public static TurretControls turretControls;
-  public static TurretInterface turret;
-  public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static BlingControls blingControls;
-  public static CommandBase driveAuto;
+  public static Drivetrain drivetrain;
+  public static DriveControls driveControls;
   // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-
     OI.init();
 
     drivetrain = new Drivetrain();
@@ -61,36 +45,6 @@ public class Robot extends TimedRobot {
     bling = new Bling();
     blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     registerSubsystem((SubsystemBase) bling, blingControls);
-
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
-
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
-
-    lift = new Lift();
-    liftControls = new LiftControls(lift);
-    registerSubsystem((SubsystemBase) lift, liftControls);
-
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
-
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
-
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase) turret, turretControls);
-
-    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-    widgets.register();
-
-    //driveAuto = autoTurn.auto90left(drivetrain);
-
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -126,9 +80,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
-      magazineControls.schedule();
-    
   }
 
   /**
@@ -136,8 +87,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    CommandScheduler.getInstance().run();
   }
 
   @Override
