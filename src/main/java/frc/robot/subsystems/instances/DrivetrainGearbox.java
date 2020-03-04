@@ -253,4 +253,11 @@ public class DrivetrainGearbox extends SubsystemBase implements DrivetrainInterf
         // TODO Auto-generated method stub
 
     }
+
+    public void setWinchPower(double power) {
+    }
+
+    public boolean isDrivetrainEngaged() {
+        return true;
+    }
 }

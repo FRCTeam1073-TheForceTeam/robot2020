@@ -240,8 +240,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.configPeakOutputReverse(-1.0);
         rightMotorFollower.configPeakOutputReverse(-1.0);
 
-        // leftMotorLeader.setInverted(true);
-
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
@@ -249,7 +247,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.setSensorPhase(true);
 
         leftMotorFollower.follow(leftMotorLeader);
-        rightMotorFollower.follow(rightMotorLeader);
+        rightMotorLeader.follow(leftMotorLeader);
+        rightMotorFollower.follow(leftMotorLeader);
+
+        rightMotorLeader.setInverted(true);
+        rightMotorFollower.setInverted(true);
         
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
@@ -262,7 +264,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         winch.set(true);
         drivetrain.set(false);
-        // solenoid.set(true);
 
         winchEngaged = true;
     }
@@ -347,5 +348,13 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
     public int isRevLimitSwitchClosedRight() {
         return rightMotorLeader.isRevLimitSwitchClosed();
+    }
+
+    public void setWinchPower(double power) {
+        leftMotorLeader.set(power);
+    }
+
+    public boolean isDrivetrainEngaged() {
+        return !winchEngaged;
     }
 }

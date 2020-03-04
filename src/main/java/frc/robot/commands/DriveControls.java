@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.WinchInterface;
 
 /**
  * Add your docs here.
@@ -18,6 +19,7 @@ import frc.robot.subsystems.interfaces.DrivetrainInterface;
 public class DriveControls extends CommandBase {
 
     DrivetrainInterface drivetrain;
+    WinchInterface winch;
     private double deadzone = Constants.CONTROLLER_DEADZONE;
     private double multiplier;
     private double forward;
@@ -29,8 +31,9 @@ public class DriveControls extends CommandBase {
      * Sets the drive controls
      * @param drivetrain
      */
-    public DriveControls(DrivetrainInterface drivetrain) {
+    public DriveControls(DrivetrainInterface drivetrain, WinchInterface winch) {
         this.drivetrain = drivetrain;
+        this.winch = winch;
         addRequirements((SubsystemBase)drivetrain);
     }
 
@@ -117,11 +120,16 @@ public class DriveControls extends CommandBase {
 
         rotation *= -1;
 
-        arcadeCompute();
+        if (drivetrain.isDrivetrainEngaged()) {
+            arcadeCompute();
+        
+            // passes the final axis values into the drivetrain
+            drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+        }
 
-
-        // passes the final axis values into the drivetrain
-        drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+        if (winch.isWinchEngaged()) {
+            winch.setWinchPower(addMultiplier(forward));
+        }
 
         // ensures that the driver doesn't accidentally reset the odometry but makes it an option
         if (OI.driverController.getStartButtonPressed() && OI.driverController.getBackButtonPressed()) {

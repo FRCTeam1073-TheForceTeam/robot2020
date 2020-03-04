@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
   public static Bling bling;
   public static BlingControls blingControls;
   public static CommandBase driveAuto;
+  public static WinchInterface winch;
   // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -55,7 +56,7 @@ public class Robot extends TimedRobot {
     OI.init();
 
     drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain);
+    driveControls = new DriveControls(drivetrain, drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     bling = new Bling();
