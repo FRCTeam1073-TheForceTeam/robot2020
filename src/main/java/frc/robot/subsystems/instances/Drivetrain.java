@@ -261,6 +261,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
+        leftMotorLeader.setIntegralAccumulator(0);
+        rightMotorLeader.setIntegralAccumulator(0);
 
         // leftMotorLeader.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
         // leftMotorLeader.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
@@ -321,8 +323,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.config_kD(0, D);
 
         leftMotorFollower.follow(leftMotorLeader);
-        leftMotorFollower.setInverted(false);
         rightMotorFollower.follow(rightMotorLeader);
+        leftMotorFollower.setInverted(false);
         rightMotorFollower.setInverted(false);
         leftMotorLeader.setInverted(false);
         rightMotorLeader.setInverted(false);
