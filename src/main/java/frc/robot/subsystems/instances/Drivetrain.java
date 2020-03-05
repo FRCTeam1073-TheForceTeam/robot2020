@@ -103,11 +103,6 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
             gyroAngle = 0;
         }
 
-        SmartDashboard.putBoolean("Left Leader is ", leftMotorLeader.getInverted());
-        SmartDashboard.putBoolean("Right Leader is ", rightMotorLeader.getInverted());
-        SmartDashboard.putBoolean("Left Follower is ", leftMotorFollower.getInverted());
-        SmartDashboard.putBoolean("Right Follower is ", rightMotorFollower.getInverted());
-
         if (hasRobotStopped) {
             gyroDriftValue = rawGyroAngle - lastGyroValue;
         }
