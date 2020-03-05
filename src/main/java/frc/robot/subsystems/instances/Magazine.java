@@ -25,7 +25,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   private static DigitalInput goingIn;
   private static DigitalInput goingOut;
   private static DigitalInput exit;
-  private boolean cellEntering, cellExiting;
+  private boolean cellEntering, cellIn, cellOut, cellExiting;
 
   public Magazine() {
     // magMotor = new WPI_TalonSRX(26);//24 is temporary ID
@@ -70,6 +70,16 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
     if (entrance.get() == false)
       cellEntering = false;
+      
+
+    // if (goingIn.get() == true && cellEntering == false && cellIn == false && cellCount < 6) {
+    //   cellCount++;
+    //   cellIn = true;
+    // }
+
+    // if (goingIn.get() == false)
+    //   cellIn = false;
+
 
     if (exit.get() == true && cellExiting == false && cellCount > 0) {
       cellCount--;
