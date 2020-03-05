@@ -7,12 +7,9 @@
 
 package frc.robot.commands;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
@@ -92,7 +89,7 @@ public class BlingControls extends CommandBase {
         }
 
         // Changes the number and color of LEDS 3-9 based on the battery voltage
-        batteryBling(2, 6, 8, 12.5);
+        batteryBling(2, 6, 8.0, 12.5);
       }
     }
   }

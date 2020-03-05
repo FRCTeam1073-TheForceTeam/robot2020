@@ -42,7 +42,7 @@ public class LowerRobotTester extends TimedRobot {
     OI.init();
 
     drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain);
+    driveControls = new DriveControls(drivetrain, drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     bling = new Bling();

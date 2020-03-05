@@ -55,6 +55,7 @@ public class RobotMercury extends TimedRobot {
   public static BlingControls blingControls;
   public static SendableChooser<Command> chooser;
   public static autoDriveForward AutoDriveForward;
+  public static WinchInterface winch;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -65,7 +66,7 @@ public class RobotMercury extends TimedRobot {
     OI.init();
 
     drivetrain = new DrivetrainMercury();
-    driveControls = new DriveControls(drivetrain);
+    driveControls = new DriveControls(drivetrain, (WinchInterface)drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
     
     bling = new Bling();

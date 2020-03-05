@@ -28,7 +28,8 @@ public class DrivetrainGearboxTester extends TimedRobot {
    */
 
   public static DriveControls driveControls;
-  public static DrivetrainInterface drivetrain;
+  public static Drivetrain drivetrain;
+  public static WinchInterface winch;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -37,7 +38,7 @@ public class DrivetrainGearboxTester extends TimedRobot {
     OI.init();
 
     drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain);
+    driveControls = new DriveControls(drivetrain, drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
   }
 
