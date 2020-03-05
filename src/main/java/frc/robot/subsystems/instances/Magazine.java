@@ -22,15 +22,19 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   // private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
   // Will likely not have encoder.
   private static DigitalInput entrance;
+  private static DigitalInput goingIn;
+  private static DigitalInput goingOut;
   private static DigitalInput exit;
   private boolean cellEntering, cellExiting;
 
   public Magazine() {
     // magMotor = new WPI_TalonSRX(26);//24 is temporary ID
     cellCount = 0;
-    // Initializes a digital input with channel
+    // Initializes a four digital inputs with channels
     entrance = new DigitalInput(0);
-    exit = new DigitalInput(1);
+    goingIn = new DigitalInput(1);
+    goingOut = new DigitalInput(2);
+    exit = new DigitalInput(3);
   }
 
   @Override
@@ -54,8 +58,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /**
    * updateCellCount() If a ball passes through the entrance, a power cell is
    * added The power cell number limit is 5. Param set to max of 6 in order to
-   * provide a warning. If a ball passes through the exit, a power cell is
-   * decreased
+   * provide  warning. Power cell value decreased after passing through exit.
    * 
    */
   public void updateCellCount() {
@@ -94,7 +97,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   @Override
   public boolean getEnteranceState(){
-    return enterance.get();
+    return entrance.get();
   }
 
   @Override
