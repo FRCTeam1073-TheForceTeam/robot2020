@@ -22,6 +22,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 
 public class Drivetrain extends SubsystemBase implements DrivetrainInterface, WinchInterface {
     private ADXRS450_Gyro gyro;
@@ -101,6 +102,12 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
             hasRobotStopped = false;
             gyroAngle = 0;
         }
+
+        SmartDashboard.putBoolean("Left Leader is ", leftMotorLeader.getInverted());
+        SmartDashboard.putBoolean("Right Leader is ", rightMotorLeader.getInverted());
+        SmartDashboard.putBoolean("Left Follower is ", leftMotorFollower.getInverted());
+        SmartDashboard.putBoolean("Right Follower is ", rightMotorFollower.getInverted());
+
         if (hasRobotStopped) {
             gyroDriftValue = rawGyroAngle - lastGyroValue;
         }
@@ -214,10 +221,16 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     }
 
     public void engageWinch(){
+
         leftMotorLeader.configFactoryDefault();
         rightMotorLeader.configFactoryDefault();
         leftMotorFollower.configFactoryDefault();
         rightMotorFollower.configFactoryDefault();
+        
+        leftMotorLeader.neutralOutput();
+        leftMotorFollower.neutralOutput();
+        rightMotorLeader.neutralOutput();
+        rightMotorFollower.neutralOutput();
 
         // Keep this false for testing on roadkill where motors are unplugged
         leftMotorLeader.setSafetyEnabled(false);
@@ -254,10 +267,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.follow(leftMotorLeader);
         rightMotorFollower.follow(leftMotorLeader);
 
-        leftMotorLeader.setInverted(false);
-        leftMotorFollower.setInverted(false);
-        rightMotorLeader.setInverted(true);
-        rightMotorFollower.setInverted(true);
+        leftMotorLeader.setInverted(TalonFXInvertType.CounterClockwise);
+        leftMotorFollower.setInverted(TalonFXInvertType.CounterClockwise);
+        rightMotorLeader.setInverted(TalonFXInvertType.Clockwise);
+        rightMotorFollower.setInverted(TalonFXInvertType.Clockwise);
         
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
@@ -281,6 +294,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.configFactoryDefault();
         leftMotorFollower.configFactoryDefault();
         rightMotorFollower.configFactoryDefault();
+
+        leftMotorLeader.neutralOutput();
+        leftMotorFollower.neutralOutput();
+        rightMotorLeader.neutralOutput();
+        rightMotorFollower.neutralOutput();
 
         leftMotorLeader.setSafetyEnabled(false);
         rightMotorLeader.setSafetyEnabled(false);
@@ -324,10 +342,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         leftMotorFollower.follow(leftMotorLeader);
         rightMotorFollower.follow(rightMotorLeader);
-        leftMotorFollower.setInverted(false);
-        rightMotorFollower.setInverted(false);
-        leftMotorLeader.setInverted(false);
-        rightMotorLeader.setInverted(false);
+
+        leftMotorFollower.setInverted(TalonFXInvertType.CounterClockwise);
+        rightMotorFollower.setInverted(TalonFXInvertType.CounterClockwise);
+        leftMotorLeader.setInverted(TalonFXInvertType.CounterClockwise);
+        rightMotorLeader.setInverted(TalonFXInvertType.CounterClockwise);
 
         leftMotorLeader.setSelectedSensorPosition(0);
         rightMotorLeader.setSelectedSensorPosition(0);
