@@ -10,17 +10,12 @@ package frc.robot.subsystems.interfaces;
 public interface LiftInterface {
 
     // brake control
-    void setBrakeOn();
-    void setBrakeOff();
-    boolean isBrakeSet();
+    // void setBrakeOn();
+    // void setBrakeOff();
+    // boolean isBrakeSet();
 
     // potentiometer
-    boolean isLiftFullyExtended();
-    boolean isLiftFullyRetracted();
-    double liftExtension();
-
-    // pin
-    void pinLift();
-    void unpinLift();
-    boolean isPinned();
+    // boolean isLiftFullyExtended();
+    // boolean isLiftFullyRetracted();
+    // double liftExtension();
 }
