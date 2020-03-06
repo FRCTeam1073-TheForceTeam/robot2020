@@ -250,4 +250,11 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
         // TODO Auto-generated method stub
 
     }
+
+    public boolean isDrivetrainEngaged() {
+        return true;
+    }
+
+    public void setWinchPower(double power) {
+    }
 }

@@ -25,4 +25,6 @@ public interface WinchInterface {
     public int isRevLimitSwitchClosedLeft();
 
     public int isRevLimitSwitchClosedRight();
+
+    public void setWinchPower(double power);
 }
