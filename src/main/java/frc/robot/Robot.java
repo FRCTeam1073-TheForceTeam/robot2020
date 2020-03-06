@@ -125,10 +125,7 @@ public class Robot extends TimedRobot {
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
-  public void autonomousInit() {
-
-      magazineControls.schedule();
-    
+  public void autonomousInit() {    
   }
 
   /**
