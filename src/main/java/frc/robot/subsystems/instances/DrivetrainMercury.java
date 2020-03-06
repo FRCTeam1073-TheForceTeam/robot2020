@@ -255,4 +255,11 @@ public class DrivetrainMercury extends SubsystemBase implements DrivetrainInterf
     public double[] getOrientation() {
         return new double[] { 0, 0, 0 };
     }
+
+    public boolean isDrivetrainEngaged() {
+        return true;
+    }
+
+    public void setWinchPower(double power) {
+    }
 }

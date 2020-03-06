@@ -9,7 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -20,26 +19,23 @@ import frc.robot.shuffleboard.*;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class LowerRobotTester extends TimedRobot {
+public class BlingTester extends TimedRobot {
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
 
-  public static DriveControls driveControls;
-  public static Drivetrain drivetrain;
-  public static CollectorControls collectorControls;
-  public static CollectorInterface collector;
   public static Bling bling;
   public static BlingControls blingControls;
-  public static ShuffleboardWidgets widgets;
+  public static Drivetrain drivetrain;
+  public static DriveControls driveControls;
+  // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-
     OI.init();
 
     drivetrain = new Drivetrain();
@@ -49,14 +45,6 @@ public class LowerRobotTester extends TimedRobot {
     bling = new Bling();
     blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     registerSubsystem((SubsystemBase) bling, blingControls);
-
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
-
-    widgets = new ShuffleboardWidgets(drivetrain, null, null, null, null, (WinchInterface) drivetrain);
-    widgets.register();
-
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -92,10 +80,6 @@ public class LowerRobotTester extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //if(driveAuto != null){
-    //  driveAuto.schedule();
-    //}
   }
 
   /**
@@ -103,8 +87,6 @@ public class LowerRobotTester extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //CommandScheduler.getInstance().run();
   }
 
   @Override
