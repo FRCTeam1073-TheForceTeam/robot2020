@@ -288,15 +288,19 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 0.05;
+        double P = 0;
         double I = 0;
         double D = 0;
+        double F = 0;
+
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
         leftMotorLeader.config_kI(0, I);
         rightMotorLeader.config_kI(0, I);
         leftMotorLeader.config_kD(0, D);
         rightMotorLeader.config_kD(0, D);
+        leftMotorLeader.config_kF(0, F);
+        rightMotorLeader.config_kF(0, F);
 
         leftMotorFollower.follow(leftMotorLeader);
         leftMotorFollower.setInverted(false);

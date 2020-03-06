@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
@@ -106,6 +107,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    // OI.driverController.setRumble(RumbleType.kLeftRumble, 65536);
     CommandScheduler.getInstance().run();
   }
 
