@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,7 +22,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * Creates a new Magazine.
    */
   private static int cellCount;// The cell count as determined by the trip of a distance sensor facing an opposite wall
-  // private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
+  private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
   // Will likely not have encoder.
   private static DigitalInput entrance;
   private static DigitalInput goingIn;
@@ -28,7 +31,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   private boolean cellEntering, cellIn, cellOut, cellExiting;
 
   public Magazine() {
-    // magMotor = new WPI_TalonSRX(26);//24 is temporary ID
+    magMotor = new WPI_TalonSRX(26);
     cellCount = 0;
     // Initializes a four digital inputs with channels
     entrance = new DigitalInput(0);
@@ -45,12 +48,12 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   @Override
   /**
-   * run sets power to the magazine motor
+   * sets power to the magazine motor
    * 
    * @param - double power: between 0 and 1. The power to the motor
    */
-  public void run(double power) {
-    // magMotor.set(power);
+  public void setPower(double power) {
+    magMotor.set(ControlMode.PercentOutput, power);
 
   }
 

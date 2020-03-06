@@ -11,7 +11,7 @@ package frc.robot.subsystems.interfaces;
  */
 public interface MagazineInterface {
 
-    void run(double speed);
+    void setPower(double speed);
 
     void updateCellCount();
 
