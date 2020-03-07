@@ -67,9 +67,9 @@ public class Robot extends TimedRobot {
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
 
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
+    // hook = new Hook();
+    // hookControls = new HookControls(hook);
+    // registerSubsystem((SubsystemBase) hook, hookControls);
 
     lift = new Lift();
     liftControls = new LiftControls(lift);
@@ -79,16 +79,16 @@ public class Robot extends TimedRobot {
     magazineControls = new MagazineControls(magazine);
     registerSubsystem((SubsystemBase) magazine, magazineControls);
 
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
+    // shooter = new Shooter();
+    // shooterControls = new ShooterControls(shooter);
+    // registerSubsystem((SubsystemBase) shooter, shooterControls);
 
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase) turret, turretControls);
+    // turret = new Turret();
+    // turretControls = new TurretControls(turret);
+    // registerSubsystem((SubsystemBase) turret, turretControls);
 
-    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-    widgets.register();
+    // widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
+    // widgets.register();
 
     //driveAuto = autoTurn.auto90left(drivetrain);
 
