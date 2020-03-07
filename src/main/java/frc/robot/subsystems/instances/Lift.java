@@ -44,9 +44,11 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
 
   // // Initializes an AnalogPotentiometer on port "potentiometerValue"
-  // AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
+  // AnalogPotentiometer potentiometer = new
+  // AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
 
-  public Lift() {
+
+public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
     liftMotor.configFactoryDefault();
