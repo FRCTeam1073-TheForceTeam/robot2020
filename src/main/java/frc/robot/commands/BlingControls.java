@@ -31,11 +31,12 @@ public class BlingControls extends CommandBase {
   double match_time;
   int move;
   String gameData;
+  int i_mag;
+  
+  AdvancedTrackerInterface portTracker;
   BlingInterface bling;
   WinchInterface winch;
   MagazineInterface magazine;
-  int i_mag;
-  AdvancedTrackerInterface portTracker;
 
   /**
    * Creates a new BlingControls.
