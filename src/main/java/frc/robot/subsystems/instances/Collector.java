@@ -88,4 +88,9 @@ public class Collector extends SubsystemBase implements CollectorInterface {
     collectorSolenoidIn.set(false);
     collectorSolenoidOut.set(false);
   }
+
+  @Override
+  public boolean getCollectorSolenoidIn(){
+    return collectorSolenoidIn.get();
+  }
 }
