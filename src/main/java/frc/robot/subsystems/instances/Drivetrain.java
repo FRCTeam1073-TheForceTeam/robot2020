@@ -135,6 +135,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.putNumber("Left Position", leftMotorLeader.getSelectedSensorPosition());
         SmartDashboard.putNumber("Right Position", rightMotorLeader.getSelectedSensorPosition());
         SmartDashboard.putBoolean("Winch Engaged", isWinchEngaged());
+        SmartDashboard.putString("Coordinates", "(" + Units.metersToFeet(getRobotPose().getTranslation().getX()) + ","
+                + Units.metersToFeet(getRobotPose().getTranslation().getY()) + ")");
     }
 
     /**
