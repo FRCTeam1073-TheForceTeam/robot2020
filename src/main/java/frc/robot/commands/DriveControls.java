@@ -12,6 +12,7 @@ import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.interfaces.WinchInterface;
+import frc.robot.Utility;
 
 /**
  * Add your docs here.
@@ -39,19 +40,6 @@ public class DriveControls extends CommandBase {
 
     // starts the robot
     public void initialize() {
-    }
-
-    /**
-     * sets raw axis value inside the deadzone to zero
-     * @param rawAxisValue
-     * @return deadzoned axisValue
-     */
-    public double deadzone(double rawAxisValue) {
-        if (Math.abs(rawAxisValue) < deadzone) {
-            return 0;
-        } else {
-            return (Math.signum(rawAxisValue) / (1 - deadzone)) * (Math.abs(rawAxisValue) - deadzone);
-        }
     }
 
     /**
@@ -113,10 +101,10 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        multiplier = deadzone(OI.driverController.getRawAxis(3));
+        multiplier = Utility.deadzone(OI.driverController.getRawAxis(3));
 
-        forward = deadzone(OI.driverController.getRawAxis(1));
-        rotation = deadzone(OI.driverController.getRawAxis(4));
+        forward = Utility.deadzone(OI.driverController.getRawAxis(1));
+        rotation = Utility.deadzone(OI.driverController.getRawAxis(4));
 
         rotation *= -1;
 
