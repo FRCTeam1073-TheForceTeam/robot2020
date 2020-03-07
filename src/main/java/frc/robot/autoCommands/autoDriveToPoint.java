@@ -7,20 +7,25 @@
 
 package frc.robot.autoCommands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
-public class autoDriveToPoint extends CommandBase {
+public class autoDriveToPoint extends SequentialCommandGroup {
   DrivetrainInterface drivetrain;
+
   /**
    * Creates a new autoDriveToPoint.
    */
   public autoDriveToPoint(double startY, double startX, double endY, double endX) {
-    addRequirements((SubsystemBase)drivetrain);
-    
-    new autoTurn(drivetrain, returnAngleToTurn(startY, startX, endY, endX));
-    new autoDriveForward(drivetrain, returnDistanceToTravel(startY, startX, endY, endX));
+    addRequirements((SubsystemBase) drivetrain);
+    sequence(
+        new autoTurn(drivetrain, returnAngleToTurn(startY, startX, endY, endX)),
+        new autoDriveForward(drivetrain, returnDistanceToTravel(startY, startX, endY, endX))
+    );
   }
 
   // Called when the command is initially scheduled.
@@ -45,14 +50,17 @@ public class autoDriveToPoint extends CommandBase {
   }
 
   public double returnAngleToTurn(double startY, double startX, double endY, double endX) {
-    // Calculates the length of the legs of a triangle made with the robot path as the hypotenuse
+    // Calculates the length of the legs of a triangle made with the robot path as
+    // the hypotenuse
     double XLength = Math.abs(endX - startX);
     double YLength = Math.abs(endY - startY);
 
-    // Uses the inverse tangent to calculate the measure of the angle in degrees that the robot should turn
+    // Uses the inverse tangent to calculate the measure of the angle in degrees
+    // that the robot should turn
     double angleDegrees = Math.atan(YLength / XLength);
 
-    // Allows the robot to move in the shortest way instead of all the way to the right
+    // Allows the robot to move in the shortest way instead of all the way to the
+    // right
     if (angleDegrees > 180) {
       angleDegrees = -360 + angleDegrees;
     }
@@ -65,7 +73,8 @@ public class autoDriveToPoint extends CommandBase {
   }
 
   public double returnDistanceToTravel(double startY, double startX, double endY, double endX) {
-    // Calculates the length of the legs of a triangle made with the robot path as the hypotenuse
+    // Calculates the length of the legs of a triangle made with the robot path as
+    // the hypotenuse
     double XLength = Math.abs(endX - startX);
     double YLength = Math.abs(endY - startY);
 

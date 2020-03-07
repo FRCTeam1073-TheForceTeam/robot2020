@@ -53,7 +53,7 @@ public class autoDriveForward extends CommandBase {
   @Override
   public void execute() {
     currentPose = drivetrain.getRobotPose();
-    velocity = accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm());
+    velocity = Math.min(Constants.MAX_DRIVETRAIN_VELOCITY,Math.max(-Constants.MAX_DRIVETRAIN_VELOCITY,(accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm()))));
 
     // ensures that it doesn't try to go faster than it's able to
     drivetrain.setVelocity(Math.min(velocity, maxVelocity), Math.min(velocity, maxVelocity));

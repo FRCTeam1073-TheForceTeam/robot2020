@@ -254,6 +254,11 @@ public class DrivetrainGearbox extends SubsystemBase implements DrivetrainInterf
 
     }
 
+    @Override
+    public double[] getOrientation() {
+        return new double[] { 0, 0, 0 };
+    }
+
     public void setWinchPower(double power) {
     }
 
