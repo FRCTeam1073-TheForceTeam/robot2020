@@ -7,8 +7,9 @@
 
 package frc.robot.subsystems.instances;
 
-//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,20 +19,27 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /**
    * Creates a new Magazine.
    */
-  private static int cellCount;// The cell count as determined by the trip of a distance sensor facing an
-                               // opposite wall
-  // private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
+  private static int cellCount;// The cell count as determined by the trip of a distance sensor facing an opposite wall
+  private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
   // Will likely not have encoder.
   private static DigitalInput entrance;
+  private static DigitalInput goingIn;
+  private static DigitalInput goingOut;
   private static DigitalInput exit;
-  private boolean cellEntering, cellExiting;
+  private boolean cellEntering, cellIn, cellOut, cellExiting;
 
   public Magazine() {
-    // magMotor = new WPI_TalonSRX(26);//24 is temporary ID
+    magMotor = new WPI_TalonSRX(26);
     cellCount = 0;
-    // Initializes a digital input with channel
+    // Initializes a four digital inputs with channels
     entrance = new DigitalInput(0);
-    exit = new DigitalInput(1);
+    goingIn = new DigitalInput(1);
+    goingOut = new DigitalInput(2);
+    exit = new DigitalInput(3);
+
+    magMotor.configFactoryDefault();
+    magMotor.setSafetyEnabled(false);
+    magMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -42,12 +50,12 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   @Override
   /**
-   * run sets power to the magazine motor
+   * sets power to the magazine motor
    * 
    * @param - double power: between 0 and 1. The power to the motor
    */
-  public void run(double power) {
-    // magMotor.set(power);
+  public void setPower(double power) {
+    magMotor.set(ControlMode.PercentOutput, power);
 
   }
 
@@ -55,8 +63,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /**
    * updateCellCount() If a ball passes through the entrance, a power cell is
    * added The power cell number limit is 5. Param set to max of 6 in order to
-   * provide a warning. If a ball passes through the exit, a power cell is
-   * decreased
+   * provide  warning. Power cell value decreased after passing through exit.
    * 
    */
   public void updateCellCount() {
@@ -68,6 +75,16 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
     if (entrance.get() == false)
       cellEntering = false;
+      
+
+    // if (goingIn.get() == true && cellEntering == false && cellIn == false && cellCount < 6) {
+    //   cellCount++;
+    //   cellIn = true;
+    // }
+
+    // if (goingIn.get() == false)
+    //   cellIn = false;
+
 
     if (exit.get() == true && cellExiting == false && cellCount > 0) {
       cellCount--;
@@ -91,5 +108,15 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    */
   public int getCellCount() {
     return cellCount;
+  }
+
+  @Override
+  public boolean getEnteranceState(){
+    return entrance.get();
+  }
+
+  @Override
+  public boolean getExitState(){
+    return exit.get();
   }
 }
