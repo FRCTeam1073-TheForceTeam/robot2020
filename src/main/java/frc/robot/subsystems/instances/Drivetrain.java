@@ -118,6 +118,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
             engageDrivetrain();
         }
 
+        SmartDashboard.putNumber("Left Velocity",
+                leftMotorLeader.getSelectedSensorVelocity() / 2048.0 * 10.0 * (2.0 * Math.PI));
+        SmartDashboard.putNumber("Left Power", leftPower);
+
         SmartDashboard.putBoolean("Winch Engaged", isWinchEngaged());
     }
 
@@ -152,8 +156,8 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
      * @param right The right motor speed.
      */
     public void setRotationalVelocity(double left, double right) {
-        leftMotorLeader.set(ControlMode.Velocity, left * 2048 * 0.1 / (2 * Math.PI));
-        rightMotorLeader.set(ControlMode.Velocity, right * 2048 * 0.1 / (2 * Math.PI));
+        leftMotorLeader.set(ControlMode.Velocity, left * 2048.0 * 0.1 / (2.0 * Math.PI));
+        rightMotorLeader.set(ControlMode.Velocity, right * 2048.0 * 0.1 / (2.0 * Math.PI));
         leftPower = left;
         rightPower = right;
         //System.out.println("x");
@@ -302,6 +306,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         leftMotorFollower.setNeutralMode(NeutralMode.Brake);
         rightMotorFollower.setNeutralMode(NeutralMode.Brake);
 
+        leftMotorLeader.configClosedloopRamp(0.25);
+        rightMotorLeader.configClosedloopRamp(0.25);
+
         leftMotorLeader.configPeakOutputForward(1.0);
         leftMotorLeader.configPeakOutputReverse(-1.0);
         leftMotorFollower.configPeakOutputForward(1.0);
@@ -321,10 +328,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 0;
-        double I = 0;
+        double P = 1e-1;
+        double I = 0.5e-4;
         double D = 0;
-        double F = 0;
+        double F = 0.138 * 1023 / 1750;
 
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);

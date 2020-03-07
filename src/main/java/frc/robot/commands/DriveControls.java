@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -122,9 +123,9 @@ public class DriveControls extends CommandBase {
 
         if (drivetrain.isDrivetrainEngaged()) {
             arcadeCompute();
-        
             // passes the final axis values into the drivetrain
-            drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            drivetrain.setRotationalVelocity(500*limit(addMultiplier(leftOutput)), -500*limit(addMultiplier(rightOutput)));
         }
 
         if (winch.isWinchEngaged()) {
