@@ -43,7 +43,6 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private boolean indexed = false;
   
   public Turret() {
-    //turretRotator = new WPI_TalonSRX(24);
     turretRotator = new TalonSRX(24);
     if (turretRotator.configFactoryDefault(30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR: Failed to configure turret default.");
@@ -162,7 +161,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     System.out.println("setPosition is happening");
     System.out.println(positionToTicks(azimuth));
     double feedForward = 0.0; // This allows arbitrary FF to be injected if needed.
-    // turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth), DemandType.ArbitraryFeedForward, feedForward);
+    // ** DemandType.ArbitraryFeedForward, feedForward);
     turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth));
     return true;
   }

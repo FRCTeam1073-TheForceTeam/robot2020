@@ -157,10 +157,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     SmartDashboard.putNumber("Flywheel Error I", shooterFlywheel1.getIntegralAccumulator());
     SmartDashboard.putNumber("Flywheel Error D", shooterFlywheel1.getErrorDerivative());
 
+    SmartDashboard.putNumber("[Graph] TalonFX 22 motor temperature (degs. C)", getInternalTemperature()[0]);
+    SmartDashboard.putNumber("[Graph] TalonFX 23 motor temperature (degs. C)", getInternalTemperature()[1]);
+    SmartDashboard.putNumber("[Value] TalonFX 22 motor temperature (degs. C)", getInternalTemperature()[0]);
+    SmartDashboard.putNumber("[Value] TalonFX 23 motor temperature (degs. C)", getInternalTemperature()[1]);
+
     // SmartDashboard.putNumber("key", shooterFlywheel1.getMotorOutputPercent());
     // SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
     // SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
-    SmartDashboard.putNumber("Position", hoodEncoder.getPosition());
+    SmartDashboard.putNumber("Hood Position", hoodEncoder.getPosition());
     // SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
     // SmartDashboard.putNumber("Error", hoodEncoder.getPosition() - targetHoodAngle);
 
