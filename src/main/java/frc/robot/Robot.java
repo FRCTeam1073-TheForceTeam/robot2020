@@ -36,7 +36,9 @@ public class Robot extends TimedRobot {
    */
 
   public static DriveControls driveControls;
-  public static Drivetrain drivetrain;
+  public static Drivetrain drivetrainInstance;
+  public static DrivetrainInterface drivetrain;
+  public static WinchInterface winch;
   public static CollectorControls collectorControls;
   public static CollectorInterface collector;
   public static HookControls hookControls;
@@ -53,9 +55,7 @@ public class Robot extends TimedRobot {
   public static Bling bling;
   public static BlingControls blingControls;
   public static CommandBase driveAuto;
-  public static WinchInterface winch;
   public static SendableChooser<Command> chooser;
-  public static DrivetrainInterface driveInt;
 
   // public static SendableChooser<Command> chooser;
   
@@ -66,8 +66,10 @@ public class Robot extends TimedRobot {
 
     OI.init();
 
-    drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain, drivetrain);
+    drivetrainInstance = new Drivetrain();
+    drivetrain = drivetrainInstance;
+    winch = drivetrainInstance;
+    driveControls = new DriveControls(drivetrain, winch);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     bling = new Bling();
@@ -103,7 +105,7 @@ public class Robot extends TimedRobot {
 
     //driveAuto = autoTurn.auto90left(drivetrain);
 
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(driveInt, 3));
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3));
     chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
