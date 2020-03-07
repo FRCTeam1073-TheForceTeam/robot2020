@@ -44,6 +44,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
   private static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
+  private static final boolean activateHood = false;
   /**
    * Creates a new Shooter.
    */
@@ -54,6 +55,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
 
     trigger = new CANSparkMax(27, MotorType.kBrushless);
     hood = new CANSparkMax(25, MotorType.kBrushless);
+    
     hood.clearFaults();
 
     shooterFlywheel1.configFactoryDefault();
