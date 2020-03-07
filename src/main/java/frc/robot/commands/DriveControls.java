@@ -62,7 +62,7 @@ public class DriveControls extends CommandBase {
      * @return axisValue with throttle multiplier
      */
     private double addMultiplier(double axisValue, double multiplier_) {
-        return axisValue * (0.25 + multiplier_ * 0.75);
+        return axisValue * (0.125 + multiplier_ * 0.875);
     }
 
 
@@ -116,8 +116,8 @@ public class DriveControls extends CommandBase {
     public void execute() {
         multiplier = deadzone(OI.driverController.getRawAxis(3));
 
-        forward = deadzone(OI.driverController.getRawAxis(1));
-        rotation = deadzone(OI.driverController.getRawAxis(4));
+        forward = addMultiplier(deadzone(OI.driverController.getRawAxis(1)));
+        rotation = addMultiplier(deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
 
         rotation *= -1;
 
@@ -125,8 +125,9 @@ public class DriveControls extends CommandBase {
             arcadeCompute();
             // passes the final axis values into the drivetrain
             // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
-            drivetrain.setRotationalVelocity(500*limit(addMultiplier(leftOutput)), -500*limit(addMultiplier(rightOutput)));
+            drivetrain.setRotationalVelocity(500*limit((leftOutput)), -500*limit((rightOutput)));
         }
+
 
         if (winch.isWinchEngaged()) {
             winch.setWinchPower(addMultiplier(forward));

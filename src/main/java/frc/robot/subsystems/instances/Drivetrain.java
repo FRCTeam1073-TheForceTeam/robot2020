@@ -29,7 +29,16 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
     // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
-    private double ticksPerMeter = 0.5 * (74842 + 75252) / Units.feetToMeters(6);
+    private double ticksPerMeter = 0.5 * (
+    (double) (
+            //Raw Encoder Ticks
+            /*Left    Right*/
+            125934 + 126241 +
+            125616 + 126094 +
+            125742 + 126717 +
+            125651 + 125870
+        ) / 8.0
+    ) / Units.feetToMeters(10.0);
     // ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonFX leftMotorLeader;
     private static WPI_TalonFX rightMotorLeader;
@@ -121,7 +130,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.putNumber("Left Velocity",
                 leftMotorLeader.getSelectedSensorVelocity() / 2048.0 * 10.0 * (2.0 * Math.PI));
         SmartDashboard.putNumber("Left Power", leftPower);
-
+        SmartDashboard.putNumber("Left Output", leftMotorLeader.getMotorOutputPercent());
+        SmartDashboard.putNumber("Left Error P", leftMotorLeader.getClosedLoopError());
+        SmartDashboard.putNumber("Left Position", leftMotorLeader.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Right Position", rightMotorLeader.getSelectedSensorPosition());
         SmartDashboard.putBoolean("Winch Engaged", isWinchEngaged());
     }
 
@@ -328,10 +340,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
-        double P = 1e-1;
-        double I = 0.5e-4;
+        double P = 1.1e-1;
+        double I = 1e-2;
         double D = 0;
-        double F = 0.138 * 1023 / 1750;
+        double F = 0.75 * 0.138 * 1023 / 1750;
 
         leftMotorLeader.config_kP(0, P);
         rightMotorLeader.config_kP(0, P);
@@ -341,6 +353,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.config_kD(0, D);
         leftMotorLeader.config_kF(0, F);
         rightMotorLeader.config_kF(0, F);
+
+        leftMotorLeader.configMaxIntegralAccumulator(0, 400);
+        rightMotorLeader.configMaxIntegralAccumulator(0, 400);
 
         leftMotorFollower.follow(leftMotorLeader);
         rightMotorFollower.follow(rightMotorLeader);
