@@ -18,4 +18,5 @@ public interface LiftInterface {
     // boolean isLiftFullyExtended();
     // boolean isLiftFullyRetracted();
     // double liftExtension();
+    public void liftExtend(double power);
 }
