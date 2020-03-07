@@ -151,8 +151,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    CommandScheduler.getInstance().run();
+    if(chooser.getSelected() != null){
+      chooser.getSelected().schedule();
+    }
   }
 
   @Override
