@@ -32,12 +32,6 @@ public class LightingControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (OI.driverController.getAButton()) {
-      lighting.setLEDLevel(0.1);
-    }
-    else {
-      lighting.setLEDLevel(0.0);
-    }
   }
 
   // Called once the command ends or is interrupted.
