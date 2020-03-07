@@ -29,22 +29,23 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
     // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
-    private double ticksPerMeter = 0.5 * (
+    private double ticksPerMeter = (
     (double) (
             //Raw Encoder Ticks
             /*Left    Right*/
-            125934 + 126241 +
-            125616 + 126094 +
-            125742 + 126717 +
-            125651 + 125870
-        ) / 8.0
+            119300 + 119130 +
+            118144 + 117828 +
+            114665 + 119048 +
+            120111 + 119625 +
+            119420 + 119625
+        ) / 10.0
     ) / Units.feetToMeters(10.0);
     // ticksPerWheelRotation / (Math.PI * wheelDiameter);
     private static WPI_TalonFX leftMotorLeader;
     private static WPI_TalonFX rightMotorLeader;
     private static WPI_TalonFX leftMotorFollower;
     private static WPI_TalonFX rightMotorFollower;
-    private final double wheelDiameter = Units.inchesToMeters(4);
+    private final double wheelDiameter = Units.inchesToMeters(5.9);
     //private static LimitSwitchNormal limitSwitch;
 
     private Pose2d robotPose = new Pose2d();
@@ -119,9 +120,10 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
                 wheelSpeeds.rightMetersPerSecond);
         
         // TODO: See what controls are actually going to be used
-        if (OI.driverController.getYButtonPressed()) {
-            engageWinch();
-        }
+
+        // if (OI.driverController.getYButtonPressed()) {
+        //     engageWinch();
+        // }
         
         if (OI.driverController.getAButtonPressed()) {
             engageDrivetrain();
@@ -135,8 +137,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.putNumber("Left Position", leftMotorLeader.getSelectedSensorPosition());
         SmartDashboard.putNumber("Right Position", rightMotorLeader.getSelectedSensorPosition());
         SmartDashboard.putBoolean("Winch Engaged", isWinchEngaged());
-        SmartDashboard.putString("Coordinates", "(" + Units.metersToFeet(getRobotPose().getTranslation().getX()) + ","
-                + Units.metersToFeet(getRobotPose().getTranslation().getY()) + ")");
+        SmartDashboard.putString("Coordinates",
+                "(" + Math.round(
+                        (getRobotPose().getTranslation().getX()
+        )*1000.0)*0.001 + ","
+                + Math.round(getRobotPose().getTranslation().getY()*1000.0)*0.001 + ")");
     }
 
     /**
