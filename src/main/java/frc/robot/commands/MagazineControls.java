@@ -35,19 +35,12 @@ public class MagazineControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(OI.operatorController.getPOV() == 0){
-      magazine.setPower(.5);
-    }
-    else if(OI.operatorController.getPOV() == 180){
-      magazine.setPower(-.5);
-    }
-    else magazine.setPower(0);
+    
 
     magazine.updateCellCount();
     cellCount = magazine.getCellCount();
     SmartDashboard.putNumber("Cell Count: ", cellCount);
-    SmartDashboard.putBoolean("Enterance: ", magazine.getEnteranceState());
-    SmartDashboard.putBoolean("Exit: ", magazine.getExitState());
+
   }
 
   // Returns true when the command should end.

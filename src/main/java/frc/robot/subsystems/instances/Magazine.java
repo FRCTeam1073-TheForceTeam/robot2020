@@ -26,7 +26,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   private static DigitalInput goingIn;
   private static DigitalInput goingOut;
   private static DigitalInput exit;
-  private boolean cellEntering, cellIn, cellOut, cellExiting;
+  private static double totalRunTicks;
 
   public Magazine() {
     magMotor = new WPI_TalonSRX(26);
@@ -35,7 +35,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     entrance = new DigitalInput(0);
     goingIn = new DigitalInput(1);
     goingOut = new DigitalInput(2);
-    exit = new DigitalInput(3);
+    
 
     magMotor.configFactoryDefault();
     magMotor.setSafetyEnabled(false);
@@ -56,7 +56,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    */
   public void setPower(double power) {
     magMotor.set(ControlMode.PercentOutput, power);
-
+    
   }
 
   @Override
@@ -67,15 +67,15 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    * 
    */
   public void updateCellCount() {
-
-    if (entrance.get() == true && cellEntering == false && cellCount < 6) {
-      cellCount++;
-      cellEntering = true;
+    if(entrance.get() == true){
+      this.setPower(0.5);
     }
-
-    if (entrance.get() == false)
-      cellEntering = false;
-      
+    if(goingIn.get() == true){
+      cellCount++;
+    }
+    if(goingOut.get() == true){
+      cellCount--;
+    }
 
     // if (goingIn.get() == true && cellEntering == false && cellIn == false && cellCount < 6) {
     //   cellCount++;
@@ -85,19 +85,6 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     // if (goingIn.get() == false)
     //   cellIn = false;
 
-
-    if (exit.get() == true && cellExiting == false && cellCount > 0) {
-      cellCount--;
-      cellExiting = true;
-    }
-
-    if (exit.get() == false)
-      cellExiting = false;
-
-    if (cellCount > 5)
-      System.out.println("Jack - stop! You have more than 5 power cells.");
-
-    SmartDashboard.putNumber("Cell Count", cellCount);
   }
 
   @Override
@@ -116,7 +103,12 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   }
 
   @Override
-  public boolean getExitState(){
-    return exit.get();
+  public boolean getGoingIn(){
+    return goingIn.get();
+  }
+
+  @Override
+  public boolean getGoingOut(){
+    return goingOut.get();
   }
 }
