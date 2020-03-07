@@ -46,7 +46,6 @@ public class Robot extends TimedRobot {
   public static BlingControls blingControls;
   public static CommandBase driveAuto;
   public static WinchInterface winch;
-  public static AdvancedTrackerInterface portTracker;
   // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -92,10 +91,6 @@ public class Robot extends TimedRobot {
     widgets.register();
 
     driveAuto = new autoTurn(drivetrain, Math.PI);
-
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, portTracker);
-    registerSubsystem((SubsystemBase) bling, blingControls);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {

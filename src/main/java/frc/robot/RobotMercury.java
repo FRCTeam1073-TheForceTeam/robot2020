@@ -74,12 +74,16 @@ public class RobotMercury extends TimedRobot {
     bling.register();
     // registerSubsystem((SubsystemBase) bling, blingControls);
 
+    //autoBlingA = new BlingA(drivetrain, bling);
+
     //widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface)drivetrain);
     //widgets.register();
 
     chooser.setDefaultOption("Unicorn Breath", new BlingA(bling));
     chooser.addOption("Medium Blue", new BlingB(bling));
     SmartDashboard.putData("Autonomous Mode", chooser);
+  
+    // autoBlingB = new BlingB(bling);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
