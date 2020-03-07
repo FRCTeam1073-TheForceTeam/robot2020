@@ -9,7 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.autoCommands.*;
+//import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -90,7 +90,8 @@ public class Robot extends TimedRobot {
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-    driveAuto = new autoTurn(drivetrain, Math.PI);
+    //driveAuto = autoTurn.auto90left(drivetrain);
+
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -125,11 +126,7 @@ public class Robot extends TimedRobot {
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
-  public void autonomousInit() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //if(driveAuto != null){
-    //  driveAuto.schedule();
-    //}
+  public void autonomousInit() {    
   }
 
   /**
@@ -138,7 +135,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //CommandScheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   @Override
