@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -18,6 +19,8 @@ import frc.robot.subsystems.interfaces.LiftInterface;
 
 public class Lift extends SubsystemBase implements LiftInterface {
   private static WPI_TalonSRX liftMotor;
+  private static int min_encoder;
+  private static int max_encoder;
   
 
   /**
@@ -48,10 +51,18 @@ public class Lift extends SubsystemBase implements LiftInterface {
 public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
+    liftMotor.configFactoryDefault();
     liftMotor.enableCurrentLimit(true);
     liftMotor.configPeakCurrentLimit(35);
     liftMotor.configContinuousCurrentLimit(20);
     liftMotor.configPeakCurrentDuration(250);
+    liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    liftMotor.configPeakOutputForward(1.0);
+    
+    // TODO: add encoder limits
+    max_encoder = ___;
+    min_encoder = ___;
+
 
     // Enables 2-bit averaging
     // potentiometerValue.setAverageBits(2);
@@ -65,7 +76,9 @@ public Lift() {
   }
 
   public void liftExtend(double power) {
-    liftMotor.set(power);
+    if (liftMotor.getSelectedSensorPosition() > min_encoder && liftMotor.getSelectedSensorPosition() < max_encoder){
+      liftMotor.set(power);
+    }
   }
 
   // public void setBrakeOn() {
