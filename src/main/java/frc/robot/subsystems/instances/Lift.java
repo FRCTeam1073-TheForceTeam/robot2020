@@ -33,10 +33,9 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // // that sets maximum possible value the potentiometer can return (when the voltage from the potentiometer is 1 (the maximum))
   // private final double maxLiftExtension = 1.0;
 
-  // // these values have to be set to the measured physical limits using the potentiometer HAVE TO BE SET
-  private static final double physicalMinExtension = 0.0;
-  private static final double physicalMaxExtension = 10.0;
-  private static
+  // these values have to be set to the measured physical limits using the potentiometer HAVE TO BE SET
+  // private static final double physicalMinExtension = 0.0;
+  // private static final double physicalMaxExtension = 10.0;
   
   // // defines the potentiometerPort HAS TO BE SET
   // private final int potentiometerPort = 0;
@@ -47,7 +46,6 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // // Initializes an AnalogPotentiometer on port "potentiometerValue"
   // AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
 
-  private final 
   public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
@@ -60,8 +58,8 @@ public class Lift extends SubsystemBase implements LiftInterface {
     liftMotor.configPeakOutputForward(1.0);
     
     // TODO: add encoder limits
-    max_encoder = ___;
-    min_encoder = ___;
+    // max_encoder = ___;
+    // min_encoder = ___;
 
 
     // Enables 2-bit averaging
@@ -76,9 +74,9 @@ public class Lift extends SubsystemBase implements LiftInterface {
   }
 
   public void liftExtend(double power) {
-    if (liftMotor.getSelectedSensorPosition() > min_encoder && liftMotor.getSelectedSensorPosition() < max_encoder){
-      liftMotor.set(power);
-    }
+    // if (liftMotor.getSelectedSensorPosition() > min_encoder && liftMotor.getSelectedSensorPosition() < max_encoder){
+    //   liftMotor.set(power);
+    // }
   }
 
   // public void setBrakeOn() {
@@ -94,12 +92,9 @@ public class Lift extends SubsystemBase implements LiftInterface {
   //   return true;
   // }
 
-  // public double liftExtension() {
-
-  //   // returns in the scale from minLiftExtention to maxLiftExtention
-  //   return potentiometer.get();
-
-  // }
+  public double liftExtension() {
+    return liftMotor.getSelectedSensorPosition();
+  }
 
   // public boolean isLiftFullyRetracted() {
   //   // Checks to see if the lift is fully retracted

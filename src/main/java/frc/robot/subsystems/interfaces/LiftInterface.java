@@ -17,6 +17,6 @@ public interface LiftInterface {
     // potentiometer
     // boolean isLiftFullyExtended();
     // boolean isLiftFullyRetracted();
-    // double liftExtension();
+    double liftExtension();
     public void liftExtend(double power);
 }
