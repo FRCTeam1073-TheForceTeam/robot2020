@@ -48,6 +48,11 @@ public class Lift extends SubsystemBase implements LiftInterface {
   public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
+    liftMotor.enableCurrentLimit(true);
+    liftMotor.configPeakCurrentLimit(35);
+    liftMotor.configContinuousCurrentLimit(20);
+    liftMotor.configPeakCurrentDuration(250);
+
     // Enables 2-bit averaging
     // potentiometerValue.setAverageBits(2);
 
@@ -57,15 +62,10 @@ public class Lift extends SubsystemBase implements LiftInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-
   }
 
-  public boolean liftExtend(double power) {
-    liftMotor.set(ControlMode.PercentOutput, power);
-    if(liftMotor.){
-
-    }
+  public void liftExtend(double power) {
+    liftMotor.set(power);
   }
 
   // public void setBrakeOn() {
