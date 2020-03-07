@@ -253,4 +253,10 @@ public class DrivetrainGearbox extends SubsystemBase implements DrivetrainInterf
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public boolean isDrivetrainEngaged() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
