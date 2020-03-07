@@ -43,7 +43,6 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private boolean indexed = false;
   
   public Turret() {
-    //turretRotator = new WPI_TalonSRX(24);
     turretRotator = new TalonSRX(24);
     if (turretRotator.configFactoryDefault(30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR: Failed to configure turret default.");
