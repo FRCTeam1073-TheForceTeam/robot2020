@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.instances;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -30,8 +31,9 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // private final double maxLiftExtension = 1.0;
 
   // // these values have to be set to the measured physical limits using the potentiometer HAVE TO BE SET
-  // private final double physicalMinExtension = 0.0;
-  // private final double physicalMaxExtension = 10.0;
+  private static final double physicalMinExtension = 0.0;
+  private static final double physicalMaxExtension = 10.0;
+  private static
   
   // // defines the potentiometerPort HAS TO BE SET
   // private final int potentiometerPort = 0;
@@ -42,11 +44,13 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // // Initializes an AnalogPotentiometer on port "potentiometerValue"
   // AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
 
+  private final 
   public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
     // Enables 2-bit averaging
     // potentiometerValue.setAverageBits(2);
+
     
   }
 
@@ -57,8 +61,11 @@ public class Lift extends SubsystemBase implements LiftInterface {
 
   }
 
-  public void liftExtend(double power) {
+  public boolean liftExtend(double power) {
+    liftMotor.set(ControlMode.PercentOutput, power);
+    if(liftMotor.){
 
+    }
   }
 
   // public void setBrakeOn() {
