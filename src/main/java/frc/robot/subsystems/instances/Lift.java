@@ -27,28 +27,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   /**
    * Creates a new Lift.
    */
-  // Solenoid solenoid = new Solenoid(7);
   
-  // // that sets minimum possible value the potentiometer  can return (when the voltage from the potentiometer is 0 (the minimum))
-  // private final double minLiftExtension = 0.0;
-  // // that sets maximum possible value the potentiometer can return (when the voltage from the potentiometer is 1 (the maximum))
-  // private final double maxLiftExtension = 1.0;
-
-  // these values have to be set to the measured physical limits using the potentiometer HAVE TO BE SET
-  // private static final double physicalMinExtension = 0.0;
-  // private static final double physicalMaxExtension = 10.0;
-  
-  // // defines the potentiometerPort HAS TO BE SET
-  // private final int potentiometerPort = 0;
-
-  // // Initializes an AnalogInput on port "potentiometerPort"
-  // AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
-
-  // // Initializes an AnalogPotentiometer on port "potentiometerValue"
-  // AnalogPotentiometer potentiometer = new
-  // AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
-
-
 public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
@@ -64,12 +43,6 @@ public Lift() {
     // // TODO: add encoder limits
     // max_encoder = ___;
     // min_encoder = 0;
-
-
-    // Enables 2-bit averaging
-    // potentiometerValue.setAverageBits(2);
-
-    
   }
 
   @Override
@@ -84,18 +57,6 @@ public Lift() {
     // }
   }
 
-  // public void setBrakeOn() {
-  //   // Turns on the brake
-  // }
-
-  // public void setBrakeOff() {
-  //   // Turns off the brake
-  // }
-
-  // public boolean isBrakeSet() {
-  //   // Checks to see if the brake is set
-  //   return true;
-  // }
 
   public double liftExtension() {
     return liftMotor.getSelectedSensorPosition();
@@ -107,7 +68,7 @@ public Lift() {
 
   // public boolean isLiftFullyRetracted() {
   //   // Checks to see if the lift is fully retracted
-  //   if (liftExtension() <= physicalMinExtension) {
+    // if (liftMotor.getSelectedSensorPosition() <= min_encoder) {
   //     return true;
   //   } else {
   //     return false;
@@ -117,7 +78,7 @@ public Lift() {
 
   // public boolean isLiftFullyExtended() {
   //   // Checks to see if the lift is fully extended
-  //   if (liftExtension() >= physicalMaxExtension) {
+    // if (liftMotor.getSelectedSensorPosition() >= max_encoder) {
   //     return true;
   //   } else {
   //     return false;
