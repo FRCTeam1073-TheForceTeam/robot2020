@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     // registerSubsystem((SubsystemBase) hook, hookControls);
 
     lift = new Lift();
-    liftControls = new LiftControls(lift);
+    liftControls = new LiftControls(lift, winch);
     registerSubsystem((SubsystemBase) lift, liftControls);
 
     magazine = new Magazine();
