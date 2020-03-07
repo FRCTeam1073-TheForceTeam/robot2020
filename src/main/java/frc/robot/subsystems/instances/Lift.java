@@ -33,8 +33,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // // these values have to be set to the measured physical limits using the potentiometer HAVE TO BE SET
   private static final double physicalMinExtension = 0.0;
   private static final double physicalMaxExtension = 10.0;
-  private static
-  
+
   // // defines the potentiometerPort HAS TO BE SET
   // private final int potentiometerPort = 0;
 
@@ -42,10 +41,11 @@ public class Lift extends SubsystemBase implements LiftInterface {
   // AnalogInput potentiometerValue = new AnalogInput(potentiometerPort);
 
   // // Initializes an AnalogPotentiometer on port "potentiometerValue"
-  // AnalogPotentiometer potentiometer = new AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
+  // AnalogPotentiometer potentiometer = new
+  // AnalogPotentiometer(potentiometerValue, minLiftExtension, maxLiftExtension);
 
-  private final 
-  public Lift() {
+
+public Lift() {
     liftMotor = new WPI_TalonSRX(30);
 
     liftMotor.enableCurrentLimit(true);

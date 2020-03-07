@@ -200,11 +200,6 @@ public class ShuffleboardWidgets extends SubsystemBase {
     // only pulls data from the lift if it exists
     if(lift != null){
       // Lift Data COMPLETE
-      isBrakeset = lift.isBrakeSet();
-      isLiftFullyExtended = lift.isLiftFullyExtended();
-      isLiftFullyRetracted = lift.isLiftFullyRetracted();
-      liftExtension = lift.liftExtension();
-      isPinned = lift.isPinned();
     }
 
     // only pulls data from the winch if it exists
