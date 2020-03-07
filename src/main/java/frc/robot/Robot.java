@@ -60,6 +60,10 @@ public class Robot extends TimedRobot {
     driveControls = new DriveControls(drivetrain, drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
+    bling = new Bling();
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    registerSubsystem((SubsystemBase) bling, blingControls);
+
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
@@ -90,7 +94,7 @@ public class Robot extends TimedRobot {
     driveAuto = new autoTurn(drivetrain, Math.PI);
 
     bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, portTracker);
     registerSubsystem((SubsystemBase) bling, blingControls);
   }
 

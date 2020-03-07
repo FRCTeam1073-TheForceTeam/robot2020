@@ -70,7 +70,7 @@ public class RobotMercury extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
     
     bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     bling.register();
     // registerSubsystem((SubsystemBase) bling, blingControls);
 
