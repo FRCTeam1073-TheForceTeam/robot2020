@@ -21,6 +21,7 @@ public class Lift extends SubsystemBase implements LiftInterface {
   private static WPI_TalonSRX liftMotor;
   private static int min_encoder;
   private static int max_encoder;
+  private int encoder_ticks;
   
 
   /**
@@ -58,10 +59,11 @@ public Lift() {
     liftMotor.configPeakCurrentDuration(250);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     liftMotor.configPeakOutputForward(1.0);
+    liftMotor.setSelectedSensorPosition(0);
     
-    // TODO: add encoder limits
+    // // TODO: add encoder limits
     // max_encoder = ___;
-    // min_encoder = ___;
+    // min_encoder = 0;
 
 
     // Enables 2-bit averaging
@@ -73,11 +75,12 @@ public Lift() {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    encoder_ticks = liftMotor.getSelectedSensorPosition();
   }
 
   public void liftExtend(double power) {
     // if (liftMotor.getSelectedSensorPosition() > min_encoder && liftMotor.getSelectedSensorPosition() < max_encoder){
-    //   liftMotor.set(power);
+      liftMotor.set(power);
     // }
   }
 
@@ -96,6 +99,10 @@ public Lift() {
 
   public double liftExtension() {
     return liftMotor.getSelectedSensorPosition();
+  }
+
+  public int getEncoderTicks() {
+    return encoder_ticks;
   }
 
   // public boolean isLiftFullyRetracted() {

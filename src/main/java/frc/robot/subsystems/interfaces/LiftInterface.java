@@ -19,4 +19,7 @@ public interface LiftInterface {
     // boolean isLiftFullyRetracted();
     double liftExtension();
     public void liftExtend(double power);
+    public int getEncoderTicks();
+
+    
 }
