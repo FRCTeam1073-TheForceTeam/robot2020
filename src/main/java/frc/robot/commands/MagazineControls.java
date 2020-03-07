@@ -36,13 +36,13 @@ public class MagazineControls extends CommandBase {
   @Override
   public void execute() {
     if(OI.operatorController.getPOV() == 0){
-      magazine.setPower(.75);
+      magazine.setPower(.5);
     }
     else if(OI.operatorController.getPOV() == 180){
-      magazine.setPower(-.75);
+      magazine.setPower(-.5);
     }
     else magazine.setPower(0);
-    
+
     magazine.updateCellCount();
     cellCount = magazine.getCellCount();
     SmartDashboard.putNumber("Cell Count: ", cellCount);
