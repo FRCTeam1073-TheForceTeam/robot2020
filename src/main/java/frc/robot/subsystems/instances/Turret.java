@@ -101,11 +101,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretVelocity = ticksToVelocity(turretRotator.getSelectedSensorVelocity());
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
-    rightLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
+    leftLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
     leftLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
 
     /// Detect Indexing Event
-    if (rightLimitSwitch == true) {
+    if (leftLimitSwitch == true) {
       SmartDashboard.putBoolean("Turret Indexed = ", true);
       indexed = true;
     }
