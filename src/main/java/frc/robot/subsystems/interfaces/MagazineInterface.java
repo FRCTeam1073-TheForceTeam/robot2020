@@ -13,8 +13,14 @@ public interface MagazineInterface {
 
     void setPower(double speed);
 
+    void setVelocity(double speed);
+
     void updateCellCount();
 
+    double getVelocity();
+
+    double getPower();
+    
     int getCellCount();
 
     boolean getEnteranceState();

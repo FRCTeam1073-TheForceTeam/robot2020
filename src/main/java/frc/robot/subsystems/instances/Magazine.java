@@ -16,42 +16,51 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.MagazineInterface;
 
 public class Magazine extends SubsystemBase implements MagazineInterface {
+  /**
+   * Creates a new Magazine.
+   */
+  private static int cellCount;// The cell count as determined by the trip of a distance sensor facing an opposite wall
+  private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
+  // Will likely not have encoder.
+  private static DigitalInput entrance;
+  private static DigitalInput goingIn;
+  private static DigitalInput exit;
+  private boolean cellCheck, cellEntering, cellExiting;  
 
-    /**
-     * Creates a new Magazine.
-     */
-    private static int cellCount;// The cell count as determined by the trip of the sensor
-    private static WPI_TalonSRX magMotor; // Motor controls all belts on magazine.
-    // Will likely not have encoder.
-    private static DigitalInput goingIn;
-    private static DigitalInput entrance;
-    private static DigitalInput exit;
-    private boolean cellCheck, cellEntering, cellExiting;
-    //private static double totalRunTicks;
+  private double P = 0.0;
+  private double I = 0.0;
+  private double D = 0.0;
+  private double F = 0.0;
 
-    public Magazine() {
-        magMotor = new WPI_TalonSRX(26);
-        cellCount = 0;
-        // Initializes a four digital inputs with channels
+  public Magazine() {
+    magMotor = new WPI_TalonSRX(26);
+    cellCount = 0;
+    // Initializes a four digital inputs with channels
         entrance = new DigitalInput(0);
         goingIn = new DigitalInput(1);
         exit = new DigitalInput(2);
 
-        magMotor.configFactoryDefault();
-        magMotor.setSafetyEnabled(false);
-        magMotor.setNeutralMode(NeutralMode.Brake);
-    }
+    magMotor.configFactoryDefault();
+    magMotor.setSafetyEnabled(false);
+    magMotor.setNeutralMode(NeutralMode.Brake);
 
-    @Override
-    /**
-     * sets power to the magazine motor
-     * 
-     * @param - double power: between 0 and 1. The power to the motor
-     */
-    public void setPower(double power) {
-        magMotor.set(ControlMode.PercentOutput, power);
+    magMotor.config_kP(0, P);
+    magMotor.config_kI(0, I);
+    magMotor.config_kD(0, D);
+    magMotor.config_kF(0, F);
+  }
 
-    }
+  /**
+   * sets the magazine speed in meters per second of the conveyor belts
+   * 
+   * @param double speed in meters per second
+   */
+  @Override
+  public void setVelocity(double speed) {
+    System.out.println("SETTING MAG VELOCITY");
+    speed = speed / (0.0254 * 2 * Math.PI);
+    magMotor.set(ControlMode.Velocity, speed);
+  }
 
     @Override
     /**
@@ -104,6 +113,14 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     }
 
 
+  public double getVelocity(){
+    return magMotor.getSelectedSensorVelocity(0);
+  }
+
+  public double getPower(){
+    return magMotor.getMotorOutputPercent();
+  }
+
   @Override
   public boolean getEnteranceState(){
     return entrance.get();
@@ -115,8 +132,15 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   }
 
     @Override
+    public void setPower(double speed) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public boolean getGoingOut() {
         // TODO Auto-generated method stub
         return false;
     }
+
 }
