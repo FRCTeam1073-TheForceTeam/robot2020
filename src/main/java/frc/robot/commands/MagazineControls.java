@@ -43,7 +43,7 @@ public class MagazineControls extends CommandBase {
     }
     else magazine.setPower(0);
 
-    // magazine.updateCellCount();
+    magazine.updateCellCount();
     cellCount = magazine.getCellCount();
     SmartDashboard.putNumber("Cell Count: ", cellCount);
     SmartDashboard.putBoolean("Enterance: ", magazine.getEnteranceState());
