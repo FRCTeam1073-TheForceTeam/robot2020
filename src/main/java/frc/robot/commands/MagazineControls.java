@@ -43,6 +43,9 @@ public class MagazineControls extends CommandBase {
     }
     else magazine.setPower(0);
 
+    SmartDashboard.putNumber("Real Mag Power", magazine.getPower());
+    SmartDashboard.putNumber("Mag Velocity", magazine.getVelocity());
+
     magazine.updateCellCount();
     cellCount = magazine.getCellCount();
     SmartDashboard.putNumber("Cell Count: ", cellCount);

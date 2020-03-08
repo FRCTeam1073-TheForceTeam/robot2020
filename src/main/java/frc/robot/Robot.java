@@ -144,7 +144,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    CommandScheduler.getInstance().cancelAll();
     if(chooser.getSelected() != null){
       SmartDashboard.putString("Auto State", "Auto Inited");
       chooser.getSelected().schedule();
