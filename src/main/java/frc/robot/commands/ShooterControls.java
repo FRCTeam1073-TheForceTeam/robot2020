@@ -57,7 +57,7 @@ public class ShooterControls extends CommandBase {
       pow2 = 1;
     }
 
-    ((Shooter)shooter).deadzoneRoller.set(OI.operatorController.getRawAxis(3));
+    shooter.setDeadzoneRollerPower(OI.operatorController.getRawAxis(3));
 
     // shooter.setDeadzoneRollerVelocity(OI.operatorController.getRawAxis(2) - OI.operatorController.getRawAxis(3));
     

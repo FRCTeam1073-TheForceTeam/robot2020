@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
-
+    
     OI.init();
     
     drivetrainInstance = new Drivetrain();
@@ -63,38 +63,38 @@ public class Robot extends TimedRobot {
     winch = drivetrainInstance;
     driveControls = new DriveControls(drivetrain, winch);
     registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
-
+    
     // bling = new Bling();
     // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     // registerSubsystem((SubsystemBase) bling, blingControls);
-
+    
     // collector = new Collector();
     // collectorControls = new CollectorControls(collector);
     // registerSubsystem((SubsystemBase) collector, collectorControls);
-
+    
     // hook = new Hook();
     // hookControls = new HookControls(hook);
     // registerSubsystem((SubsystemBase) hook, hookControls);
-
+    
     // lift = new Lift();
     // liftControls = new LiftControls(lift, winch);
     // registerSubsystem((SubsystemBase) lift, liftControls);
-
+    
     magazine = new Magazine();
     magazineControls = new MagazineControls(magazine, collector);
     registerSubsystem((SubsystemBase) magazine, magazineControls);
-
+    
     shooter = new Shooter();
     shooterControls = new ShooterControls(shooter);
     registerSubsystem((SubsystemBase) shooter, shooterControls);
-
+    
     // turret = new Turret();
     // turretControls = new TurretControls(turret);
     // registerSubsystem((SubsystemBase) turret, turretControls);
 
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
-
+    
     //driveAuto = autoTurn.auto90left(drivetrain);
     chooser = new SendableChooser<Command>();
     chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 0.7, 0.7));
@@ -103,42 +103,43 @@ public class Robot extends TimedRobot {
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
     SmartDashboard.putData("Autonomous Mode", chooser);
   }
-
+  
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
     subsystem.register();
     CommandScheduler.getInstance().setDefaultCommand(subsystem, command);
   }
-
+  
   /*
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
-   */
+  * This function is called every robot packet, no matter the mode. Use this for items like
+  * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+  *
+  * <p>This runs after the mode specific periodic functions, but before
+  * LiveWindow and SmartDashboard integrated updating.
+  */
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     // OI.driverController.setRumble(RumbleType.kLeftRumble, 65536);
   }
-
+  
   /**
    * This function is called once each time the robot enters Disabled mode.
    */
   @Override
   public void disabledInit() {
   }
-
+  
   @Override
   public void disabledPeriodic() {
   }
-
+  
   /**
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
+    (new ShooterIndex(shooter)).schedule(false);
     if (chooser.getSelected() != null) {
       SmartDashboard.putString("Auto State", "Auto Inited");
       chooser.getSelected().schedule();

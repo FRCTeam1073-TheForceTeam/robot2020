@@ -39,14 +39,14 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
   private static WPI_TalonFX shooterFlywheel1;
   private static WPI_TalonFX shooterFlywheel2;
   private static CANSparkMax hood;
-  private static CANSparkMax trigger;
+  public CANSparkMax deadzoneRoller;
+
   private static CANDigitalInput hoodIndexer;
   private static CANEncoder hoodEncoder;
   private static CANEncoder hoodEncoder2;
   private static CANEncoder deadzoneRollerEncoder;
   private static CANPIDController hoodController;
   private static CANPIDController deadzoneRollerController;
-  public CANSparkMax deadzoneRoller;
 
   private static final double flywheelTicksPerRevolution = 2048;
   private static final int hoodEncoderTPR = 1;//2048;
@@ -62,7 +62,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     shooterFlywheel1 = new WPI_TalonFX(22);
     shooterFlywheel2 = new WPI_TalonFX(23);
 
-    trigger = new CANSparkMax(27, MotorType.kBrushless);
     hood = new CANSparkMax(25, MotorType.kBrushless);
     
     hood.clearFaults();
@@ -218,11 +217,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
   @Override
   public void setFlywheelPower(double power) {
     shooterFlywheel1.set(power);
-  }
-
-  @Override
-  public void setTriggerPower(double power) {
-    trigger.set(power);
   }
 
   /**
@@ -406,6 +400,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     }
     deadzoneRollerController.setReference(velocity / (2.0 * Math.PI), ControlType.kVelocity);
   }
+
+  @Override
+  public void setDeadzoneRollerPower(double power) {
+    if (!(deadzoneRollerMode.equals(DeadzoneRollerMode.DEADZONE_TRIGGER))) {
+      return;
+    }
+    deadzoneRoller.set(power);
+  }
+
 
   @Override
   public double getDeadzoneRollerVelocity() {
