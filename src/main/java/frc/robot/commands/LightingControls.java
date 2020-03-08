@@ -7,46 +7,36 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
-import frc.robot.subsystems.interfaces.CollectorInterface;
-import frc.robot.subsystems.interfaces.MagazineInterface;
+import frc.robot.subsystems.interfaces.LightingInterface;
 
-public class MagazineControls extends CommandBase {
-  MagazineInterface magazine;
-  CollectorInterface collector;
+public class LightingControls extends CommandBase {
+
+  LightingInterface lighting;
+
   /**
-   * Creates a new MagazineControls.
+   * Creates a new Lighting.
    */
-  int cellCount;
-  public MagazineControls(MagazineInterface magazine_, CollectorInterface collector_) {
-    magazine = magazine_;
-    collector = collector_;
-    cellCount = 0;
-    addRequirements((SubsystemBase)magazine);
+  public LightingControls(LightingInterface lighting) {
+    this.lighting = lighting;
+    addRequirements((SubsystemBase)lighting);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+  }
 
-    magazine.updateCellCount();
-    cellCount = magazine.getCellCount();
-    SmartDashboard.putNumber("Cell Count: ", cellCount);
-    if(cellCount <= 0 || collector.getCollectorSolenoidIn() == false){
-        magazine.setPower(0);
-    }
-
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.

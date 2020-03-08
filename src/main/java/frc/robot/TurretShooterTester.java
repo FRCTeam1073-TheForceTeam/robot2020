@@ -56,7 +56,7 @@ public class TurretShooterTester extends TimedRobot {
     ((SubsystemBase) turret).register();
     shooter = new Shooter();
     ((SubsystemBase) shooter).register();
-    turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, CLAMode.VELOCITY, false, 0.01);
+    // turretControls = new ClosedLoopAiming(turret, portTrackerCamera, shooter, CLAMode.VELOCITY, false, 0.01);
     registerSubsystem((SubsystemBase) turret, turretControls);
   }
 
