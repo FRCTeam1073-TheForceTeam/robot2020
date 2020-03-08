@@ -27,7 +27,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     private static DigitalInput entrance;
     private static DigitalInput exit;
     private boolean cellCheck, cellEntering, cellExiting;
-    private static double totalRunTicks;
+    //private static double totalRunTicks;
 
     public Magazine() {
         magMotor = new WPI_TalonSRX(26);
@@ -55,11 +55,9 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
     @Override
     /**
-     * updateCellCount() If a ball passes through the entrance, a power cell is
-     * added The power cell number limit is 5. Param set to max of 6 in order to
-     * provide a warning. If a ball passes through the exit, a power cell is
-     * decreased
-     * 
+     * First prox sensor trip checks if the cell has passed through the collector.
+     * Second prox sensor trip adds a power cell, but only if the first is tripped.
+     * Third prox sensor trip subtracts a power cell, as it will be exiting through the turret. 
      */
     public void updateCellCount() {
 
@@ -89,6 +87,8 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
         if (cellCount > 5)
             System.out.println("Jack - stop! You have more than 5 power cells.");
+
+            //TODO:Link with Turret when autonomous
 
         SmartDashboard.putNumber("Cell Count", cellCount);
     }
