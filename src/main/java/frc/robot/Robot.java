@@ -8,7 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.autoCommands.autoDriveForward;
 //import frc.robot.autoCommands.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
@@ -28,7 +31,9 @@ public class Robot extends TimedRobot {
    */
 
   public static DriveControls driveControls;
-  public static Drivetrain drivetrain;
+  public static Drivetrain drivetrainInstance;
+  public static DrivetrainInterface drivetrain;
+  public static WinchInterface winch;
   public static CollectorControls collectorControls;
   public static CollectorInterface collector;
   public static HookControls hookControls;
@@ -45,8 +50,7 @@ public class Robot extends TimedRobot {
   public static Bling bling;
   public static BlingControls blingControls;
   public static CommandBase driveAuto;
-  public static WinchInterface winch;
-  // public static SendableChooser<Command> chooser;
+  public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -54,14 +58,16 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     OI.init();
+    
+    drivetrainInstance = new Drivetrain();
+    drivetrain = (DrivetrainInterface)drivetrainInstance;
+    winch = (WinchInterface)drivetrainInstance;
+    driveControls = new DriveControls(drivetrain, winch);
+    registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
-    drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain, drivetrain);
-    registerSubsystem((SubsystemBase) drivetrain, driveControls);
-
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+    // bling = new Bling();
+    // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    // registerSubsystem((SubsystemBase) bling, blingControls);
 
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
@@ -71,9 +77,9 @@ public class Robot extends TimedRobot {
     // hookControls = new HookControls(hook);
     // registerSubsystem((SubsystemBase) hook, hookControls);
 
-    lift = new Lift();
-    liftControls = new LiftControls(lift);
-    registerSubsystem((SubsystemBase) lift, liftControls);
+    // lift = new Lift();
+    // liftControls = new LiftControls(lift, winch);
+    // registerSubsystem((SubsystemBase) lift, liftControls);
 
     magazine = new Magazine();
     magazineControls = new MagazineControls(magazine);
@@ -91,6 +97,12 @@ public class Robot extends TimedRobot {
     // widgets.register();
 
     //driveAuto = autoTurn.auto90left(drivetrain);
+
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3));
+    // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
+    // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
+    // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
+    SmartDashboard.putData("Autonomous Mode", chooser);
 
   }
 
