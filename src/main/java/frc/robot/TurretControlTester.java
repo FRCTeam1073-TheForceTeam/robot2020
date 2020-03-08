@@ -111,7 +111,7 @@ public class TurretControlTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.1));
+    turretGroup = new SequentialCommandGroup(new TurretIndex(turret), new PointTurret(turret, 0.0, 0.0));
     // , new ClosedLoopAiming(turret,
             // (AdvancedTrackerInterface) portTrackerCamera, shooter, lights, CLAMode.VELOCITY, false, 0.1));
     // (new ShooterIndex(shooter)).schedule();
