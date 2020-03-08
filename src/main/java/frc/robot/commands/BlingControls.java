@@ -41,10 +41,12 @@ public class BlingControls extends CommandBase {
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_, WinchInterface winch_) {
+  public BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_) {
+    // AdvancedTrackerInterface portTracker_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
     this.winch = winch_;
+    this.magazine = magazine_;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -96,6 +98,8 @@ public class BlingControls extends CommandBase {
 
         // Changes the number and color of LEDS 3-9 based on the battery voltage
         batteryBling(2, 6, 8.0, 12.5);
+
+        magazineBallCountBling(9, magazine.getCellCount(), 255, 255, 0);
       }
     }
   }
@@ -220,6 +224,28 @@ public class BlingControls extends CommandBase {
       // If y was pressed
       // turn the light off
       bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 0);
+    }
+  }
+
+  public void magazineBallCountBling(int min_LEDs, int ballCount, int r, int g, int b) {
+    bling.rangeRGB(min_LEDs, ballCount, r, g, b);
+  }
+
+  public void powerCellTrackingBling(int minLEDs, int numLEDs, double min_meters, double max_meters, int r, int g, int b) {
+    if (portTracker.getAdvancedTargets()[0].quality > 0) {
+      int num = (int) (Math.round(((portTracker.getAdvancedTargets()[0].range - min_meters) /
+          (max_meters - min_meters)) * (numLEDs - 1)) + 1);
+      bling.rangeRGB(minLEDs, num, 0, 0, 0);
+      bling.rangeRGB(minLEDs, num, r, g, b);
+    }
+  }
+
+  public void winchVSdrivetrain(int min_LEDs, int num_LEDs) {
+    // The first two LEDs turn white if the winch is engaged
+    if (winch.isWinchEngaged()) {
+      bling.rangeRGB(min_LEDs, num_LEDs, 255, 255, 255);
+    } else {
+      bling.rangeRGB(min_LEDs, num_LEDs, 0, 0, 0);
     }
   }
 

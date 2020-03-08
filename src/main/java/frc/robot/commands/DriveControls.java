@@ -104,8 +104,8 @@ public class DriveControls extends CommandBase {
     public void execute() {
         multiplier = Utility.deadzone(OI.driverController.getRawAxis(3));
 
-        forward = addMultiplier(deadzone(OI.driverController.getRawAxis(1)));
-        rotation = addMultiplier(deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
+        forward = addMultiplier(Utility.deadzone(OI.driverController.getRawAxis(1)));
+        rotation = addMultiplier(Utility.deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
 
         rotation *= -1;
 

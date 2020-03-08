@@ -34,6 +34,7 @@ public class LowerRobotTester extends TimedRobot {
   public static Bling bling;
   public static BlingControls blingControls;
   public static ShuffleboardWidgets widgets;
+  public static MagazineInterface magazine;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -47,7 +48,7 @@ public class LowerRobotTester extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
     registerSubsystem((SubsystemBase) bling, blingControls);
 
     collector = new Collector();

@@ -45,7 +45,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    updateCellCount();
+    // updateCellCount();
   }
 
   @Override
