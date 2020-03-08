@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
-import frc.robot.shuffleboard.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -30,7 +30,6 @@ public class BlingTester extends TimedRobot {
   public static BlingControls blingControls;
   public static Drivetrain drivetrain;
   public static DriveControls driveControls;
-  public static MagazineInterface magazine;
   // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -44,7 +43,7 @@ public class BlingTester extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     registerSubsystem((SubsystemBase) bling, blingControls);
   }
 

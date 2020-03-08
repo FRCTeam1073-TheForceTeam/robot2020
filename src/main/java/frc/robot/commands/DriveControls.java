@@ -7,11 +7,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.interfaces.WinchInterface;
+import frc.robot.Utility;
 
 /**
  * Add your docs here.
@@ -42,26 +44,13 @@ public class DriveControls extends CommandBase {
     }
 
     /**
-     * sets raw axis value inside the deadzone to zero
-     * @param rawAxisValue
-     * @return deadzoned axisValue
-     */
-    public double deadzone(double rawAxisValue) {
-        if (Math.abs(rawAxisValue) < deadzone) {
-            return 0;
-        } else {
-            return (Math.signum(rawAxisValue) / (1 - deadzone)) * (Math.abs(rawAxisValue) - deadzone);
-        }
-    }
-
-    /**
      * adds the throttle multiplier to the axis value
      * @param axisValue
      * @param multiplier_
      * @return axisValue with throttle multiplier
      */
     private double addMultiplier(double axisValue, double multiplier_) {
-        return axisValue * (0.25 + multiplier_ * 0.75);
+        return axisValue * (0.125 + multiplier_ * 0.875);
     }
 
 
@@ -113,19 +102,20 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        multiplier = deadzone(OI.driverController.getRawAxis(3));
+        multiplier = Utility.deadzone(OI.driverController.getRawAxis(3));
 
-        forward = deadzone(OI.driverController.getRawAxis(1));
-        rotation = deadzone(OI.driverController.getRawAxis(4));
+        forward = addMultiplier(deadzone(OI.driverController.getRawAxis(1)));
+        rotation = addMultiplier(deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
 
         rotation *= -1;
 
         if (drivetrain.isDrivetrainEngaged()) {
             arcadeCompute();
-        
             // passes the final axis values into the drivetrain
-            drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            drivetrain.setRotationalVelocity(500*limit((leftOutput)), -500*limit((rightOutput)));
         }
+
 
         if (winch.isWinchEngaged()) {
             winch.setWinchPower(addMultiplier(forward));

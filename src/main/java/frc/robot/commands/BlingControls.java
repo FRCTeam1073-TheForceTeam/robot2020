@@ -41,14 +41,10 @@ public class BlingControls extends CommandBase {
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_) {
-      // AdvancedTrackerInterface portTracker_) {
+  public BlingControls(BlingInterface bling_, WinchInterface winch_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
     this.winch = winch_;
-    this.magazine = magazine_;
-    // this.portTracker = portTracker_;
-
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -62,7 +58,6 @@ public class BlingControls extends CommandBase {
     leds_from_middle = 0;
     move = 0;
     gameDataBlinkCount = 0;
-    i_mag = 0;
     SmartDashboard.putBoolean("Winch", winch.isWinchEngaged());
   }
 
@@ -91,27 +86,17 @@ public class BlingControls extends CommandBase {
 
       } else {
         // TODO: Add other bling commands
-
-        winchVSdrivetrain(0, 2); // Who will win?
+          
+        // The first two LEDs turn white if the winch is engaged
+        if (winch.isWinchEngaged()) {
+          bling.rangeRGB(0, 2, 255, 255, 255);
+        } else {
+          bling.rangeRGB(0, 2, 0, 0, 0);
+        }
 
         // Changes the number and color of LEDS 3-9 based on the battery voltage
-        batteryBling(2, 6, 8, 12.5);
-
-        // Sets an LED for each ball in the collector
-        magazineBallCountBling(9, magazine.getCellCount(), 255, 255, 0);
-
-        // Sets LEDs based on the distance from the base of the power port
-        // powerCellTrackingBling(14, 10, 1.21, 8.53, 255, 240, 0);
+        batteryBling(2, 6, 8.0, 12.5);
       }
-    }
-  }
-
-  public void winchVSdrivetrain(int min_LEDs, int num_LEDs) {
-    // The first two LEDs turn white if the winch is engaged
-    if (winch.isWinchEngaged()) {
-      bling.rangeRGB(min_LEDs, num_LEDs, 255, 255, 255);
-    } else {
-      bling.rangeRGB(min_LEDs, num_LEDs, 0, 0, 0);
     }
   }
 
@@ -235,19 +220,6 @@ public class BlingControls extends CommandBase {
       // If y was pressed
       // turn the light off
       bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 0);
-    }
-  }
-
-  public void magazineBallCountBling(int min_LEDs, int ballCount, int r, int g, int b) {
-    bling.rangeRGB(min_LEDs, ballCount, r, g, b);
-  }
-
-  public void powerCellTrackingBling(int minLEDs, int numLEDs, double min_meters, double max_meters, int r, int g, int b) {
-    if (portTracker.getAdvancedTargets()[0].quality > 0) {
-      int num = (int) (Math.round(((portTracker.getAdvancedTargets()[0].range - min_meters) /
-          (max_meters - min_meters)) * (numLEDs - 1)) + 1);
-      bling.rangeRGB(minLEDs, num, 0, 0, 0);
-      bling.rangeRGB(minLEDs, num, r, g, b);
     }
   }
 

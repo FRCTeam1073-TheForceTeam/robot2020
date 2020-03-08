@@ -33,7 +33,7 @@ public class LowerRobotTester extends TimedRobot {
   public static CollectorInterface collector;
   public static Bling bling;
   public static BlingControls blingControls;
-  public static MagazineInterface magazine;
+  public static ShuffleboardWidgets widgets;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -46,13 +46,17 @@ public class LowerRobotTester extends TimedRobot {
     driveControls = new DriveControls(drivetrain, drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
+    bling = new Bling();
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    registerSubsystem((SubsystemBase) bling, blingControls);
+
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+    widgets = new ShuffleboardWidgets(drivetrain, null, null, null, null, (WinchInterface) drivetrain);
+    widgets.register();
+
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
