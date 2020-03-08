@@ -18,7 +18,7 @@ package frc.robot;
 public final class Constants {
 
     //the maximum velocity the drivetrain can drive at
-    public static final double MAX_DRIVETRAIN_VELOCITY = 100.0;
+    public static final double MAX_DRIVETRAIN_VELOCITY = 3;
     //the minimum distance needed to drive off of the initiation line
     public static final double MIN_DISTANCE_INIT_LINE = 0.46;
     //the maximum velocity the turret can turn at

@@ -104,8 +104,8 @@ public class DriveControls extends CommandBase {
     public void execute() {
         multiplier = Utility.deadzone(OI.driverController.getRawAxis(3));
 
-        forward = addMultiplier(deadzone(OI.driverController.getRawAxis(1)));
-        rotation = addMultiplier(deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
+        forward = addMultiplier(-Utility.deadzone(OI.driverController.getRawAxis(1)));
+        rotation = addMultiplier(-Utility.deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
 
         rotation *= -1;
 
@@ -113,7 +113,7 @@ public class DriveControls extends CommandBase {
             arcadeCompute();
             // passes the final axis values into the drivetrain
             // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
-            drivetrain.setRotationalVelocity(500*limit((leftOutput)), -500*limit((rightOutput)));
+            drivetrain.setVelocity(forward * 1.0, rotation);
         }
 
 
