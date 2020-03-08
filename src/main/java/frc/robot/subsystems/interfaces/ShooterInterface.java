@@ -127,4 +127,21 @@ public interface ShooterInterface {
 
    public void setHoodPower(double pow);
 
+    /**
+     * Engages deadzone roller.
+     */
+    public void engageDeadzoneRoller();
+
+    /**
+     * Sets deadzone roller velocity.
+     * @param velocity The velocity to be set in radians/second.
+     */
+    public void setDeadzoneRollerVelocity(double velocity);
+
+    /**
+     * Gets deadzone roller velocity.
+     * @return The velocity in radians/second.
+     */
+    public double getDeadzoneRollerVelocity();
+
 }
