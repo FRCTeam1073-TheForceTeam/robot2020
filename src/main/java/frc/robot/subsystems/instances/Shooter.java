@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
   private static WPI_TalonFX shooterFlywheel1;
   private static WPI_TalonFX shooterFlywheel2;
   private static CANSparkMax hood;
-  public CANSparkMax deadzoneRoller;
+  private static CANSparkMax deadzoneRoller;
 
   private static CANDigitalInput hoodIndexer;
   private static CANEncoder hoodEncoder;
