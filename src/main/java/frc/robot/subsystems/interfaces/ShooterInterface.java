@@ -85,6 +85,11 @@ public interface ShooterInterface {
    public boolean setHoodVelocity(double angle_rate);
 
    /**
+    * Sets the trigger motor power.
+    */
+    public void setTriggerPower(double power);
+
+   /**
     * Disable the hood axis control so that it is "limp". Setting a new hood angle will
     * re-enable the hood axis control.
     */
@@ -121,5 +126,22 @@ public interface ShooterInterface {
    public boolean hoodIsIndexed();
 
    public void setHoodPower(double pow);
+
+    /**
+     * Engages deadzone roller.
+     */
+    public void engageDeadzoneRoller();
+
+    /**
+     * Sets deadzone roller velocity.
+     * @param velocity The velocity to be set in radians/second.
+     */
+    public void setDeadzoneRollerVelocity(double velocity);
+
+    /**
+     * Gets deadzone roller velocity.
+     * @return The velocity in radians/second.
+     */
+    public double getDeadzoneRollerVelocity();
 
 }

@@ -7,17 +7,25 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.OI;
+import frc.robot.subsystems.interfaces.CollectorInterface;
 import frc.robot.subsystems.interfaces.MagazineInterface;
 
 public class MagazineControls extends CommandBase {
   MagazineInterface magazine;
+  CollectorInterface collector;
   /**
    * Creates a new MagazineControls.
    */
-  public MagazineControls(MagazineInterface magazine_) {
+  int cellCount;
+  public MagazineControls(MagazineInterface magazine_, CollectorInterface collector_) {
     magazine = magazine_;
+    collector = collector_;
+    cellCount = 0;
     addRequirements((SubsystemBase)magazine);
   }
 
@@ -31,6 +39,17 @@ public class MagazineControls extends CommandBase {
   @Override
   public void execute() {
     
+
+    SmartDashboard.putNumber("Real Mag Power", magazine.getPower());
+    SmartDashboard.putNumber("Mag Velocity", magazine.getVelocity());
+
+    magazine.updateCellCount();
+    cellCount = magazine.getCellCount();
+    SmartDashboard.putNumber("Cell Count: ", cellCount);
+    if(cellCount <= 0 || collector.getCollectorSolenoidIn() == false){
+        magazine.setPower(0);
+    }
+
   }
 
   // Returns true when the command should end.

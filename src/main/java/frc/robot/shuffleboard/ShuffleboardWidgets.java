@@ -200,11 +200,9 @@ public class ShuffleboardWidgets extends SubsystemBase {
     // only pulls data from the lift if it exists
     if(lift != null){
       // Lift Data COMPLETE
-      isBrakeset = lift.isBrakeSet();
-      isLiftFullyExtended = lift.isLiftFullyExtended();
-      isLiftFullyRetracted = lift.isLiftFullyRetracted();
+      // isLiftFullyExtended = lift.isLiftFullyExtended();
+      // isLiftFullyRetracted = lift.isLiftFullyRetracted();
       liftExtension = lift.liftExtension();
-      isPinned = lift.isPinned();
     }
 
     // only pulls data from the winch if it exists
@@ -241,10 +239,8 @@ public class ShuffleboardWidgets extends SubsystemBase {
 
     gyroAngleEntry = tab
     .add("gyroAngle", gyroAngleDegrees)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
     .withPosition(2, 3)
-    .withSize(2, 2)
+    .withSize(2, 1)
     .getEntry();
     xcoordinateEntry = tab
     .add("x-coordinate", robotX)
@@ -259,7 +255,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     rotationEntry = tab
     .add("rotation", robotRotation)
     .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
+    .withProperties(Map.of("min", -180, "max", 180))
     .withPosition(4, 3)
     .withSize(2, 2)
     .getEntry();
@@ -295,7 +291,7 @@ public class ShuffleboardWidgets extends SubsystemBase {
     hoodAngleEntry = tab
     .add("hoodDegrees", hoodDegrees)
     .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
+    .withProperties(Map.of("min", 0, "max", 180))
     .withPosition(8, 3)
     .withSize(2, 2)
     .getEntry();

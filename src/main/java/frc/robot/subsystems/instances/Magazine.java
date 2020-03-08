@@ -7,8 +7,9 @@
 
 package frc.robot.subsystems.instances;
 
-//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,78 +19,128 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   /**
    * Creates a new Magazine.
    */
-  private static int cellCount;// The cell count as determined by the trip of a distance sensor facing an
-                               // opposite wall
-  // private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
+  private static int cellCount;// The cell count as determined by the trip of a distance sensor facing an opposite wall
+  private static WPI_TalonSRX magMotor; //Motor controls all belts on magazine.
   // Will likely not have encoder.
   private static DigitalInput entrance;
+  private static DigitalInput goingIn;
   private static DigitalInput exit;
-  private boolean cellEntering, cellExiting;
+  private boolean cellCheck, cellEntering, cellExiting;  
+
+  private double P = 0.0;
+  private double I = 0.0;
+  private double D = 0.0;
+  private double F = 0.0;
 
   public Magazine() {
-    // magMotor = new WPI_TalonSRX(26);//24 is temporary ID
+    magMotor = new WPI_TalonSRX(26);
     cellCount = 0;
-    // Initializes a digital input with channel
-    entrance = new DigitalInput(0);
-    exit = new DigitalInput(1);
+    // Initializes a four digital inputs with channels
+        entrance = new DigitalInput(0);
+        goingIn = new DigitalInput(1);
+        exit = new DigitalInput(2);
+
+    magMotor.configFactoryDefault();
+    magMotor.setSafetyEnabled(false);
+    magMotor.setNeutralMode(NeutralMode.Brake);
+
+    magMotor.config_kP(0, P);
+    magMotor.config_kI(0, I);
+    magMotor.config_kD(0, D);
+    magMotor.config_kF(0, F);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    updateCellCount();
-  }
-
-  @Override
   /**
-   * run sets power to the magazine motor
+   * sets the magazine speed in meters per second of the conveyor belts
    * 
-   * @param - double power: between 0 and 1. The power to the motor
+   * @param double speed in meters per second
    */
-  public void run(double power) {
-    // magMotor.set(power);
-
+  @Override
+  public void setVelocity(double speed) {
+    System.out.println("SETTING MAG VELOCITY");
+    speed = speed / (0.0254 * 2 * Math.PI);
+    magMotor.set(ControlMode.Velocity, speed);
   }
 
-  @Override
-  /**
-   * updateCellCount() If a ball passes through the entrance, a power cell is
-   * added The power cell number limit is 5. Param set to max of 6 in order to
-   * provide a warning. If a ball passes through the exit, a power cell is
-   * decreased
-   * 
-   */
-  public void updateCellCount() {
+    @Override
+    /**
+     * First prox sensor trip checks if the cell has passed through the collector.
+     * Second prox sensor trip adds a power cell, but only if the first is tripped.
+     * Third prox sensor trip subtracts a power cell, as it will be exiting through the turret. 
+     */
+    public void updateCellCount() {
 
-    if (entrance.get() == true && cellEntering == false && cellCount < 6) {
-      cellCount++;
-      cellEntering = true;
+        if (goingIn.get() == true) {
+            this.setPower(0.5);
+            cellCheck = true;
+        }
+        if (goingIn.get() == false)
+            this.setPower(0);
+            cellCheck = false;
+
+        if (entrance.get() == true && cellEntering == false && cellCount < 6 && cellCheck == false) {
+            cellCount++;
+            cellEntering = true;
+        }
+
+        if (entrance.get() == false)
+            cellEntering = false;
+
+        if (exit.get() == true && cellExiting == false && cellCount > 0) {
+            cellCount--;
+            cellExiting = true;
+        }
+
+        if (exit.get() == false)
+            cellExiting = false;
+
+        if (cellCount > 5)
+            System.out.println("Jack - stop! You have more than 5 power cells.");
+
+            //TODO:Link with Turret when autonomous
+
+        SmartDashboard.putNumber("Cell Count", cellCount);
     }
 
-    if (entrance.get() == false)
-      cellEntering = false;
-
-    if (exit.get() == true && cellExiting == false && cellCount > 0) {
-      cellCount--;
-      cellExiting = true;
+    @Override
+    /**
+     * getCellCount()
+     * 
+     * @return number of cells in the magazine
+     */
+    public int getCellCount() {
+        return cellCount;
     }
 
-    if (exit.get() == false)
-      cellExiting = false;
 
-    if (cellCount > 5)
-      System.out.println("Jack - stop! You have more than 5 power cells.");
+  public double getVelocity(){
+    return magMotor.getSelectedSensorVelocity(0);
+  }
 
-    SmartDashboard.putNumber("Cell Count", cellCount);
+  public double getPower(){
+    return magMotor.getMotorOutputPercent();
   }
 
   @Override
-  /**
-   * getCellCount()
-   * 
-   * @return number of cells in the magazine
-   */
-  public int getCellCount() {
-    return cellCount;
+  public boolean getEnteranceState(){
+    return entrance.get();
   }
+
+  @Override
+  public boolean getGoingIn(){
+    return goingIn.get();
+  }
+
+    @Override
+    public void setPower(double speed) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean getGoingOut() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

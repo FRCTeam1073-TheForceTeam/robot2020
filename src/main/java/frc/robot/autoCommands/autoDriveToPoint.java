@@ -8,12 +8,14 @@
 package frc.robot.autoCommands;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 
-public class autoDriveToPoint extends CommandBase {
-
+public class autoDriveToPoint extends SequentialCommandGroup {
   DrivetrainInterface drivetrain;
 
   /**
@@ -21,9 +23,10 @@ public class autoDriveToPoint extends CommandBase {
    */
   public autoDriveToPoint(double XLength, double YLength) {
     addRequirements((SubsystemBase)drivetrain);
-    
-    new autoTurn(drivetrain, returnAngleToTurn(XLength, YLength));
-    new autoDriveForward(drivetrain, returnDistanceToTravel(XLength, YLength));
+    sequence(
+      new autoTurn(drivetrain, returnAngleToTurn(XLength, YLength)),
+      new autoDriveForward(drivetrain, returnDistanceToTravel(XLength, YLength))
+    );
   }
 
   // Called when the command is initially scheduled.

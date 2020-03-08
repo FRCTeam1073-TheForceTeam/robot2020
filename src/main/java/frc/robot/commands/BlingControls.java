@@ -9,95 +9,116 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.commands.BlingControls;
 import frc.robot.subsystems.interfaces.BlingInterface;
+import frc.robot.subsystems.interfaces.WinchInterface;
 
 
 public class BlingControls extends CommandBase {
   int burst_done;
+  int gameDataBlinkCount;
   int burstCount;
   int time;
+  int time_burst;
+  int time_blinkyLEDs;
   int leds_from_middle;
   double match_time;
   int move;
   String gameData;
   BlingInterface bling;
-  
+  WinchInterface winch;
 
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_) {
+  public BlingControls(BlingInterface bling_, WinchInterface winch_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
+    this.winch = winch_;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    burst_done = 0;
+    time_burst = 0;
+    burst_done = 1;
     time = 0;
+    time_blinkyLEDs = 0;
     leds_from_middle = 0;
     move = 0;
+    gameDataBlinkCount = 0;
+    SmartDashboard.putBoolean("Winch", winch.isWinchEngaged());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
     if (burst_done == 0) {
-      burst(bling.getM_LEDBuffer().getLength());
-      bling.setPatternRGBAll(0, 0, 0);
+      // burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+      // bling.setPatternRGBAll(0, 0, 0);
     } else {
-      if (match_time < 30) {
-        blinkyLightsTwoColors(0, 255, 255, 0, 0, 0);
+      if (gameData.equals("R") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
+
+      } else if (gameData.equals("G") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 255, 0);
+
+      } else if (gameData.equals("B") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+
+      } else if (gameData.equals("Y") && gameDataBlinkCount < 5) {
+        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
+
       } else {
-        // driverControlledLEDs(8, 4);
-        // blinkyLights(14, 3, 255, 255, 255);
-        // movingLEDs(19, 7);
-        bling.setPatternRGBAll(0, 0, 0);
+        // TODO: Add other bling commands
+          
+        // The first two LEDs turn white if the winch is engaged
+        if (winch.isWinchEngaged()) {
+          bling.rangeRGB(0, 2, 255, 255, 255);
+        } else {
+          bling.rangeRGB(0, 2, 0, 0, 0);
+        }
+
+        // Changes the number and color of LEDS 3-9 based on the battery voltage
+        batteryBling(2, 6, 8.0, 12.5);
       }
     }
   }
-  
-  
 
-//  public void GameData() {
-//    if (Robot.gameData.getGameData() returns "A")
-//  }
-
-// burst() lights LEDs from the middle out  
-public void burst(int length) {    
+  // burst() lights LEDs from the middle out  
+  public void burst(int length, int r, int g, int b) {    
     // Calculates the middle led(s) of the led string
     int middle1 = (int) (Math.floor((length / 2)));
     int middle2 = (int) (Math.ceil((length / 2)));
     
-    
-    if ((leds_from_middle + middle2) < (length - 1) && time < 15) {
+    if ((leds_from_middle + middle2) < (length - 1) && time_burst < 15) {
       // If there are still more LEDs to change and it is not yet time to change
       // Wait until the 2000th time
-      time = time + 1;
+      time_burst = time_burst + 1;
     } else if ((leds_from_middle + middle2) < (length - 1)) {
       // If it is time to change and there are still more LEDs to change
       // Reset the time
-      time = 0;
+      time_burst = 0;
       // Moves the LEDs out from the center by one light
       leds_from_middle = leds_from_middle + 1;
       // Sets the LEDs
       bling.setPatternRGBAll(0, 0, 0);
-      bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
+      bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, r, g, b);
     } else {
       // Resets the time and says that the burst is finished
       burst_done = 1;
-      time = 0;
+      time_burst = 0;
+      bling.setPatternRGBAll(0, 0, 0);
     }
-    bling.setLEDs2(middle1 - leds_from_middle, middle2 + leds_from_middle, 0, 0, 255);
   }
 
 
@@ -120,18 +141,18 @@ public void burst(int length) {
 
   // blinkyLights() flashes lights on and off in one color for a range of LEDs
   public void blinkyLights(int minLEDsBlink, int numberLEDsBlink, int r, int g, int b) {
-    int time = 0;
-    if (time < 20) {
-      // Turns the LEDs off
-      bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
-      time = time + 1;
-    } else if (time < 40) {
+    if (time_blinkyLEDs < 30) {
       // Sets the LEDs to the specified color
-      time = time + 1;
       bling.rangeRGB(minLEDsBlink, numberLEDsBlink, r, g, b);
+      time_blinkyLEDs = time_blinkyLEDs + 1;
+    } else if (time_blinkyLEDs < 60) {
+      // Turns the LEDs off
+      time_blinkyLEDs = time_blinkyLEDs + 1;
+      bling.rangeRGB(minLEDsBlink, numberLEDsBlink, 0, 0, 0);
     } else {
       // Resets the time counter
-      time = 0;
+      time_blinkyLEDs = 0;
+      gameDataBlinkCount = gameDataBlinkCount + 1;
     }
   }
 

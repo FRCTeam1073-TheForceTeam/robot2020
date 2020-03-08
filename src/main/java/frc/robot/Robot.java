@@ -8,8 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.autoCommands.*;
+import frc.robot.autoCommands.autoDriveForward;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -28,7 +30,9 @@ public class Robot extends TimedRobot {
    */
 
   public static DriveControls driveControls;
+  public static Drivetrain drivetrainInstance;
   public static DrivetrainInterface drivetrain;
+  public static WinchInterface winch;
   public static CollectorControls collectorControls;
   public static CollectorInterface collector;
   public static HookControls hookControls;
@@ -45,7 +49,7 @@ public class Robot extends TimedRobot {
   public static Bling bling;
   public static BlingControls blingControls;
   public static CommandBase driveAuto;
-  // public static SendableChooser<Command> chooser;
+  public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -53,43 +57,51 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     OI.init();
+    
+    drivetrainInstance = new Drivetrain();
+    drivetrain = drivetrainInstance;
+    winch = drivetrainInstance;
+    driveControls = new DriveControls(drivetrain, winch);
+    registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+    // bling = new Bling();
+    // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    // registerSubsystem((SubsystemBase) bling, blingControls);
 
-    drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain);
-    registerSubsystem((SubsystemBase) drivetrain, driveControls);
+    // collector = new Collector();
+    // collectorControls = new CollectorControls(collector);
+    // registerSubsystem((SubsystemBase) collector, collectorControls);
 
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
+    // hook = new Hook();
+    // hookControls = new HookControls(hook);
+    // registerSubsystem((SubsystemBase) hook, hookControls);
 
-    hook = new Hook();
-    hookControls = new HookControls(hook);
-    registerSubsystem((SubsystemBase) hook, hookControls);
-
-    lift = new Lift();
-    liftControls = new LiftControls(lift);
-    registerSubsystem((SubsystemBase) lift, liftControls);
+    // lift = new Lift();
+    // liftControls = new LiftControls(lift, winch);
+    // registerSubsystem((SubsystemBase) lift, liftControls);
 
     magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
+    magazineControls = new MagazineControls(magazine, collector);
     registerSubsystem((SubsystemBase) magazine, magazineControls);
 
     shooter = new Shooter();
     shooterControls = new ShooterControls(shooter);
     registerSubsystem((SubsystemBase) shooter, shooterControls);
 
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase) turret, turretControls);
+    // turret = new Turret();
+    // turretControls = new TurretControls(turret);
+    // registerSubsystem((SubsystemBase) turret, turretControls);
 
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
 
-    driveAuto = new autoTurn(drivetrain, Math.PI);
+    //driveAuto = autoTurn.auto90left(drivetrain);
+    chooser = new SendableChooser<Command>();
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 0.7, 0.7));
+    // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
+    // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
+    // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
+    SmartDashboard.putData("Autonomous Mode", chooser);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -107,6 +119,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    // OI.driverController.setRumble(RumbleType.kLeftRumble, 65536);
   }
 
   /**
@@ -125,23 +138,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //if(driveAuto != null){
-    //  driveAuto.schedule();
-    //}
+    CommandScheduler.getInstance().cancelAll();
+    if (chooser.getSelected() != null) {
+      SmartDashboard.putString("Auto State", "Auto Inited");
+      chooser.getSelected().schedule();
+    }
   }
-
+  
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    //CommandScheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit() {
+    (new ShooterIndex(shooter)).schedule(false);
   }
 
   /**

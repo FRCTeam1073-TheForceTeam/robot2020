@@ -8,23 +8,20 @@
 package frc.robot.subsystems.interfaces;
 
 /**
- * Add your docs here.
+ * Controls the port-tracking lights
  */
-public interface WinchInterface {
-    // I CHOOOOSE: Winch! Winch uses ENGAGE!    
-    public void engageWinch();
+public interface LightingInterface {
 
-    public void engageDrivetrain();
-    
-    public boolean isWinchEngaged();
+    /**
+     * gets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
+     * @return double (0 - 1) 
+     */
+    public double getLEDLevel();
 
-    public int isFwdLimitSwitchClosedLeft();
+    /**
+     * sets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
+     * set double (0 - 1)
+     */
+    public void setLEDLevel(double LEDLevel);
 
-    public int isFwdLimitSwitchClosedRight();
-
-    public int isRevLimitSwitchClosedLeft();
-
-    public int isRevLimitSwitchClosedRight();
-
-    public void setWinchPower(double power);
 }

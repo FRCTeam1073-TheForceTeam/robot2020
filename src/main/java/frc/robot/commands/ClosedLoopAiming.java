@@ -7,10 +7,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
+import frc.robot.subsystems.interfaces.LightingInterface;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
@@ -23,21 +26,19 @@ public class ClosedLoopAiming extends CommandBase {
   TurretInterface turret;
   AdvancedTrackerInterface portTracker;
   ShooterInterface shooter;
+  LightingInterface lights;
+  AdvancedTrackerInterface.AdvancedTargetData currentTarget;
+
+  private String trackerStatus;
 
   private double azimuthTarget;
   private boolean temporary;
 
-  private double currentAzimuth = 0;
-  public double currentDistance = 0;
-  public double currentRange = 0;
-  public double currentElevation = 0;
-
-  private double accelConstant = 0.1;
-  private double azimuthThreshold = 0;
-
   private double azimuthCorrection = 0.0;
+  private double accelConstant = 1.5;
+  private double azimuthThreshold = 0.0;
   private double shooterVelocity = 0.0;
-  private double hoodAngle = 0.0;
+  private double hoodAngle = 0.0; 
   private TrajectoryConfiguration targetTrajectory;
 
   private CLAMode mode = CLAMode.VELOCITY;
@@ -46,17 +47,21 @@ public class ClosedLoopAiming extends CommandBase {
    * @param turret_ Turret susbsytem on the robot
    * @param portTracker_ Vision tracker for the power port
    * @param shooter_ Shooter subsystem on the robot
-   * @param temporary_ Set true to end the command when difference < sucess threshold
+   * @param lights_ Lights control subsytem on the robot
+   * @param shooter_ Shooter subsystem on the robot
+   * @param temporary_ Set true to end the command when difference < success threshold
    */
 
   public ClosedLoopAiming(final TurretInterface turret_, final AdvancedTrackerInterface portTracker_,
-      final ShooterInterface shooter_, CLAMode mode_, boolean temporary_, double azimuthThreshold_) {
+      final ShooterInterface shooter_, final LightingInterface lights_, CLAMode mode_, boolean temporary_, double azimuthThreshold_) {
     turret = turret_;
     portTracker = portTracker_;
     shooter = shooter_;
+    lights = lights_;
     mode = mode_;
     temporary = temporary_;
     azimuthThreshold = azimuthThreshold_;
+    trackerStatus = "";
     addRequirements((SubsystemBase) turret, (SubsystemBase) portTracker);
   }
 
@@ -162,23 +167,43 @@ public class ClosedLoopAiming extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentAzimuth = portTracker.getAdvancedTargets()[0].azimuth;
-    currentDistance = portTracker.getAdvancedTargets()[0].distance;
-    currentRange = portTracker.getAdvancedTargets()[0].range;
-    currentElevation = portTracker.getAdvancedTargets()[0].elevation;
-    if(mode == CLAMode.VELOCITY)
-      azimuthCorrection = (azimuthTarget - currentAzimuth) * accelConstant;
-    if(mode == CLAMode.POSITION)
-      azimuthCorrection = azimuthTarget + currentAzimuth;
-    targetTrajectory = getDoublePortConfiguration(currentRange, currentElevation);
-    shooterVelocity = targetTrajectory.velocity;
-    hoodAngle = targetTrajectory.angle;
-    shooter.setHoodAngle(hoodAngle);
-    shooter.setFlywheelSpeed(getFlywheelRotationRate(shooterVelocity));
-    if(mode == CLAMode.VELOCITY)
-      turret.setVelocity(azimuthCorrection);
-    if(mode == CLAMode.POSITION)
-      turret.setPosition(azimuthCorrection);
+    lights.setLEDLevel(1);
+    AdvancedTrackerInterface.AdvancedTargetData[] targets;
+    targets = portTracker.getAdvancedTargets();
+    if(targets.length > 0) {                //makes sure we have a viable target
+      currentTarget = targets[0];     
+      if(currentTarget.quality >= 50){      //filters targets for high quality
+        if(mode == CLAMode.VELOCITY){
+          azimuthCorrection = (azimuthTarget - currentTarget.azimuth)* accelConstant;
+        }
+        if(mode == CLAMode.POSITION){
+          azimuthCorrection = azimuthTarget + currentTarget.azimuth;
+        }
+        targetTrajectory = getDoublePortConfiguration(currentTarget.range, currentTarget.elevation);
+        shooterVelocity = targetTrajectory.velocity;
+        hoodAngle = targetTrajectory.angle;
+        shooter.setHoodAngle(hoodAngle);
+        // shooter.setFlywheelSpeed(getFlywheelRotationRate(shooterVelocity));
+        if(mode == CLAMode.VELOCITY){
+          turret.setVelocity(azimuthCorrection);
+        }
+        if(mode == CLAMode.POSITION){
+          turret.setPosition(azimuthCorrection);
+        }
+        trackerStatus = "Tracking";
+      }
+      else {
+        trackerStatus = "Low Quality";
+        if(mode == CLAMode.VELOCITY){
+          azimuthCorrection = (azimuthTarget - currentTarget.azimuth)* accelConstant * 0.5;
+          turret.setVelocity(azimuthCorrection);
+        }
+      }
+    }
+    else {
+      trackerStatus = "Target Not Found";
+      turret.disable();
+    }
   }
 
   /**
@@ -194,15 +219,20 @@ public class ClosedLoopAiming extends CommandBase {
   @Override
   public void end(final boolean interrupted) {
     turret.disable();
+    trackerStatus = "Disabled";
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (temporary)
-      return Math.abs(azimuthTarget - currentAzimuth) < azimuthThreshold;
+      return Math.abs(azimuthTarget - currentTarget.azimuth) < azimuthThreshold;
     else
       return false;
+  }
+
+  public String GetTrackerStatus(){
+    return trackerStatus;
   }
   
   public TrajectoryConfiguration trajectoryConfigurationFromAngle(double angle, double portRange, double portHeight) {

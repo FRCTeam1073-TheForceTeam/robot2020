@@ -7,10 +7,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.WinchInterface;
+import frc.robot.Utility;
 
 /**
  * Add your docs here.
@@ -18,6 +21,7 @@ import frc.robot.subsystems.interfaces.DrivetrainInterface;
 public class DriveControls extends CommandBase {
 
     DrivetrainInterface drivetrain;
+    WinchInterface winch;
     private double deadzone = Constants.CONTROLLER_DEADZONE;
     private double multiplier;
     private double forward;
@@ -29,26 +33,14 @@ public class DriveControls extends CommandBase {
      * Sets the drive controls
      * @param drivetrain
      */
-    public DriveControls(DrivetrainInterface drivetrain) {
+    public DriveControls(DrivetrainInterface drivetrain, WinchInterface winch) {
         this.drivetrain = drivetrain;
+        this.winch = winch;
         addRequirements((SubsystemBase)drivetrain);
     }
 
     // starts the robot
     public void initialize() {
-    }
-
-    /**
-     * sets raw axis value inside the deadzone to zero
-     * @param rawAxisValue
-     * @return deadzoned axisValue
-     */
-    public double deadzone(double rawAxisValue) {
-        if (Math.abs(rawAxisValue) < deadzone) {
-            return 0;
-        } else {
-            return rawAxisValue;
-        }
     }
 
     /**
@@ -58,7 +50,7 @@ public class DriveControls extends CommandBase {
      * @return axisValue with throttle multiplier
      */
     private double addMultiplier(double axisValue, double multiplier_) {
-        return axisValue * (0.25 + multiplier_ * 0.75);
+        return axisValue * (0.125 + multiplier_ * 0.875);
     }
 
 
@@ -110,18 +102,24 @@ public class DriveControls extends CommandBase {
 
     // executes actions defined here
     public void execute() {
-        multiplier = deadzone(OI.driverController.getRawAxis(3));
+        multiplier = Utility.deadzone(OI.driverController.getRawAxis(3));
 
-        forward = deadzone(OI.driverController.getRawAxis(1));
-        rotation = deadzone(OI.driverController.getRawAxis(4));
+        forward = addMultiplier(-Utility.deadzone(OI.driverController.getRawAxis(1)));
+        rotation = addMultiplier(-Utility.deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
 
         rotation *= -1;
 
-        arcadeCompute();
+        if (drivetrain.isDrivetrainEngaged()) {
+            arcadeCompute();
+            // passes the final axis values into the drivetrain
+            // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            drivetrain.setVelocity(forward * 1.0, rotation);
+        }
 
 
-        // passes the final axis values into the drivetrain
-        drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+        if (winch.isWinchEngaged()) {
+            winch.setWinchPower(addMultiplier(forward));
+        }
 
         // ensures that the driver doesn't accidentally reset the odometry but makes it an option
         if (OI.driverController.getStartButtonPressed() && OI.driverController.getBackButtonPressed()) {
