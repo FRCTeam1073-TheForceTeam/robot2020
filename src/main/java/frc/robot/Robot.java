@@ -73,10 +73,6 @@ public class Robot extends TimedRobot {
     driveControls = new DriveControls(drivetrain, winch);
     registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
-    registerSubsystem((SubsystemBase) bling, blingControls);
-
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
@@ -100,6 +96,10 @@ public class Robot extends TimedRobot {
     // turret = new Turret();
     // turretControls = new TurretControls(turret);
     // registerSubsystem((SubsystemBase) turret, turretControls);
+
+    bling = new Bling();
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
+    registerSubsystem((SubsystemBase) bling, blingControls);
 
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();

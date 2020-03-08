@@ -41,12 +41,13 @@ public class BlingControls extends CommandBase {
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_) {
-    // AdvancedTrackerInterface portTracker_) {
+  public BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_,
+    AdvancedTrackerInterface portTracker_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
     this.winch = winch_;
     this.magazine = magazine_;
+    this.portTracker = portTracker_;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -99,7 +100,13 @@ public class BlingControls extends CommandBase {
         // Changes the number and color of LEDS 3-9 based on the battery voltage
         batteryBling(2, 6, 8.0, 12.5);
 
-        magazineBallCountBling(9, magazine.getCellCount(), 255, 255, 0);
+        magazineBallCountBling(8, 252, 227, 0);
+
+        if (magazine == null) {
+          SmartDashboard.putBoolean("Magazine Null", true);
+        } else {
+          SmartDashboard.putBoolean("Magazine Null", false);
+        }
       }
     }
   }
@@ -227,22 +234,41 @@ public class BlingControls extends CommandBase {
     }
   }
 
-  public void magazineBallCountBling(int min_LEDs, int ballCount, int r, int g, int b) {
-    if (ballCount == 0) {
-      bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
-    } else if (ballCount > 5){
-      bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
-    } else {
-      bling.rangeRGB(min_LEDs, ballCount, r, g, b);
+  public void magazineBallCountBling(int min_LEDs, int r, int g, int b) {
+    if (magazine != null) {
+      int ballCount = magazine.getCellCount();
+      if (ballCount == 0) {
+        bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
+      } else if (ballCount > 5){
+        bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
+      } else {
+        bling.rangeRGB(min_LEDs, ballCount, r, g, b);
+      }
     }
   }
 
-  public void powerCellTrackingBling(int minLEDs, int numLEDs, double min_meters, double max_meters, int r, int g, int b) {
-    if (portTracker.getAdvancedTargets()[0].quality > 0) {
-      int num = (int) (Math.round(((portTracker.getAdvancedTargets()[0].range - min_meters) /
-          (max_meters - min_meters)) * (numLEDs - 1)) + 1);
-      bling.rangeRGB(minLEDs, num, 0, 0, 0);
-      bling.rangeRGB(minLEDs, num, r, g, b);
+  public void powerPortTrackingBling(int minLEDs, int numLEDs, double min_meters, double max_meters, int r, int g, int b) {
+    if (portTracker != null) {
+      if (portTracker.getAdvancedTargets()[0].quality > 0) {
+        int num = (int) (Math.round(((portTracker.getAdvancedTargets()[0].range - min_meters) /
+            (max_meters - min_meters)) * (numLEDs - 1)) + 1);
+        bling.rangeRGB(minLEDs, num, 0, 0, 0);
+        bling.rangeRGB(minLEDs, num, r, g, b);
+      }
+    }
+  }
+
+  public void movingPowerPortTrackingBling(int min_LED, int num_LEDs, int r, int g, int b) {
+    if (portTracker != null) {
+      if (portTracker.getAdvancedTargets()[0].quality > 0) {
+        int min_LED_move = min_LED + 1;
+        int num_LEDs_move = num_LEDs - 2;
+
+        int x_value = portTracker.getAdvancedTargets()[0].cx;
+        int moving_LED = ((x_value / 320) * num_LEDs_move) + min_LED_move;
+
+        bling.rangeRGB((moving_LED - 1), 3, r, g, b);
+      }
     }
   }
 

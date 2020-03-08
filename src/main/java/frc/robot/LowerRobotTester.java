@@ -47,13 +47,13 @@ public class LowerRobotTester extends TimedRobot {
     driveControls = new DriveControls(drivetrain, drivetrain);
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine);
-    registerSubsystem((SubsystemBase) bling, blingControls);
-
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
+
+    bling = new Bling();
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
+    registerSubsystem((SubsystemBase) bling, blingControls);
 
     widgets = new ShuffleboardWidgets(drivetrain, null, null, null, null, (WinchInterface) drivetrain);
     widgets.register();

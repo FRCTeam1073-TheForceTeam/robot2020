@@ -30,7 +30,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   public Magazine() {
     magMotor = new WPI_TalonSRX(26);
-    cellCount = 0;
+    cellCount = 4;
     // Initializes a four digital inputs with channels
     entrance = new DigitalInput(0);
     goingIn = new DigitalInput(1);
