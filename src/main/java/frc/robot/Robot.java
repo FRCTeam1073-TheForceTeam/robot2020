@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
-    
+
     // hook = new Hook();
     // hookControls = new HookControls(hook);
     // registerSubsystem((SubsystemBase) hook, hookControls);
@@ -97,6 +97,8 @@ public class Robot extends TimedRobot {
     
     //driveAuto = autoTurn.auto90left(drivetrain);
 
+    chooser = new SendableChooser<Command>();
+    
     chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3, 2));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
