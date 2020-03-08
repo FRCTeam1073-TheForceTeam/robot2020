@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     // registerSubsystem((SubsystemBase) lift, liftControls);
 
     magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
+    magazineControls = new MagazineControls(magazine, collector);
     registerSubsystem((SubsystemBase) magazine, magazineControls);
 
     // shooter = new Shooter();
