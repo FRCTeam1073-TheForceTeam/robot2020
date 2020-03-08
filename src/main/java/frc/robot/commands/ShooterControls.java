@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.ShooterInterface;
-import frc.robot.OI;
+import frc.robot.subsystems.instances.Shooter;
 
 public class ShooterControls extends CommandBase {
   ShooterInterface shooter;
@@ -64,6 +64,10 @@ public class ShooterControls extends CommandBase {
     } else if (OI.operatorController.getStartButtonPressed()) {
       pow2 = 1;
     }
+
+    ((Shooter)shooter).deadzoneRoller.set(OI.operatorController.getRawAxis(3));
+
+    // shooter.setDeadzoneRollerVelocity(OI.operatorController.getRawAxis(2) - OI.operatorController.getRawAxis(3));
     
     //Math.abs(OI.driverController.getRawAxis(1)) * Math.PI * 3.5;
 
@@ -83,7 +87,7 @@ public class ShooterControls extends CommandBase {
     
     
     shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
-    + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(1));
+    + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.operatorController.getRawAxis(5));
 
     value = pow2 * pow * OI.operatorController.getRawAxis(1);
     shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
