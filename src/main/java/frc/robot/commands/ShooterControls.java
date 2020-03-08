@@ -47,17 +47,12 @@ public class ShooterControls extends CommandBase {
     if(deadzone(OI.operatorController.getTriggerAxis(Hand.kRight)) == 0){
       if(OI.operatorController.getBumper(Hand.kLeft)) shooter.setFlywheelSpeed(0);
       else{
-        speed = deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670);
+        speed = -deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670.0);
         shooter.setFlywheelSpeed(speed);
       }
     }
-    if (OI.operatorController.getBumper(Hand.kRight)) {
-      pow2 = 0.1;
-    } else if (OI.operatorController.getStartButtonPressed()) {
-      pow2 = 1;
-    }
 
-    shooter.setDeadzoneRollerPower(OI.operatorController.getRawAxis(3));
+    shooter.setDeadzoneRollerPower(OI.operatorController.getBumper(Hand.kRight) ? 0.75 : 0);
 
     // shooter.setDeadzoneRollerVelocity(OI.operatorController.getRawAxis(2) - OI.operatorController.getRawAxis(3));
     
@@ -80,8 +75,8 @@ public class ShooterControls extends CommandBase {
     shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
     + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.operatorController.getRawAxis(5));
 
-    value = pow2 * pow * OI.operatorController.getRawAxis(1);
-    shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
+    // value = pow2 * pow * OI.operatorController.getRawAxis(1);
+    // shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
     SmartDashboard.putNumber("Input RPM", value * shooter.getMaximumFlywheelSpeed() * 30 / Math.PI);
     SmartDashboard.putNumber("[Graph] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
     SmartDashboard.putNumber("[Graph] Estimated linear velocity of power cell (MPH)",

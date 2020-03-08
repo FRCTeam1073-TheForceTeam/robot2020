@@ -122,7 +122,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   }
 
   @Override
-  public boolean getEnteranceState() {
+  public boolean getEntranceState(){
     return entrance.get();
   }
 
@@ -131,16 +131,8 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     return goingIn.get();
   }
 
-    @Override
-    public void setPower(double speed) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean getGoingOut() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
+  @Override
+  public void setPower(double speed) {
+    magMotor.set(ControlMode.PercentOutput, speed);
+  }
 }

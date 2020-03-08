@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
-
+    
     // hook = new Hook();
     // hookControls = new HookControls(hook);
     // registerSubsystem((SubsystemBase) hook, hookControls);
