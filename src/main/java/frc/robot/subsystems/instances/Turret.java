@@ -20,7 +20,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private TalonSRX turretRotator;
   private final double ticksPerRadian = 6441.318;
   private double range = 3;          // radians  TODO: get from CAD
-  private double indexOffset = -.752; // radians  TODO: get from CAD
+  private double indexOffset = 0.0; // radians  TODO: get from CAD
   private boolean disabled = true;
   private boolean velocityMode = true;
 
