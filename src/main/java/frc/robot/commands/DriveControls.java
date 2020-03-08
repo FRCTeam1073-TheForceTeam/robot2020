@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -49,7 +50,7 @@ public class DriveControls extends CommandBase {
      * @return axisValue with throttle multiplier
      */
     private double addMultiplier(double axisValue, double multiplier_) {
-        return axisValue * (0.25 + multiplier_ * 0.75);
+        return axisValue * (0.125 + multiplier_ * 0.875);
     }
 
 
@@ -103,17 +104,18 @@ public class DriveControls extends CommandBase {
     public void execute() {
         multiplier = Utility.deadzone(OI.driverController.getRawAxis(3));
 
-        forward = addMultiplier(Utility.deadzone(OI.driverController.getRawAxis(1)));
-        rotation = addMultiplier(Utility.deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
+        forward = addMultiplier(-Utility.deadzone(OI.driverController.getRawAxis(1)));
+        rotation = addMultiplier(-Utility.deadzone(OI.driverController.getRawAxis(4)),0.5 * multiplier);
 
         rotation *= -1;
 
         if (drivetrain.isDrivetrainEngaged()) {
             arcadeCompute();
-        
             // passes the final axis values into the drivetrain
-            drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
+            drivetrain.setVelocity(forward * 1.0, rotation);
         }
+
 
         if (winch.isWinchEngaged()) {
             winch.setWinchPower(addMultiplier(forward));

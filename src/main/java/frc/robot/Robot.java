@@ -10,9 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.autoCommands.autoDriveForward;
-//import frc.robot.autoCommands.*;
+import frc.robot.autoCommands.autoDriveToPoint;
+import frc.robot.autoCommands.autoSetFlywheel;
+import frc.robot.autoCommands.autoSetHood;
+import frc.robot.autoCommands.autoShootingAlignedWithTarget;
+import frc.robot.autoCommands.autoShootingMidOfField;
 import frc.robot.commands.*;
 import frc.robot.subsystems.instances.*;
 import frc.robot.subsystems.interfaces.*;
@@ -60,13 +65,13 @@ public class Robot extends TimedRobot {
     OI.init();
     
     drivetrainInstance = new Drivetrain();
-    drivetrain = (DrivetrainInterface)drivetrainInstance;
-    winch = (WinchInterface)drivetrainInstance;
+    drivetrain = drivetrainInstance;
+    winch = drivetrainInstance;
     driveControls = new DriveControls(drivetrain, winch);
     registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
     // bling = new Bling();
-    // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
+    // blingControls = new BlingControls(bling, winch);
     // registerSubsystem((SubsystemBase) bling, blingControls);
 
     collector = new Collector();
@@ -93,17 +98,16 @@ public class Robot extends TimedRobot {
     // turretControls = new TurretControls(turret);
     // registerSubsystem((SubsystemBase) turret, turretControls);
 
-    // widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-    // widgets.register();
+    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
+    widgets.register();
 
     //driveAuto = autoTurn.auto90left(drivetrain);
-
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3));
+    chooser = new SendableChooser<Command>();
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 0.7, 0.7));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
     SmartDashboard.putData("Autonomous Mode", chooser);
-
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -121,6 +125,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    // OI.driverController.setRumble(RumbleType.kLeftRumble, 65536);
   }
 
   /**
@@ -138,16 +143,19 @@ public class Robot extends TimedRobot {
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
-  public void autonomousInit() {    
+  public void autonomousInit() {
+    CommandScheduler.getInstance().cancelAll();
+    if(chooser.getSelected() != null){
+      SmartDashboard.putString("Auto State", "Auto Inited");
+      chooser.getSelected().schedule();
+    }
   }
-
+  
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
-    // JTJ - commenting out as we merge to master. re-enable with driveAuto is complete. 
-    CommandScheduler.getInstance().run();
   }
 
   @Override
