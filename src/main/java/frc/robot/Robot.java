@@ -101,12 +101,12 @@ public class Robot extends TimedRobot {
     // turretControls = new TurretControls(turret);
     // registerSubsystem((SubsystemBase) turret, turretControls);
 
-    // widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-    // widgets.register();
+    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
+    widgets.register();
 
     //driveAuto = autoTurn.auto90left(drivetrain);
-
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3));
+    chooser = new SendableChooser<Command>();
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3, 1));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
@@ -128,8 +128,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // OI.driverController.setRumble(RumbleType.kLeftRumble, 65536);
     CommandScheduler.getInstance().run();
+    // OI.driverController.setRumble(RumbleType.kLeftRumble, 65536);
   }
 
   /**
@@ -155,9 +155,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().cancelAll();
     if(chooser.getSelected() != null){
+      SmartDashboard.putString("Auto State", "Auto Inited");
       chooser.getSelected().schedule();
     }
+
   }
 
   @Override

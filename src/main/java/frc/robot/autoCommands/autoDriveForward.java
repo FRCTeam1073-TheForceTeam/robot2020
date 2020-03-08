@@ -7,7 +7,9 @@
 
 package frc.robot.autoCommands;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,7 +21,7 @@ public class autoDriveForward extends CommandBase {
   private double maxVelocity;
   private double velocity;
   private double distance;
-  private double accelConstant = 0.5;
+  private double accelConstant = 0;
   Pose2d initPose;
   Pose2d currentPose;
 
@@ -33,31 +35,30 @@ public class autoDriveForward extends CommandBase {
     addRequirements((SubsystemBase)drivetrain);
   }
 
-  // creates an autoDriveForward where you don't have to input the maxVelocity
-  public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
-    this(drivetrain, distance, Constants.MAX_DRIVETRAIN_VELOCITY);
-  }
-
-  // creates an autoDriveForward where it only drives off of the initiation line
-  public autoDriveForward autoInitLine(DrivetrainInterface drivetrain) {
-    return new autoDriveForward(drivetrain, Constants.MIN_DISTANCE_INIT_LINE, Constants.MAX_DRIVETRAIN_VELOCITY);
-  }
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     initPose = drivetrain.getRobotPose();
   }
 
+  int a = 0;
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     currentPose = drivetrain.getRobotPose();
-    velocity = Math.min(Constants.MAX_DRIVETRAIN_VELOCITY,Math.max(-Constants.MAX_DRIVETRAIN_VELOCITY,(accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm()))));
-
+    velocity = maxVelocity;
+    // velocity = Math.min(Constants.MAX_DRIVETRAIN_VELOCITY,Math.max(-Constants.MAX_DRIVETRAIN_VELOCITY,(accelConstant * (distance - currentPose.minus(initPose).getTranslation().getNorm()))));
+    SmartDashboard.putNumber("A", a++);
     // ensures that it doesn't try to go faster than it's able to
-    drivetrain.setVelocity(Math.min(velocity, maxVelocity), Math.min(velocity, maxVelocity));
+
+    // drivetrain.setVelocity(Math.min(velocity, maxVelocity), 0);
+    SmartDashboard.putNumber("Auto Velocity", Math.min(velocity, maxVelocity));
+    SmartDashboard.putNumber("NORM", currentPose.minus(initPose).getTranslation().getNorm());
+    SmartDashboard.putNumber("DISTANCE", distance);
+    drivetrain.setPower(0.1, 0);
   }
+  boolean b=true;
 
   // Called once the command ends or is interrupted.
   @Override
@@ -65,11 +66,14 @@ public class autoDriveForward extends CommandBase {
 
     // stops the drivetrain
     drivetrain.setVelocity(0, 0);
+
+    SmartDashboard.putBoolean("AutoDrive Status", interrupted);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return currentPose.minus(initPose).getTranslation().getNorm() >= distance;
+    SmartDashboard.putBoolean("is: finished?", currentPose.minus(initPose).getTranslation().getNorm() >= Math.abs(distance));
+    return currentPose.minus(initPose).getTranslation().getNorm() >= Math.abs(distance);
   }
 }
