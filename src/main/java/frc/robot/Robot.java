@@ -68,9 +68,9 @@ public class Robot extends TimedRobot {
     // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     // registerSubsystem((SubsystemBase) bling, blingControls);
     
-    // collector = new Collector();
-    // collectorControls = new CollectorControls(collector);
-    // registerSubsystem((SubsystemBase) collector, collectorControls);
+    collector = new Collector();
+    collectorControls = new CollectorControls(collector);
+    registerSubsystem((SubsystemBase) collector, collectorControls);
     
     // hook = new Hook();
     // hookControls = new HookControls(hook);

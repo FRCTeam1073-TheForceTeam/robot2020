@@ -32,9 +32,11 @@ public class MagazineControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
   }
 
+  
+  double magazinePower = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -46,8 +48,19 @@ public class MagazineControls extends CommandBase {
     magazine.updateCellCount();
     cellCount = magazine.getCellCount();
     SmartDashboard.putNumber("Cell Count: ", cellCount);
-    if(cellCount <= 0 || collector.getCollectorSolenoidIn() == false){
-        magazine.setPower(0);
+    // if (cellCount < 0 || collector.getCollectorSolenoidIn() == false) {
+    //   magazine.setPower(0);
+    if (false) {
+      
+    } else {
+      if (OI.operatorController.getPOV() == 0) {
+        magazinePower = 0.5;        
+      } else if (OI.operatorController.getPOV() == 180) {
+        magazinePower = -0.5;
+      }else{
+        magazinePower = 0;
+      }
+      magazine.setPower(magazinePower); 
     }
 
   }

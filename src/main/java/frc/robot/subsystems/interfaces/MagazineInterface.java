@@ -23,9 +23,7 @@ public interface MagazineInterface {
     
     int getCellCount();
 
-    boolean getEnteranceState();
+    boolean getEntranceState();
 
     boolean getGoingIn();
-
-    boolean getGoingOut();
 }

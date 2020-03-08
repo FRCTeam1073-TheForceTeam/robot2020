@@ -38,7 +38,7 @@ public class CollectorControls extends CommandBase {
   double pow = 1;
   @Override
   public void execute() {
-    if (OI.operatorController.getBumper(Hand.kRight)) {
+    if (OI.operatorController.getBButton()) {
       collect.lower();
       isRaised = false;
     } else {
