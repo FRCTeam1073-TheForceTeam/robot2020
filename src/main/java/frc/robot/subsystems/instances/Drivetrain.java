@@ -179,11 +179,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     public void setRotationalVelocity(double left, double right) {
         leftMotorLeader.set(ControlMode.Velocity, left * 2048.0 * 0.1 / (2.0 * Math.PI));
         rightMotorLeader.set(ControlMode.Velocity, right * 2048.0 * 0.1 / (2.0 * Math.PI));
+        SmartDashboard.putNumber("Left Set Power", left * 2048.0 * 0.1 / (2.0 * Math.PI));
         leftPower = left;
         rightPower = right;
         //System.out.println("x");
     }
-
     /**
      * Sets the robot velocity.
      * @param forward The forward speed in meters/second
@@ -193,12 +193,17 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         SmartDashboard.putNumber("SetVelocity Forward", forward);
         DifferentialDriveWheelSpeeds diffSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(forward, 0, rotation));
-        double leftRotationalSpeed = diffSpeeds.leftMetersPerSecond / wheelDiameter;
-        double rightRotationalSpeed = diffSpeeds.rightMetersPerSecond / wheelDiameter;
-
-        SmartDashboard.putNumber("Left Set Power", leftRotationalSpeed * 2048.0 * 0.1 / (2.0 * Math.PI));
-        leftMotorLeader.set(ControlMode.Velocity, leftRotationalSpeed * 2048.0 * 0.1 / (2.0 * Math.PI));
-        rightMotorLeader.set(ControlMode.Velocity, -rightRotationalSpeed * 2048.0 * 0.1 / (2.0 * Math.PI));
+        SmartDashboard.putNumber("diffSpeeds.left", diffSpeeds.leftMetersPerSecond);
+        SmartDashboard.putNumber("diffSpeeds.right", diffSpeeds.rightMetersPerSecond);
+        double leftRotationalSpeed = -diffSpeeds.leftMetersPerSecond * ticksPerMeter * 0.1;
+        double rightRotationalSpeed = diffSpeeds.rightMetersPerSecond * ticksPerMeter * 0.1;
+        SmartDashboard.putNumber("leftRotationalSpeed", leftRotationalSpeed);
+        SmartDashboard.putNumber("rightRotationalSpeed", rightRotationalSpeed);
+        SmartDashboard.putNumber("wheelDiameter", wheelDiameter);
+        
+        SmartDashboard.putNumber("Left Set Power", leftRotationalSpeed);
+        leftMotorLeader.set(ControlMode.Velocity, leftRotationalSpeed);
+        rightMotorLeader.set(ControlMode.Velocity, rightRotationalSpeed);
         leftPower = leftRotationalSpeed;
         rightPower = rightRotationalSpeed;
 

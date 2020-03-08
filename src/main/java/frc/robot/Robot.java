@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     drivetrain = drivetrainInstance;
     winch = drivetrainInstance;
     driveControls = new DriveControls(drivetrain, winch);
-    registerSubsystem((SubsystemBase) drivetrain, driveControls);
+    registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
     bling = new Bling();
     blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
@@ -85,9 +85,9 @@ public class Robot extends TimedRobot {
     // hookControls = new HookControls(hook);
     // registerSubsystem((SubsystemBase) hook, hookControls);
 
-    lift = new Lift();
-    liftControls = new LiftControls(lift, winch);
-    registerSubsystem((SubsystemBase) lift, liftControls);
+    // lift = new Lift();
+    // liftControls = new LiftControls(lift, winch);
+    // registerSubsystem((SubsystemBase) lift, liftControls);
 
     magazine = new Magazine();
     magazineControls = new MagazineControls(magazine);
