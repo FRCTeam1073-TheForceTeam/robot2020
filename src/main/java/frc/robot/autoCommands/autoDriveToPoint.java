@@ -23,8 +23,8 @@ public class autoDriveToPoint extends SequentialCommandGroup {
   public autoDriveToPoint(double startY, double startX, double endY, double endX) {
     addRequirements((SubsystemBase) drivetrain);
     sequence(
-        new autoTurn(drivetrain, returnAngleToTurn(startY, startX, endY, endX)),
-        new autoDriveForward(drivetrain, returnDistanceToTravel(startY, startX, endY, endX))
+        new autoTurn(drivetrain, returnAngleToTurn(startY, startX, endY, endX))
+        // new autoDriveForward(drivetrain, returnDistanceToTravel(startY, startX, endY, endX))
     );
   }
 

@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.interfaces.WinchInterface;
@@ -25,7 +26,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     private PigeonIMU gyro;
     private DifferentialDriveOdometry odometry;
 
-    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6477);
+    private double robotWidth = 0.5969;
+
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(robotWidth);
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
     // ((52352+56574+54036+56452+53588+57594)/6.0)*0.1;//7942.8;
@@ -148,7 +151,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
      * Returns a Pose2d object containing the translation and rotation components of the robot's position.
      */
     public Pose2d getRobotPose() {
-        return robotPose;
+        return new Pose2d(
+            robotPose.getTranslation().getX(), 
+            robotPose.getTranslation().getY(),
+            new Rotation2d(robotPose.getRotation().getRadians())
+        );
     }
 
     /**
@@ -177,18 +184,34 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
     public void setRotationalVelocity(double left, double right) {
         leftMotorLeader.set(ControlMode.Velocity, left * 2048.0 * 0.1 / (2.0 * Math.PI));
         rightMotorLeader.set(ControlMode.Velocity, right * 2048.0 * 0.1 / (2.0 * Math.PI));
+        SmartDashboard.putNumber("Left Set Power", left * 2048.0 * 0.1 / (2.0 * Math.PI));
         leftPower = left;
         rightPower = right;
         //System.out.println("x");
     }
-
     /**
      * Sets the robot velocity.
      * @param forward The forward speed in meters/second
      * @param rotation The robot's rotational speed in radians/second
      */
     public void setVelocity(double forward, double rotation) {
-        setRotationalVelocity(forward * 2 / wheelDiameter, forward * 2 / wheelDiameter);
+
+        SmartDashboard.putNumber("SetVelocity Forward", forward);
+        DifferentialDriveWheelSpeeds diffSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(forward, 0, rotation));
+        SmartDashboard.putNumber("diffSpeeds.left", diffSpeeds.leftMetersPerSecond);
+        SmartDashboard.putNumber("diffSpeeds.right", diffSpeeds.rightMetersPerSecond);
+        double leftRotationalSpeed = -diffSpeeds.leftMetersPerSecond * ticksPerMeter * 0.1;
+        double rightRotationalSpeed = diffSpeeds.rightMetersPerSecond * ticksPerMeter * 0.1;
+        SmartDashboard.putNumber("leftRotationalSpeed", leftRotationalSpeed);
+        SmartDashboard.putNumber("rightRotationalSpeed", rightRotationalSpeed);
+        SmartDashboard.putNumber("wheelDiameter", wheelDiameter);
+        
+        SmartDashboard.putNumber("Left Set Power", leftRotationalSpeed);
+        leftMotorLeader.set(ControlMode.Velocity, leftRotationalSpeed);
+        rightMotorLeader.set(ControlMode.Velocity, rightRotationalSpeed);
+        leftPower = leftRotationalSpeed;
+        rightPower = rightRotationalSpeed;
+
         //System.out.println("x");
     }
 
@@ -197,7 +220,7 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         rightMotorLeader.set(ControlMode.PercentOutput, right);
         leftPower = left;
         rightPower = right;
-        //System.out.println("x");
+        System.out.println("x");
     }
 
     /**
