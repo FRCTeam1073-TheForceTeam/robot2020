@@ -30,7 +30,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
 
   public Magazine() {
     magMotor = new WPI_TalonSRX(26);
-    cellCount = 4;
+    cellCount = 0;
     // Initializes a four digital inputs with channels
     entrance = new DigitalInput(0);
     goingIn = new DigitalInput(1);
@@ -45,7 +45,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // updateCellCount();
+    updateCellCount();
   }
 
   @Override
@@ -56,7 +56,6 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
    */
   public void setPower(double power) {
     magMotor.set(ControlMode.PercentOutput, power);
-
   }
 
   @Override

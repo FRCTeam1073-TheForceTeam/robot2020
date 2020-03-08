@@ -101,12 +101,6 @@ public class BlingControls extends CommandBase {
         batteryBling(2, 6, 8.0, 12.5);
 
         magazineBallCountBling(8, 252, 227, 0);
-
-        if (magazine == null) {
-          SmartDashboard.putBoolean("Magazine Null", true);
-        } else {
-          SmartDashboard.putBoolean("Magazine Null", false);
-        }
       }
     }
   }
