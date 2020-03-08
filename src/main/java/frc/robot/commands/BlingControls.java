@@ -228,7 +228,13 @@ public class BlingControls extends CommandBase {
   }
 
   public void magazineBallCountBling(int min_LEDs, int ballCount, int r, int g, int b) {
-    bling.rangeRGB(min_LEDs, ballCount, r, g, b);
+    if (ballCount == 0) {
+      bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
+    } else if (ballCount > 5){
+      bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
+    } else {
+      bling.rangeRGB(min_LEDs, ballCount, r, g, b);
+    }
   }
 
   public void powerCellTrackingBling(int minLEDs, int numLEDs, double min_meters, double max_meters, int r, int g, int b) {
