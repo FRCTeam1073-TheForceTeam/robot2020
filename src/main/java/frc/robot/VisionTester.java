@@ -8,9 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.instances.OpenMVBase;
 import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
+import frc.robot.subsystems.interfaces.LightingInterface;
+import frc.robot.subsystems.instances.Lighting;
+import frc.robot.commands.LightingControls;
 import frc.robot.subsystems.instances.OMVPortTracker;
 
 /**
@@ -22,6 +25,8 @@ import frc.robot.subsystems.instances.OMVPortTracker;
 public class VisionTester extends TimedRobot {
 
   public static AdvancedTrackerInterface portTrackerCamera;
+  public static LightingInterface lighting;
+  public static Lighting lights;
 
 
   /**
@@ -35,6 +40,9 @@ public class VisionTester extends TimedRobot {
     OMVPortTracker tracker = new OMVPortTracker(1);
     tracker.register();
     portTrackerCamera = tracker;
+    lights = new Lighting(0);
+    lights.register();
+    CommandScheduler.getInstance().setDefaultCommand((Subsystem)lights, new LightingControls(lights));
     System.out.println("VisionTester Init");
   }
 
@@ -55,7 +63,7 @@ public class VisionTester extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    portTrackerCamera.setLEDLevel(0);
+    lights.setLEDLevel(0.0);
   }
 
   @Override
@@ -78,7 +86,9 @@ public class VisionTester extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    portTrackerCamera.setLEDLevel(0.5);
+    if (lights != null){
+      lights.setLEDLevel(0.1);
+    }
   }
 
   /**
