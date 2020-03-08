@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
 
     //driveAuto = autoTurn.auto90left(drivetrain);
     chooser = new SendableChooser<Command>();
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3, 0.7));
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 0.7, 0.7));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
@@ -147,20 +147,19 @@ public class Robot extends TimedRobot {
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
-  public void autonomousInit() {    
-  }
-
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
+  public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
     if(chooser.getSelected() != null){
       SmartDashboard.putString("Auto State", "Auto Inited");
       chooser.getSelected().schedule();
     }
-
+  }
+  
+  /**
+   * This function is called periodically during autonomous.
+   */
+  @Override
+  public void autonomousPeriodic() {
   }
 
   @Override

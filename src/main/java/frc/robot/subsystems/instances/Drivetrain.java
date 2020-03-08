@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
 import frc.robot.subsystems.interfaces.WinchInterface;
@@ -150,7 +151,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
      * Returns a Pose2d object containing the translation and rotation components of the robot's position.
      */
     public Pose2d getRobotPose() {
-        return robotPose;
+        return new Pose2d(
+            robotPose.getTranslation().getX(), 
+            robotPose.getTranslation().getY(),
+            new Rotation2d(robotPose.getRotation().getRadians())
+        );
     }
 
     /**
