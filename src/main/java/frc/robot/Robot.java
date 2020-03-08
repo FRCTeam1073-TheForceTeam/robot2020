@@ -106,11 +106,11 @@ public class Robot extends TimedRobot {
 
     //driveAuto = autoTurn.auto90left(drivetrain);
 
-    // chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3));
-    // // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
-    // // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
-    // // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
-    // SmartDashboard.putData("Autonomous Mode", chooser);
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3, 2));
+    // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
+    // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
+    // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
+    SmartDashboard.putData("Autonomous Mode", chooser);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -159,9 +159,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // if(chooser.getSelected() != null){
-    //   chooser.getSelected().schedule();
-    // }
+    if(chooser.getSelected() != null){
+      chooser.getSelected().schedule();
+    }
   }
 
   @Override
