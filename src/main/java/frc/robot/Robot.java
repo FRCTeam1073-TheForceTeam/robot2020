@@ -71,12 +71,12 @@ public class Robot extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
     // bling = new Bling();
-    // blingControls = new BlingControls(bling, winch);
+    // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
     // registerSubsystem((SubsystemBase) bling, blingControls);
 
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
+    // collector = new Collector();
+    // collectorControls = new CollectorControls(collector);
+    // registerSubsystem((SubsystemBase) collector, collectorControls);
 
     // hook = new Hook();
     // hookControls = new HookControls(hook);
@@ -87,12 +87,12 @@ public class Robot extends TimedRobot {
     // registerSubsystem((SubsystemBase) lift, liftControls);
 
     magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
+    magazineControls = new MagazineControls(magazine, collector);
     registerSubsystem((SubsystemBase) magazine, magazineControls);
 
-    // shooter = new Shooter();
-    // shooterControls = new ShooterControls(shooter);
-    // registerSubsystem((SubsystemBase) shooter, shooterControls);
+    shooter = new Shooter();
+    shooterControls = new ShooterControls(shooter);
+    registerSubsystem((SubsystemBase) shooter, shooterControls);
 
     // turret = new Turret();
     // turretControls = new TurretControls(turret);
@@ -144,7 +144,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if(chooser.getSelected() != null){
+    CommandScheduler.getInstance().cancelAll();
+    if (chooser.getSelected() != null) {
       SmartDashboard.putString("Auto State", "Auto Inited");
       chooser.getSelected().schedule();
     }
@@ -159,6 +160,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    (new ShooterIndex(shooter)).schedule(false);
   }
 
   /**

@@ -24,9 +24,8 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   // Will likely not have encoder.
   private static DigitalInput entrance;
   private static DigitalInput goingIn;
-  private static DigitalInput goingOut;
   private static DigitalInput exit;
-  private boolean cellEntering, cellIn, cellOut, cellExiting;
+  private boolean cellCheck, cellEntering, cellExiting;  
 
   private double P = 0.0;
   private double I = 0.0;
@@ -37,10 +36,9 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor = new WPI_TalonSRX(26);
     cellCount = 0;
     // Initializes a four digital inputs with channels
-    entrance = new DigitalInput(0);
-    goingIn = new DigitalInput(1);
-    goingOut = new DigitalInput(2);
-    exit = new DigitalInput(3);
+        entrance = new DigitalInput(0);
+        goingIn = new DigitalInput(1);
+        exit = new DigitalInput(2);
 
     magMotor.configFactoryDefault();
     magMotor.setSafetyEnabled(false);
@@ -50,23 +48,6 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor.config_kI(0, I);
     magMotor.config_kD(0, D);
     magMotor.config_kF(0, F);
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    updateCellCount();
-  }
-
-  @Override
-  /**
-   * sets power to the magazine motor
-   * 
-   * @param - double power: between 0 and 1. The power to the motor
-   */
-  public void setPower(double power) {
-    magMotor.set(ControlMode.PercentOutput, power);
-
   }
 
   /**
@@ -81,56 +62,56 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor.set(ControlMode.Velocity, speed);
   }
 
-  @Override
-  /**
-   * updateCellCount() If a ball passes through the entrance, a power cell is
-   * added The power cell number limit is 5. Param set to max of 6 in order to
-   * provide  warning. Power cell value decreased after passing through exit.
-   * 
-   */
-  public void updateCellCount() {
+    @Override
+    /**
+     * First prox sensor trip checks if the cell has passed through the collector.
+     * Second prox sensor trip adds a power cell, but only if the first is tripped.
+     * Third prox sensor trip subtracts a power cell, as it will be exiting through the turret. 
+     */
+    public void updateCellCount() {
 
-    if (entrance.get() == true && cellEntering == false && cellCount < 6) {
-      cellCount++;
-      cellEntering = true;
+        if (goingIn.get() == true) {
+            this.setPower(0.5);
+            cellCheck = true;
+        }
+        if (goingIn.get() == false)
+            this.setPower(0);
+            cellCheck = false;
+
+        if (entrance.get() == true && cellEntering == false && cellCount < 6 && cellCheck == false) {
+            cellCount++;
+            cellEntering = true;
+        }
+
+        if (entrance.get() == false)
+            cellEntering = false;
+
+        if (exit.get() == true && cellExiting == false && cellCount > 0) {
+            cellCount--;
+            cellExiting = true;
+        }
+
+        if (exit.get() == false)
+            cellExiting = false;
+
+        if (cellCount > 5)
+            System.out.println("Jack - stop! You have more than 5 power cells.");
+
+            //TODO:Link with Turret when autonomous
+
+        SmartDashboard.putNumber("Cell Count", cellCount);
     }
 
-    if (entrance.get() == false)
-      cellEntering = false;
-      
-
-    // if (goingIn.get() == true && cellEntering == false && cellIn == false && cellCount < 6) {
-    //   cellCount++;
-    //   cellIn = true;
-    // }
-
-    // if (goingIn.get() == false)
-    //   cellIn = false;
-
-
-    if (exit.get() == true && cellExiting == false && cellCount > 0) {
-      cellCount--;
-      cellExiting = true;
+    @Override
+    /**
+     * getCellCount()
+     * 
+     * @return number of cells in the magazine
+     */
+    public int getCellCount() {
+        return cellCount;
     }
 
-    if (exit.get() == false)
-      cellExiting = false;
-
-    if (cellCount > 5)
-      System.out.println("Jack - stop! You have more than 5 power cells.");
-
-    SmartDashboard.putNumber("Cell Count", cellCount);
-  }
-
-  @Override
-  /**
-   * getCellCount()
-   * 
-   * @return number of cells in the magazine
-   */
-  public int getCellCount() {
-    return cellCount;
-  }
 
   public double getVelocity(){
     return magMotor.getSelectedSensorVelocity(0);
@@ -146,9 +127,20 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   }
 
   @Override
-  public boolean getExitState(){
-    return exit.get();
+  public boolean getGoingIn(){
+    return goingIn.get();
   }
 
-  
+    @Override
+    public void setPower(double speed) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean getGoingOut() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

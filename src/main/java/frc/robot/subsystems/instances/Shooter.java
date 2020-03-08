@@ -27,9 +27,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import frc.robot.subsystems.interfaces.ControlPanelInterface;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 
-public class Shooter extends SubsystemBase implements ShooterInterface {
+enum DeadzoneRollerMode {
+  DEADZONE_TRIGGER,
+  CONTROL_PANEL
+}
+
+public class Shooter extends SubsystemBase implements ShooterInterface, ControlPanelInterface {
   private static WPI_TalonFX shooterFlywheel1;
   private static WPI_TalonFX shooterFlywheel2;
   private static CANSparkMax hood;
@@ -37,14 +43,17 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static CANDigitalInput hoodIndexer;
   private static CANEncoder hoodEncoder;
   private static CANEncoder hoodEncoder2;
+  private static CANEncoder deadzoneRollerEncoder;
   private static CANPIDController hoodController;
+  private static CANPIDController deadzoneRollerController;
+  public CANSparkMax deadzoneRoller;
 
   private static final double flywheelTicksPerRevolution = 2048;
   private static final int hoodEncoderTPR = 1;//2048;
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
   private static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
-  private static final boolean activateHood = false;
+  DeadzoneRollerMode deadzoneRollerMode;
   /**
    * Creates a new Shooter.
    */
@@ -58,11 +67,21 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     
     hood.clearFaults();
 
+    deadzoneRoller = new CANSparkMax(28, MotorType.kBrushless);
+
     shooterFlywheel1.configFactoryDefault();
     shooterFlywheel2.configFactoryDefault();
 
     hood.restoreFactoryDefaults();
-    trigger.restoreFactoryDefaults();
+
+    deadzoneRoller.restoreFactoryDefaults();
+    deadzoneRollerEncoder = deadzoneRoller.getEncoder(EncoderType.kHallSensor, 1);
+    deadzoneRollerController = deadzoneRoller.getPIDController();
+    deadzoneRollerEncoder.setPosition(0);
+    deadzoneRollerController.setIAccum(0);
+//    deadzoneRollerController.setIMaxAccum(100, 0);
+    deadzoneRollerController.setFeedbackDevice(deadzoneRollerEncoder);
+    engageDeadzoneRoller();
 
     shooterFlywheel1.setSafetyEnabled(false);
     shooterFlywheel2.setSafetyEnabled(false);
@@ -346,5 +365,50 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
 
   public void setHoodPower(double pow) {
     hood.set(pow);
+  }
+
+  private void setDeadzonerollerPID(double P, double I, double D) {
+    
+  }
+
+  @Override
+  public void engageControlPanel() {
+    deadzoneRoller.restoreFactoryDefaults();
+    setDeadzonerollerPID(0, 0, 0);
+    deadzoneRollerMode = DeadzoneRollerMode.CONTROL_PANEL;
+  }
+
+  @Override
+  public void setControlPanelVelocity(double velocity) {
+    if (!(deadzoneRollerMode.equals(DeadzoneRollerMode.CONTROL_PANEL))) {
+      return;
+    }
+    deadzoneRollerController.setReference(velocity / (2.0 * Math.PI), ControlType.kVelocity);
+  }
+
+  @Override
+  public double getControlPanelVelocity() {
+    return deadzoneRollerEncoder.getVelocity();
+  }
+
+  @Override
+  public void engageDeadzoneRoller() {
+    deadzoneRoller.restoreFactoryDefaults();
+    deadzoneRoller.setInverted(true);
+    setDeadzonerollerPID(1e-2, 0, 0);
+    deadzoneRollerMode = DeadzoneRollerMode.DEADZONE_TRIGGER;
+  }
+
+  @Override
+  public void setDeadzoneRollerVelocity(double velocity) {
+    if (!(deadzoneRollerMode.equals(DeadzoneRollerMode.DEADZONE_TRIGGER))) {
+      return;
+    }
+    deadzoneRollerController.setReference(velocity / (2.0 * Math.PI), ControlType.kVelocity);
+  }
+
+  @Override
+  public double getDeadzoneRollerVelocity() {
+    return deadzoneRollerEncoder.getVelocity();
   }
 }

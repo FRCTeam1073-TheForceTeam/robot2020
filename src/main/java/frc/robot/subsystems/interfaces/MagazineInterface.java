@@ -25,5 +25,7 @@ public interface MagazineInterface {
 
     boolean getEnteranceState();
 
-    boolean getExitState();
+    boolean getGoingIn();
+
+    boolean getGoingOut();
 }
