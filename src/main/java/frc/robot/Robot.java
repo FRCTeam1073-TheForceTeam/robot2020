@@ -63,11 +63,7 @@ public class Robot extends TimedRobot {
     winch = drivetrainInstance;
     driveControls = new DriveControls(drivetrain, winch);
     registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
-    
-    // bling = new Bling();
-    // blingControls = new BlingControls(bling, (WinchInterface)drivetrain);
-    // registerSubsystem((SubsystemBase) bling, blingControls);
-    
+
     collector = new Collector();
     collectorControls = new CollectorControls(collector);
     registerSubsystem((SubsystemBase) collector, collectorControls);
@@ -92,12 +88,18 @@ public class Robot extends TimedRobot {
     // turretControls = new TurretControls(turret);
     // registerSubsystem((SubsystemBase) turret, turretControls);
 
+    bling = new Bling();
+    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
+    registerSubsystem((SubsystemBase) bling, blingControls);
+
     widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
     widgets.register();
     
     //driveAuto = autoTurn.auto90left(drivetrain);
+
     chooser = new SendableChooser<Command>();
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 0.7, 0.7));
+    
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3, 2));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
@@ -151,6 +153,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    if(chooser.getSelected() != null){
+      chooser.getSelected().schedule();
+    }
   }
 
   @Override

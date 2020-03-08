@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.commands.BlingControls;
+import frc.robot.subsystems.interfaces.AdvancedTrackerInterface;
 import frc.robot.subsystems.interfaces.BlingInterface;
+import frc.robot.subsystems.interfaces.MagazineInterface;
 import frc.robot.subsystems.interfaces.WinchInterface;
 
 
@@ -29,16 +31,23 @@ public class BlingControls extends CommandBase {
   double match_time;
   int move;
   String gameData;
+  int i_mag;
+  
+  AdvancedTrackerInterface portTracker;
   BlingInterface bling;
   WinchInterface winch;
+  MagazineInterface magazine;
 
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_, WinchInterface winch_) {
+  public BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_,
+    AdvancedTrackerInterface portTracker_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
     this.winch = winch_;
+    this.magazine = magazine_;
+    this.portTracker = portTracker_;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -90,6 +99,8 @@ public class BlingControls extends CommandBase {
 
         // Changes the number and color of LEDS 3-9 based on the battery voltage
         batteryBling(2, 6, 8.0, 12.5);
+
+        magazineBallCountBling(8, 252, 227, 0);
       }
     }
   }
@@ -214,6 +225,53 @@ public class BlingControls extends CommandBase {
       // If y was pressed
       // turn the light off
       bling.rangeRGB(minLEDsDriver, numberLEDsDriver, 0, 0, 0);
+    }
+  }
+
+  public void magazineBallCountBling(int min_LEDs, int r, int g, int b) {
+    if (magazine != null) {
+      int ballCount = magazine.getCellCount();
+      if (ballCount == 0) {
+        bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
+      } else if (ballCount > 5){
+        bling.rangeRGB(min_LEDs, 5, 0, 0, 0);
+      } else {
+        bling.rangeRGB(min_LEDs, ballCount, r, g, b);
+      }
+    }
+  }
+
+  public void powerPortTrackingBling(int minLEDs, int numLEDs, double min_meters, double max_meters, int r, int g, int b) {
+    if (portTracker != null) {
+      if (portTracker.getAdvancedTargets()[0].quality > 0) {
+        int num = (int) (Math.round(((portTracker.getAdvancedTargets()[0].range - min_meters) /
+            (max_meters - min_meters)) * (numLEDs - 1)) + 1);
+        bling.rangeRGB(minLEDs, num, 0, 0, 0);
+        bling.rangeRGB(minLEDs, num, r, g, b);
+      }
+    }
+  }
+
+  public void movingPowerPortTrackingBling(int min_LED, int num_LEDs, int r, int g, int b) {
+    if (portTracker != null) {
+      if (portTracker.getAdvancedTargets()[0].quality > 0) {
+        int min_LED_move = min_LED + 1;
+        int num_LEDs_move = num_LEDs - 2;
+
+        int x_value = portTracker.getAdvancedTargets()[0].cx;
+        int moving_LED = ((x_value / 320) * num_LEDs_move) + min_LED_move;
+
+        bling.rangeRGB((moving_LED - 1), 3, r, g, b);
+      }
+    }
+  }
+
+  public void winchVSdrivetrain(int min_LEDs, int num_LEDs) {
+    // The first two LEDs turn white if the winch is engaged
+    if (winch.isWinchEngaged()) {
+      bling.rangeRGB(min_LEDs, num_LEDs, 255, 255, 255);
+    } else {
+      bling.rangeRGB(min_LEDs, num_LEDs, 0, 0, 0);
     }
   }
 
