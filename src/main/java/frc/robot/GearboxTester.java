@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -32,18 +34,23 @@ public class GearboxTester extends TimedRobot {
 
   // public WPI_TalonFX leftLeader = new WPI_TalonFX(22);
   // public WPI_TalonFX leftFollower = new WPI_TalonFX(23);
-  public Solenoid solenoid1 = new Solenoid(1, 3);
-  public Solenoid solenoid2 = new Solenoid(1, 4);
+
+  // public Solenoid solenoid1 = new Solenoid(1, 3);
+  // public Solenoid solenoid2 = new Solenoid(1, 4);
+  public CANSparkMax hood;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
   @Override
   public void robotInit() {
     OI.init();
+    hood=new CANSparkMax(25, MotorType.kBrushless);
+    System.out.println(hood.getLastError());
     // leftFollower.follow(leftLeader);
     // leftFollower.setInverted(true);
-    solenoid1.set(true);
-    solenoid2.set(false);
+
+    // solenoid1.set(true);
+    // solenoid2.set(false);
   }
 
   public void registerSubsystem(SubsystemBase subsystem, CommandBase command) {
@@ -104,13 +111,14 @@ public class GearboxTester extends TimedRobot {
   public void teleopPeriodic() {
     // leftLeader.set(ControlMode.PercentOutput,
     //     0.5 * (OI.driverController.getRawAxis(2) + 1) * OI.driverController.getRawAxis(1));
-    if (OI.driverController.getAButtonPressed()) {
-      solenoid1.set(true);
-      solenoid2.set(false);
-    } else if (OI.driverController.getBButtonPressed()) {
-      solenoid1.set(false);
-      solenoid2.set(true);
-    }
+
+    // if (OI.driverController.getAButtonPressed()) {
+    //   solenoid1.set(true);
+    //   solenoid2.set(false);
+    // } else if (OI.driverController.getBButtonPressed()) {
+    //   solenoid1.set(false);
+    //   solenoid2.set(true);
+    // }
   }
 
   @Override

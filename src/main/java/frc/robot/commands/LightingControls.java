@@ -7,50 +7,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.interfaces.TurretInterface;
+import frc.robot.OI;
+import frc.robot.subsystems.interfaces.LightingInterface;
 
-public class TurretIndex extends CommandBase {
+public class LightingControls extends CommandBase {
+
+  LightingInterface lighting;
+
   /**
-   * Creates a new TurretIndex.
+   * Creates a new Lighting.
    */
-  TurretInterface turret;
-
-  public TurretIndex(TurretInterface turret_) {
-    turret = turret_;
-    SmartDashboard.putBoolean("TURRET-INDEXING ", true);
-    addRequirements((SubsystemBase) turret);
+  public LightingControls(LightingInterface lighting) {
+    this.lighting = lighting;
+    addRequirements((SubsystemBase)lighting);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turret.resetTurret();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    turret.setVelocity(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("TURRET-INDEXING", false);
-    turret.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (turret.isIndexed()) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return false;
   }
 }

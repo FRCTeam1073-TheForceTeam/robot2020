@@ -12,16 +12,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import frc.robot.subsystems.interfaces.CollectorInterface;
 import frc.robot.subsystems.interfaces.MagazineInterface;
 
 public class MagazineControls extends CommandBase {
   MagazineInterface magazine;
+  CollectorInterface collector;
   /**
    * Creates a new MagazineControls.
    */
   int cellCount;
-  public MagazineControls(MagazineInterface magazine_) {
+  public MagazineControls(MagazineInterface magazine_, CollectorInterface collector_) {
     magazine = magazine_;
+    collector = collector_;
     cellCount = 0;
     addRequirements((SubsystemBase)magazine);
   }
@@ -35,19 +38,18 @@ public class MagazineControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(OI.operatorController.getPOV() == 0){
-      magazine.setPower(.5);
-    }
-    else if(OI.operatorController.getPOV() == 180){
-      magazine.setPower(-.5);
-    }
-    else magazine.setPower(0);
+    
+
+    SmartDashboard.putNumber("Real Mag Power", magazine.getPower());
+    SmartDashboard.putNumber("Mag Velocity", magazine.getVelocity());
 
     magazine.updateCellCount();
     cellCount = magazine.getCellCount();
     SmartDashboard.putNumber("Cell Count: ", cellCount);
-    SmartDashboard.putBoolean("Enterance: ", magazine.getEnteranceState());
-    SmartDashboard.putBoolean("Exit: ", magazine.getExitState());
+    if(cellCount <= 0 || collector.getCollectorSolenoidIn() == false){
+        magazine.setPower(0);
+    }
+
   }
 
   // Returns true when the command should end.

@@ -6,26 +6,22 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems.interfaces;
+
 /**
- * Add your docs here.
+ * Controls the port-tracking lights
  */
-public interface MagazineInterface {
+public interface LightingInterface {
 
-    void setPower(double speed);
+    /**
+     * gets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
+     * @return double (0 - 1) 
+     */
+    public double getLEDLevel();
 
-    void setVelocity(double speed);
+    /**
+     * sets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
+     * set double (0 - 1)
+     */
+    public void setLEDLevel(double LEDLevel);
 
-    void updateCellCount();
-
-    double getVelocity();
-
-    double getPower();
-    
-    int getCellCount();
-
-    boolean getEnteranceState();
-
-    boolean getGoingIn();
-
-    boolean getGoingOut();
 }

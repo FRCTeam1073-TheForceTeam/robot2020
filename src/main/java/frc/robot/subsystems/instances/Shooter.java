@@ -27,22 +27,33 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import frc.robot.subsystems.interfaces.ControlPanelInterface;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 
-public class Shooter extends SubsystemBase implements ShooterInterface {
+enum DeadzoneRollerMode {
+  DEADZONE_TRIGGER,
+  CONTROL_PANEL
+}
+
+public class Shooter extends SubsystemBase implements ShooterInterface, ControlPanelInterface {
   private static WPI_TalonFX shooterFlywheel1;
   private static WPI_TalonFX shooterFlywheel2;
   private static CANSparkMax hood;
+  public CANSparkMax deadzoneRoller;
+
   private static CANDigitalInput hoodIndexer;
   private static CANEncoder hoodEncoder;
   private static CANEncoder hoodEncoder2;
+  private static CANEncoder deadzoneRollerEncoder;
   private static CANPIDController hoodController;
+  private static CANPIDController deadzoneRollerController;
 
   private static final double flywheelTicksPerRevolution = 2048;
   private static final int hoodEncoderTPR = 1;//2048;
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
   private static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
+  DeadzoneRollerMode deadzoneRollerMode;
   /**
    * Creates a new Shooter.
    */
@@ -52,12 +63,24 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     shooterFlywheel2 = new WPI_TalonFX(23);
 
     hood = new CANSparkMax(25, MotorType.kBrushless);
+    
     hood.clearFaults();
+
+    deadzoneRoller = new CANSparkMax(28, MotorType.kBrushless);
 
     shooterFlywheel1.configFactoryDefault();
     shooterFlywheel2.configFactoryDefault();
 
     hood.restoreFactoryDefaults();
+
+    deadzoneRoller.restoreFactoryDefaults();
+    deadzoneRollerEncoder = deadzoneRoller.getEncoder(EncoderType.kHallSensor, 1);
+    deadzoneRollerController = deadzoneRoller.getPIDController();
+    deadzoneRollerEncoder.setPosition(0);
+    deadzoneRollerController.setIAccum(0);
+//    deadzoneRollerController.setIMaxAccum(100, 0);
+    deadzoneRollerController.setFeedbackDevice(deadzoneRollerEncoder);
+    engageDeadzoneRoller();
 
     shooterFlywheel1.setSafetyEnabled(false);
     shooterFlywheel2.setSafetyEnabled(false);
@@ -86,7 +109,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double I = 0;
     double D = 0;
 
-    double hoodP = 2e-1;
+    double hoodP = 1.8e-1;
     double hoodI = 4e-5;
     double hoodD = 0;
 
@@ -152,10 +175,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     SmartDashboard.putNumber("Flywheel Error I", shooterFlywheel1.getIntegralAccumulator());
     SmartDashboard.putNumber("Flywheel Error D", shooterFlywheel1.getErrorDerivative());
 
+    SmartDashboard.putNumber("[Graph] TalonFX 22 motor temperature (degs. C)", getInternalTemperature()[0]);
+    SmartDashboard.putNumber("[Graph] TalonFX 23 motor temperature (degs. C)", getInternalTemperature()[1]);
+    SmartDashboard.putNumber("[Value] TalonFX 22 motor temperature (degs. C)", getInternalTemperature()[0]);
+    SmartDashboard.putNumber("[Value] TalonFX 23 motor temperature (degs. C)", getInternalTemperature()[1]);
+
     // SmartDashboard.putNumber("key", shooterFlywheel1.getMotorOutputPercent());
     // SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
     // SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
-    SmartDashboard.putNumber("Position", hoodEncoder.getPosition());
+    SmartDashboard.putNumber("Hood Position", hoodEncoder.getPosition());
     // SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
     // SmartDashboard.putNumber("Error", hoodEncoder.getPosition() - targetHoodAngle);
 
@@ -252,9 +280,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
    */
   @Override
   public boolean setHoodAngle(double angle) {
-    if (false) {
-      return false;
-    }
+    angle = Math.min(maxAngle, Math.max(minAngle, angle));
     isHoodDisabled = false;
     double hoodAngle = kMotorRadiansPerHoodRadian * (angle - minAngle);
     hood.setIdleMode(IdleMode.kBrake);
@@ -333,5 +359,59 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
 
   public void setHoodPower(double pow) {
     hood.set(pow);
+  }
+
+  private void setDeadzonerollerPID(double P, double I, double D) {
+    
+  }
+
+  @Override
+  public void engageControlPanel() {
+    deadzoneRoller.restoreFactoryDefaults();
+    setDeadzonerollerPID(0, 0, 0);
+    deadzoneRollerMode = DeadzoneRollerMode.CONTROL_PANEL;
+  }
+
+  @Override
+  public void setControlPanelVelocity(double velocity) {
+    if (!(deadzoneRollerMode.equals(DeadzoneRollerMode.CONTROL_PANEL))) {
+      return;
+    }
+    deadzoneRollerController.setReference(velocity / (2.0 * Math.PI), ControlType.kVelocity);
+  }
+
+  @Override
+  public double getControlPanelVelocity() {
+    return deadzoneRollerEncoder.getVelocity();
+  }
+
+  @Override
+  public void engageDeadzoneRoller() {
+    deadzoneRoller.restoreFactoryDefaults();
+    deadzoneRoller.setInverted(true);
+    setDeadzonerollerPID(1e-2, 0, 0);
+    deadzoneRollerMode = DeadzoneRollerMode.DEADZONE_TRIGGER;
+  }
+
+  @Override
+  public void setDeadzoneRollerVelocity(double velocity) {
+    if (!(deadzoneRollerMode.equals(DeadzoneRollerMode.DEADZONE_TRIGGER))) {
+      return;
+    }
+    deadzoneRollerController.setReference(velocity / (2.0 * Math.PI), ControlType.kVelocity);
+  }
+
+  @Override
+  public void setDeadzoneRollerPower(double power) {
+    if (!(deadzoneRollerMode.equals(DeadzoneRollerMode.DEADZONE_TRIGGER))) {
+      return;
+    }
+    deadzoneRoller.set(power);
+  }
+
+
+  @Override
+  public double getDeadzoneRollerVelocity() {
+    return deadzoneRollerEncoder.getVelocity();
   }
 }
