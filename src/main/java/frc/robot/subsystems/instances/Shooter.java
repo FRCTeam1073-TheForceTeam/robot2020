@@ -219,11 +219,6 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     shooterFlywheel1.set(power);
   }
 
-  @Override
-  public void setTriggerPower(double power) {
-    trigger.set(power);
-  }
-
   /**
    * Return the maximum flywheel speed.
    * 
