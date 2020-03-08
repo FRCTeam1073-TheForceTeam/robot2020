@@ -55,16 +55,4 @@ public interface AdvancedTrackerInterface {
      * Return timestamp of last update.
      */
     public long getLastAdvancedTargetUpdate();
-
-    /**
-     * gets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
-     * @return double (0 - 1) 
-     */
-    public double getLEDLevel();
-
-    /**
-     * sets brightness of the LEDs on the port-tracking OpenMV sensor module through RIO and PWM
-     * set double (0 - 1)
-     */
-    public void setLEDLevel(double LEDLevel);
 }

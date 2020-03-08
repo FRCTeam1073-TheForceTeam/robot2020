@@ -17,9 +17,10 @@ public class WaitForTurret extends CommandBase {
   double azimuth = 0.0;
   double tolerance = 0.01;
 
-  public WaitForTurret(TurretInterface turret_, double azimuth_) {
+  public WaitForTurret(TurretInterface turret_, double azimuth_, double tolerance_) {
     turret = turret_;
     azimuth = azimuth_;
+    tolerance = tolerance_;
     addRequirements((SubsystemBase) turret);
   }
 
