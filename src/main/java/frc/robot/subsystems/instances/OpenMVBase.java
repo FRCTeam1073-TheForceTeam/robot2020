@@ -243,10 +243,10 @@ public class OpenMVBase extends SubsystemBase {
 
       // Only log hearbeat updates once in a while.
       if (loopCounter % 50 == 0) {
-        System.out.print("OpenMV Heartbeat. Device ID: ");
-        System.out.println(deviceId);
-        System.out.println(frameCounter);
-        System.out.println(lastHeartbeat);
+        // System.out.print("OpenMV Heartbeat. Device ID: ");
+        // System.out.println(deviceId);
+        // System.out.println(frameCounter);
+        // System.out.println(lastHeartbeat);
       }
 
       missedHeartbeats = 0;
@@ -263,23 +263,23 @@ public class OpenMVBase extends SubsystemBase {
     }
 
     if ((loopCounter % 50 == 0)) {
-      System.out.println("SET MODE");
+      // System.out.println("SET MODE");
       setMode((byte)3);
     }
 
     // See if we got a config message and update data, but only check once in a while.
     if ((loopCounter % 50 == 0) && readConfig()) {
-      System.out.print("OpenMV Configuration Updated: ");
-      System.out.println(deviceId);
+      // System.out.print("OpenMV Configuration Updated: ");
+      // System.out.println(deviceId);
     }
 
     // See if we got a camera status message and update data, but only check once in a while.
     if ((loopCounter % 50 == 0) && readCameraStatus())
     {
-      System.out.print("OpenMV Camera Status Updated : ");
-      System.out.println(deviceId);
-      System.out.print("Width: ");
-      System.out.println(imageWidth);
+      // System.out.print("OpenMV Camera Status Updated : ");
+      // System.out.println(deviceId);
+      // System.out.print("Width: ");
+      // System.out.println(imageWidth);
     }
 
     loopCounter++;

@@ -33,6 +33,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static WPI_TalonFX shooterFlywheel1;
   private static WPI_TalonFX shooterFlywheel2;
   private static CANSparkMax hood;
+  private static CANSparkMax trigger;
   private static CANDigitalInput hoodIndexer;
   private static CANEncoder hoodEncoder;
   private static CANEncoder hoodEncoder2;
@@ -43,6 +44,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
   private static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
+  private static final boolean activateHood = false;
   /**
    * Creates a new Shooter.
    */
@@ -51,13 +53,16 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     shooterFlywheel1 = new WPI_TalonFX(22);
     shooterFlywheel2 = new WPI_TalonFX(23);
 
+    trigger = new CANSparkMax(27, MotorType.kBrushless);
     hood = new CANSparkMax(25, MotorType.kBrushless);
+    
     hood.clearFaults();
 
     shooterFlywheel1.configFactoryDefault();
     shooterFlywheel2.configFactoryDefault();
 
     hood.restoreFactoryDefaults();
+    trigger.restoreFactoryDefaults();
 
     shooterFlywheel1.setSafetyEnabled(false);
     shooterFlywheel2.setSafetyEnabled(false);
@@ -86,7 +91,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     double I = 0;
     double D = 0;
 
-    double hoodP = 2e-1;
+    double hoodP = 1.8e-1;
     double hoodI = 4e-5;
     double hoodD = 0;
 
@@ -152,10 +157,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
     SmartDashboard.putNumber("Flywheel Error I", shooterFlywheel1.getIntegralAccumulator());
     SmartDashboard.putNumber("Flywheel Error D", shooterFlywheel1.getErrorDerivative());
 
+    SmartDashboard.putNumber("[Graph] TalonFX 22 motor temperature (degs. C)", getInternalTemperature()[0]);
+    SmartDashboard.putNumber("[Graph] TalonFX 23 motor temperature (degs. C)", getInternalTemperature()[1]);
+    SmartDashboard.putNumber("[Value] TalonFX 22 motor temperature (degs. C)", getInternalTemperature()[0]);
+    SmartDashboard.putNumber("[Value] TalonFX 23 motor temperature (degs. C)", getInternalTemperature()[1]);
+
     // SmartDashboard.putNumber("key", shooterFlywheel1.getMotorOutputPercent());
     // SmartDashboard.putNumber("OUT:", hood.getAppliedOutput());
     // SmartDashboard.putNumber("Velocity", hoodEncoder.getVelocity());
-    SmartDashboard.putNumber("Position", hoodEncoder.getPosition());
+    SmartDashboard.putNumber("Hood Position", hoodEncoder.getPosition());
     // SmartDashboard.putNumber("Position 2", hoodEncoder2.getPosition());
     // SmartDashboard.putNumber("Error", hoodEncoder.getPosition() - targetHoodAngle);
 
@@ -189,6 +199,11 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
   @Override
   public void setFlywheelPower(double power) {
     shooterFlywheel1.set(power);
+  }
+
+  @Override
+  public void setTriggerPower(double power) {
+    trigger.set(power);
   }
 
   /**
@@ -252,9 +267,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface {
    */
   @Override
   public boolean setHoodAngle(double angle) {
-    if (false) {
-      return false;
-    }
+    angle = Math.min(maxAngle, Math.max(minAngle, angle));
     isHoodDisabled = false;
     double hoodAngle = kMotorRadiansPerHoodRadian * (angle - minAngle);
     hood.setIdleMode(IdleMode.kBrake);

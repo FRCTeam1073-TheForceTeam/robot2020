@@ -32,5 +32,6 @@ public interface DrivetrainInterface {
        
     public ChassisSpeeds getDrivetrainVelocity();
 
+    public double[] getOrientation();
     public boolean isDrivetrainEngaged();
 }
