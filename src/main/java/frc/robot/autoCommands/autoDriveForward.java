@@ -32,6 +32,7 @@ public class autoDriveForward extends CommandBase {
     this.drivetrain = drivetrain;
     this.distance = distance;
     this.maxVelocity = maxVelocity;
+
     addRequirements((SubsystemBase)drivetrain);
   }
 
@@ -39,6 +40,7 @@ public class autoDriveForward extends CommandBase {
   @Override
   public void initialize() {
     initPose = drivetrain.getRobotPose();
+    SmartDashboard.putString("AUTO CMD: InitPose", initPose.toString());
   }
 
   int a = 0;
@@ -52,11 +54,12 @@ public class autoDriveForward extends CommandBase {
     SmartDashboard.putNumber("A", a++);
     // ensures that it doesn't try to go faster than it's able to
 
-    // drivetrain.setVelocity(Math.min(velocity, maxVelocity), 0);
-    SmartDashboard.putNumber("Auto Velocity", Math.min(velocity, maxVelocity));
-    SmartDashboard.putNumber("NORM", currentPose.minus(initPose).getTranslation().getNorm());
-    SmartDashboard.putNumber("DISTANCE", distance);
-    drivetrain.setPower(0.1, 0);
+    SmartDashboard.putNumber("AUTO CMD: Auto Velocity", Math.min(velocity, maxVelocity));
+    SmartDashboard.putNumber("AUTO CMD: NORM", currentPose.minus(initPose).getTranslation().getNorm());
+    SmartDashboard.putNumber("AUTO CMD: DISTANCE", distance);
+
+    //drivetrain.setPower(0.1, 0);
+    drivetrain.setVelocity(velocity, 0);
   }
   boolean b=true;
 
@@ -73,7 +76,10 @@ public class autoDriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    SmartDashboard.putString("AUTO CMD: CurrentPose", currentPose.toString());
+    SmartDashboard.putNumber("AUTO CMD: curr. init translation", currentPose.minus(initPose).getTranslation().getNorm());
     SmartDashboard.putBoolean("is: finished?", currentPose.minus(initPose).getTranslation().getNorm() >= Math.abs(distance));
+
     return currentPose.minus(initPose).getTranslation().getNorm() >= Math.abs(distance);
   }
 }
