@@ -27,7 +27,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   private static DigitalInput exit;
   private boolean cellCheck, cellEntering, cellExiting;  
 
-  private double P = 0.0;
+  private double P = 0.5;
   private double I = 0.0;
   private double D = 0.0;
   private double F = 0.0;

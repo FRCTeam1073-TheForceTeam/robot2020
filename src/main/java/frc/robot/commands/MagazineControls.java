@@ -36,7 +36,7 @@ public class MagazineControls extends CommandBase {
   }
 
   
-  double magazinePower = 0;
+  double magazineSpeed = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -54,13 +54,13 @@ public class MagazineControls extends CommandBase {
       
     } else {
       if (OI.operatorController.getPOV() == 0) {
-        magazinePower = 0.5;        
+        magazineSpeed = 0.5;        
       } else if (OI.operatorController.getPOV() == 180) {
-        magazinePower = -0.5;
+        magazineSpeed = -0.5;
       }else{
-        magazinePower = 0;
+        magazineSpeed = 0;
       }
-      magazine.setPower(magazinePower); 
+      magazine.setVelocity(magazineSpeed); 
     }
 
   }
