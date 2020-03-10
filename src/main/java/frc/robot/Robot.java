@@ -99,7 +99,8 @@ public class Robot extends TimedRobot {
 
     chooser = new SendableChooser<Command>();
     
-    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 3, 2));
+    chooser.setDefaultOption("Drive Forward 2 meters", new autoDriveForward(drivetrain, 3, 2));
+    chooser.addOption("Drive Forward 2 feet", new autoDriveForward(drivetrain, 3, 0.6096));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
