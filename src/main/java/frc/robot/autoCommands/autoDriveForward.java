@@ -7,7 +7,6 @@
 
 package frc.robot.autoCommands;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,6 +33,10 @@ public class autoDriveForward extends CommandBase {
     this.maxVelocity = maxVelocity;
 
     addRequirements((SubsystemBase)drivetrain);
+  }
+
+  public autoDriveForward(DrivetrainInterface drivetrain, double distance) {
+    this(drivetrain, distance, Constants.MAX_DRIVETRAIN_VELOCITY);
   }
 
   // Called when the command is initially scheduled.

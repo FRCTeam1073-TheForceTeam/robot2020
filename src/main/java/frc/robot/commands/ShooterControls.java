@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.ShooterInterface;
-import frc.robot.OI;
+import frc.robot.subsystems.instances.Shooter;
 
 public class ShooterControls extends CommandBase {
   ShooterInterface shooter;
@@ -47,10 +47,16 @@ public class ShooterControls extends CommandBase {
     if(deadzone(OI.operatorController.getTriggerAxis(Hand.kRight)) == 0){
       if(OI.operatorController.getBumper(Hand.kLeft)) shooter.setFlywheelSpeed(0);
       else{
-        speed = deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670);
+        speed = -deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670.0);
         shooter.setFlywheelSpeed(speed);
       }
     }
+
+    shooter.setDeadzoneRollerPower(OI.operatorController.getBumper(Hand.kRight) ? 0.75 : 0);
+
+    // shooter.setDeadzoneRollerVelocity(OI.operatorController.getRawAxis(2) - OI.operatorController.getRawAxis(3));
+    
+    //Math.abs(OI.driverController.getRawAxis(1)) * Math.PI * 3.5;
     // double aput = OI.driverController.getRawAxis(1);
     // aput = Math.signum(aput) * Math.pow(Math.abs(aput), 0.65);
     // shooter.setHoodPower(0.05 * aput);
@@ -67,10 +73,10 @@ public class ShooterControls extends CommandBase {
     
     
     shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
-    + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.driverController.getRawAxis(5));
+    + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.operatorController.getRawAxis(5));
 
-    value = pow2 * pow * OI.operatorController.getRawAxis(1);
-    shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
+    // value = pow2 * pow * OI.operatorController.getRawAxis(1);
+    // shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
     SmartDashboard.putNumber("Input RPM", value * shooter.getMaximumFlywheelSpeed() * 30 / Math.PI);
     SmartDashboard.putNumber("[Graph] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
     SmartDashboard.putNumber("[Graph] Estimated linear velocity of power cell (MPH)",

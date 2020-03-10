@@ -7,9 +7,7 @@
 
 package frc.robot.autoCommands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
@@ -20,11 +18,11 @@ public class autoDriveToPoint extends SequentialCommandGroup {
   /**
    * Creates a new autoDriveToPoint.
    */
-  public autoDriveToPoint(double startY, double startX, double endY, double endX) {
-    addRequirements((SubsystemBase) drivetrain);
+  public autoDriveToPoint(double XLength, double YLength) {
+    addRequirements((SubsystemBase)drivetrain);
     sequence(
-        new autoTurn(drivetrain, returnAngleToTurn(startY, startX, endY, endX))
-        // new autoDriveForward(drivetrain, returnDistanceToTravel(startY, startX, endY, endX))
+      new autoTurn(drivetrain, returnAngleToTurn(XLength, YLength)),
+      new autoDriveForward(drivetrain, returnDistanceToTravel(XLength, YLength))
     );
   }
 
@@ -49,34 +47,19 @@ public class autoDriveToPoint extends SequentialCommandGroup {
     return false;
   }
 
-  public double returnAngleToTurn(double startY, double startX, double endY, double endX) {
-    // Calculates the length of the legs of a triangle made with the robot path as
-    // the hypotenuse
-    double XLength = Math.abs(endX - startX);
-    double YLength = Math.abs(endY - startY);
+  public double returnAngleToTurn(double XLength, double YLength) {
 
-    // Uses the inverse tangent to calculate the measure of the angle in degrees
-    // that the robot should turn
-    double angleDegrees = Math.atan(YLength / XLength);
+    /* Uses the arctangent to calculate the measure of the angle in degrees that the robot should turn
+    We used WPIlib's Rotation2d utility to subtract the target angle from the robot's angle the shortest way
+    (if it's easier to get to the target angle by turning right, it will turn right, and vice versa with left) */
+    Rotation2d angle = new Rotation2d(Math.atan2(YLength, XLength)).minus(drivetrain.getAngleRadians());
 
-    // Allows the robot to move in the shortest way instead of all the way to the
-    // right
-    if (angleDegrees > 180) {
-      angleDegrees = -360 + angleDegrees;
-    }
-
-    // Converts degrees to radians
-    double returnAngleRadians = Math.toRadians(angleDegrees);
 
     // Returns the angle needed to turn (in radians)
-    return returnAngleRadians;
+    return angle.getRadians();
   }
 
-  public double returnDistanceToTravel(double startY, double startX, double endY, double endX) {
-    // Calculates the length of the legs of a triangle made with the robot path as
-    // the hypotenuse
-    double XLength = Math.abs(endX - startX);
-    double YLength = Math.abs(endY - startY);
+  public double returnDistanceToTravel(double XLength, double YLength) {
 
     // Uses the pythagorean theorem to find the length of the hypotenuse
     double returnLength = Math.sqrt(Math.pow(XLength, 2) + Math.pow(YLength, 2));

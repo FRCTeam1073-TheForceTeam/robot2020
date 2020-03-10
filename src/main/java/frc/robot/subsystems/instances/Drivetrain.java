@@ -124,9 +124,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         
         // TODO: See what controls are actually going to be used
 
-        // if (OI.driverController.getYButtonPressed()) {
-        //     engageWinch();
-        // }
+        if (OI.driverController.getYButtonPressed()) {
+            engageWinch();
+        }
         
         if (OI.driverController.getAButtonPressed()) {
             engageDrivetrain();
