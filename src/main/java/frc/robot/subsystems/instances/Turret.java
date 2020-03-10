@@ -270,6 +270,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
   public double getVelocity() {
     return turretVelocity;
   }
+
+  @Override
+  public double getCurrent() {
+    return turretCurrent;
+  }
   
   /**
    * Return true if the turret has been indexed.
