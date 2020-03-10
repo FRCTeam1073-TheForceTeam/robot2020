@@ -32,6 +32,8 @@ public class BlingTester extends TimedRobot {
   public static DriveControls driveControls;
   public static MagazineInterface magazine;
   public static MagazineControls magazineControls;
+  public static CollectorInterface collector;
+  
   // public static SendableChooser<Command> chooser;
   
   // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -45,7 +47,7 @@ public class BlingTester extends TimedRobot {
     registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
     magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine);
+    magazineControls = new MagazineControls(magazine, collector);
     registerSubsystem((SubsystemBase) magazine, magazineControls);
 
     bling = new Bling();
