@@ -44,16 +44,26 @@ public class ShooterControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(deadzone(OI.operatorController.getTriggerAxis(Hand.kRight)) == 0){
+    if(OI.operatorController.getStartButton()){
+      shooter.setFlywheelSpeed(-1.301 * (4000.0  * 2.0 * Math.PI) / 60.0);
+      shooter.setHoodAngle((1.259 * 2.0 * Math.PI) / Shooter.kMotorRadiansPerHoodRadian + shooter.getMinHoodAngle());
+    }
+    else if(deadzone(OI.operatorController.getTriggerAxis(Hand.kRight)) == 0){
       if(OI.operatorController.getBumper(Hand.kLeft)) shooter.setFlywheelSpeed(0);
       else{
-        speed = -deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670.0);
+        speed = -1.301 * deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670.0);
         shooter.setFlywheelSpeed(speed);
       }
+    }
+    
+    if(OI.operatorController.getBackButtonPressed()){
+      SmartDashboard.putNumber("Input RPM Snapshot",  speed * 60 / (2 * Math.PI));
+      SmartDashboard.putNumber("Output RPM Snapshot", shooter.getFlywheelSpeed() * 30.0 / Math.PI);
     }
 
     shooter.setDeadzoneRollerPower(OI.operatorController.getBumper(Hand.kRight) ? 0.75 : 0);
 
+    
     // shooter.setDeadzoneRollerVelocity(OI.operatorController.getRawAxis(2) - OI.operatorController.getRawAxis(3));
     
     //Math.abs(OI.driverController.getRawAxis(1)) * Math.PI * 3.5;
@@ -77,17 +87,18 @@ public class ShooterControls extends CommandBase {
 
     // value = pow2 * pow * OI.operatorController.getRawAxis(1);
     // shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());
-    SmartDashboard.putNumber("Input RPM", value * shooter.getMaximumFlywheelSpeed() * 30 / Math.PI);
-    SmartDashboard.putNumber("[Graph] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
-    SmartDashboard.putNumber("[Graph] Estimated linear velocity of power cell (MPH)",
-        shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
+    // SmartDashboard.putNumber("Input RPM", value * shooter.getMaximumFlywheelSpeed() * 30 / Math.PI);
+    // SmartDashboard.putNumber("[Graph] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
+    // SmartDashboard.putNumber("[Graph] Estimated linear velocity of power cell (MPH)",
+        // shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
     SmartDashboard.putNumber("[Value] Motor speed (RPM)", shooter.getFlywheelSpeed() * 60 / (2 * Math.PI));
-    SmartDashboard.putNumber("[Value] Estimated linear velocity of power cell (MPH)",
-        shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
-    SmartDashboard.putNumber("Percent multiplier", 100 * pow * pow2);
-    SmartDashboard.putNumber("[Graph] Applied motor power", value);
+
+    // SmartDashboard.putNumber("[Value] Estimated linear velocity of power cell (MPH)",
+        // shooter.getFlywheelSpeed() / (2.0 * Math.PI) * Math.PI * 0.5 * ((4.0 + 3.5) / 12.0) * (1.0 / 5280.0) * 3600.0);
+    // SmartDashboard.putNumber("Percent multiplier", 100 * pow * pow2);
+    // SmartDashboard.putNumber("[Graph] Applied motor power", value);
     SmartDashboard.putNumber("[Value] Applied motor power", value);
-    SmartDashboard.putNumber("[Graph] Battery voltage (Volts)", RobotController.getBatteryVoltage());
+    // SmartDashboard.putNumber("[Graph] Battery voltage (Volts)", RobotController.getBatteryVoltage());
     SmartDashboard.putNumber("[Value] Battery voltage (Volts)", RobotController.getBatteryVoltage());
     SmartDashboard.putString("Brownout status", RobotController.isBrownedOut() ? "BROWNED OUT" : "NOMINAL");
 

@@ -84,9 +84,9 @@ public class Robot extends TimedRobot {
     shooterControls = new ShooterControls(shooter);
     registerSubsystem((SubsystemBase) shooter, shooterControls);
     
-    // turret = new Turret();
-    // turretControls = new TurretControls(turret);
-    // registerSubsystem((SubsystemBase) turret, turretControls);
+    turret = new Turret();
+    turretControls = new TurretControls(turret);
+    registerSubsystem((SubsystemBase) turret, turretControls);
 
     bling = new Bling();
     blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
@@ -142,6 +142,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
     (new ShooterIndex(shooter)).schedule(false);
+    (new TurretIndex(turret)).schedule(false);
     if (chooser.getSelected() != null) {
       SmartDashboard.putString("Auto State", "Auto Inited");
       chooser.getSelected().schedule();
@@ -161,6 +162,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     (new ShooterIndex(shooter)).schedule(false);
+    (new TurretIndex(turret)).schedule(false);
   }
 
   /**

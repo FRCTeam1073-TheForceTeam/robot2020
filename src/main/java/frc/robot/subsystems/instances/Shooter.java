@@ -52,7 +52,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
   private static final int hoodEncoderTPR = 1;//2048;
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
-  private static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
+  public static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
   DeadzoneRollerMode deadzoneRollerMode;
   /**
    * Creates a new Shooter.
@@ -208,6 +208,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
    */
   @Override
   public void setFlywheelSpeed(double speed) {
+    speed = -Math.abs(speed);
     shooterFlywheel1.set(ControlMode.Velocity, speed * flywheelTicksPerRevolution * 0.1 / (2 * Math.PI));
   }
 
