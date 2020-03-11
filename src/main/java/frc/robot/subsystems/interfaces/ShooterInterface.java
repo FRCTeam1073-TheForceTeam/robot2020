@@ -72,6 +72,13 @@ public interface ShooterInterface {
     */
    public boolean setHoodAngle(double angle);
 
+  /**
+   * Sets the raw hood angle in rotations. The hood will move to the amount of rotations under
+   * closed loop position control.
+   * Returns true if the hood is indexed
+   */
+  public boolean setRawHoodAngle(double rotations);
+   
    /**
     * Resets hood.
     */
@@ -145,5 +152,16 @@ public interface ShooterInterface {
      * @return The velocity in radians/second.
      */
     public double getDeadzoneRollerVelocity();
+
+    /**
+     * Quickly pulses deadzone roller (time is 0.25 seconds by default)
+     */
+    public void deadzonePulse();
+
+    /**
+     * Pulses deadzone roller in periodic.
+     * @param time The pulse length in seconds.
+     */
+    public void deadzonePulse(double time);
 
 }

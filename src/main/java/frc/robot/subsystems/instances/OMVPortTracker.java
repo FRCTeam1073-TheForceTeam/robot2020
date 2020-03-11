@@ -31,7 +31,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
   public OMVPortTracker(int deviceId) {
     super(deviceId);
     targetData = new CANData();
-    targets = new AdvancedTrackerInterface.AdvancedTargetData[1]; // We only have 1 of these.
+    targets = new AdvancedTrackerInterface.AdvancedTargetData[1];   // We only have 1 of these right now.
     targets[0] = new AdvancedTrackerInterface.AdvancedTargetData();
     
   }
@@ -81,13 +81,6 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
       SmartDashboard.putNumber("tracking quality", targets[0].quality);
       SmartDashboard.putNumber("tracking azimuth", targets[0].azimuth);
       SmartDashboard.putNumber("tracking distance", targets[0].distance);
-
-
-      // System.out.println("Advanced Tracking...");
-      
-      // System.out.println(String.format("T: %d Cx: %d Cy: %d Type: %d Qual: %d Area: %f", 
-      //         lastUpdate, targets[0].cx, targets[0].cy, 
-      //         targets[0].targetType, targets[0].quality, targets[0].area));
     }
   }
 
@@ -124,7 +117,7 @@ public class OMVPortTracker extends OpenMVBase implements AdvancedTrackerInterfa
    * @param data
    */
   private void computeAzimuth(AdvancedTrackerInterface.AdvancedTargetData data) {
-    if(data.quality == 0) data.azimuth = 0;
+    if (data.quality == 0) data.azimuth = 0;
     else data.azimuth = -(centerX - data.cx) * azimuthConv;
   }
 
