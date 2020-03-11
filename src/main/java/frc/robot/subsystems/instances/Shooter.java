@@ -52,7 +52,8 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
   private static final int hoodEncoderTPR = 1;//2048;
   private static final double minAngle = 19.64 * Math.PI / 180;
   private static final double maxAngle = 49.18 * Math.PI / 180;
-  public static final double kMotorRadiansPerHoodRadian = 2.523808240890503 * 2 * Math.PI / (maxAngle - minAngle);
+  public static final double kRawMotorRange = 2.523808240890503;
+  public static final double kMotorRadiansPerHoodRadian = kRawMotorRange * 2 * Math.PI / (maxAngle - minAngle);
   DeadzoneRollerMode deadzoneRollerMode;
   /**
    * Creates a new Shooter.
@@ -105,7 +106,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
 
     // shooterFlywheel1.setSensorPhase(true);
 
-    double P = 1.5e-1;
+    double P = 1.9e-1;
     double I = 0;
     double D = 0;
 
@@ -154,6 +155,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
   private static final double hoodIndexAngle = 0;
   private static double hoodVelocityTarget = 0;
   private static double hoodInputPower = 0;
+  private boolean isDeadzonePulse = false;
+  private long deadzonePulseStart = 0;
+  private double deadzonePulseLength = 0;
 
   @Override
   public void periodic() {
@@ -168,6 +172,14 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     hoodAngle = hoodEncoder.getPosition() * 2 * Math.PI;
     lastTimestamp = System.currentTimeMillis();
     flywheelVelocity = shooterFlywheel1.getSelectedSensorVelocity() * 2 * Math.PI * 10 / flywheelTicksPerRevolution;
+
+    if (isDeadzonePulse) {
+      if (((double) (lastTimestamp - deadzonePulseStart)) * 0.001 >= deadzonePulseLength) {
+        isDeadzonePulse = false;
+      } else {
+        setDeadzoneRollerPower(0.75);
+      }
+    }
 
     SmartDashboard.putNumber("Flywheel Error P", shooterFlywheel1.getClosedLoopError());
     SmartDashboard.putNumber("Flywheel Error P [RPM]",
@@ -291,6 +303,15 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     return true;
   }
 
+  @Override
+  public boolean setRawHoodAngle(double rotation) {
+    rotation = Math.min(kRawMotorRange, Math.max(0, rotation));
+    SmartDashboard.putNumber("raw rotations", rotation);
+    hoodController.setReference(rotation, ControlType.kPosition);
+    return true;
+  }
+
+
   /**
    * Set the hood to move in velocity mode which can be done without indexing the
    * hood.
@@ -368,6 +389,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
 
   @Override
   public void engageControlPanel() {
+    isDeadzonePulse = false;
     deadzoneRoller.restoreFactoryDefaults();
     setDeadzonerollerPID(0, 0, 0);
     deadzoneRollerMode = DeadzoneRollerMode.CONTROL_PANEL;
@@ -388,6 +410,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
 
   @Override
   public void engageDeadzoneRoller() {
+    isDeadzonePulse = false;
     deadzoneRoller.restoreFactoryDefaults();
     deadzoneRoller.setInverted(true);
     setDeadzonerollerPID(1e-2, 0, 0);
@@ -410,6 +433,18 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     deadzoneRoller.set(power);
   }
 
+  @Override
+  public void deadzonePulse() {
+    deadzonePulse(0.25);
+  }
+
+  
+  @Override
+  public void deadzonePulse(double time) {
+    isDeadzonePulse = true;
+    deadzonePulseStart = getLastShooterUpdate();
+    deadzonePulseLength = time;
+  }
 
   @Override
   public double getDeadzoneRollerVelocity() {

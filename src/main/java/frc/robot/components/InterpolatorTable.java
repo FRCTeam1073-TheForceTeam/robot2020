@@ -15,9 +15,20 @@ package frc.robot.components;
 
 public class InterpolatorTable {
     private InterpolatorTableEntry[] entries;
+    boolean extrapolate = false;
+
+    /**
+     * Constructs an InterpolatorTable object.
+     * Optionally allows for extrapolation past the 
+     * @param extrapolate
+     * @param entries_
+     */
+    public InterpolatorTable(boolean extrapolate, InterpolatorTableEntry... entries_) {
+        entries = entries_;
+    }
 
     public InterpolatorTable(InterpolatorTableEntry... entries_) {
-        entries = entries_;
+        this(false, entries_);
     }
 
     public double getValue(double input) {

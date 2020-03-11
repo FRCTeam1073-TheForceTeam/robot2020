@@ -40,9 +40,9 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private final double ticksPerRadian = 6441.318;
   /// This is the difference between max and min encoder angles in radians.
   /// Should be a positive number of radians > PI and < 2 PI.
-  private double range = 4.0;          // radians  TODO: get from experiment
+  private double range = 5.508; //35477/ticksPerRadian
   /// This is the output angle when the encoder is zero ticks, in radians. Should be small positive number.
-  private double indexOffset = 0.4;    // radians  TODO: get from measurement
+  private double indexOffset = 0.0872665;    // radians  TODO: get from measurement
   private boolean disabled = true;
   private boolean velocityMode = true;
 
