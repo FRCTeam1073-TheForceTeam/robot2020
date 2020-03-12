@@ -28,6 +28,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
     private double robotWidth = 0.5969;
 
+    private int Winch_Encoder_Ticks_Left = 0;
+    private int Winch_Encoder_Ticks_Right = 0;
+
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(robotWidth);
    //private double wheelDiameter = 0.15;
     // private double ticksPerWheelRotation =
@@ -145,6 +148,11 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
                         (getRobotPose().getTranslation().getX()
         )*1000.0)*0.001 + ","
                 + Math.round(getRobotPose().getTranslation().getY()*1000.0)*0.001 + ")");
+        
+        if (isWinchEngaged() == true) {
+            Winch_Encoder_Ticks_Left = leftMotorLeader.getSelectedSensorPosition();
+            Winch_Encoder_Ticks_Right = rightMotorLeader.getSelectedSensorPosition();
+        }
     }
 
     /**
@@ -297,6 +305,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
 
         leftMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         rightMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
+        leftMotorLeader.setSelectedSensorPosition(Winch_Encoder_Ticks_Left);
+        rightMotorLeader.setSelectedSensorPosition(Winch_Encoder_Ticks_Right);
 
         leftMotorLeader.setSensorPhase(true);
         rightMotorLeader.setSensorPhase(true);
