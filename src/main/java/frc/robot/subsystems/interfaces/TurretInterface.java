@@ -72,6 +72,12 @@ public interface TurretInterface {
     public double getVelocity();
 
     /**
+     * Return the current going to the turret motor in amps.
+     * @return Turret motor current in amps.
+     */
+    public double getCurrent();
+
+    /**
      * Return true if the turret has been indexed.
      * @return True if the turret has been indexed, false if it has not been indexed.
      */

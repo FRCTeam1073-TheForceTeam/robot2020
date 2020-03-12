@@ -16,11 +16,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
+/**
+ * The turret subsystem uses the robot coordinate system. In the robot coordinate system
+ * +X points out the front of the robot to the collector.
+ * +Y points out the left side of the robot if you are sitting facing collector in robot.
+ * +Z points upward from the floor.
+ * The turret angle is a rotation about the Z axis defined using the right-hand rule.
+ * 
+ * The zero turret angle is with the turret facing directly forward.
+ * 
+ * Note that the physical limits of the turret limit positive turret rotation to a small amount.
+ * Most of the range of the turret will be through negative turret angles (pointing backwards over
+ * your right shoulder if you were sitting in the robot).
+ * 
+ * zero should be straight ahead.
+ * -pi should be straight back.
+ * -3pi/2 should be straight left.
+ * -pi/2 should be straight right.
+ * 
+ */
 public class Turret extends SubsystemBase implements TurretInterface {
   private TalonSRX turretRotator;
   private final double ticksPerRadian = 6441.318;
-  private double range = 3;          // radians  TODO: get from CAD
-  private double indexOffset = -.752; // radians  TODO: get from CAD
+  /// This is the difference between max and min encoder angles in radians.
+  /// Should be a positive number of radians > PI and < 2 PI.
+  private double range = 5.508; //35477/ticksPerRadian
+  /// This is the output angle when the encoder is zero ticks, in radians. Should be small positive number.
+  private double indexOffset = 0.0872665;    // radians  TODO: get from measurement
   private boolean disabled = true;
   private boolean velocityMode = true;
 
@@ -35,11 +57,12 @@ public class Turret extends SubsystemBase implements TurretInterface {
   private double positionFF = 1.0;
 
   private double turretTemperature = -1.0;
-  private double turretAngle = 0;
-  private double turretVelocity = 0;
+  private double turretAngle = 0.0;
+  private double turretVelocity = 0.0;
+  private double turretCurrent = 0.0;
   private long timestamp = System.currentTimeMillis();
-  private boolean leftLimitSwitch = false;
-  private boolean rightLimitSwitch = false;
+  private boolean forwardLimitSwitch = false;
+  private boolean reverseLimitSwitch = false;
   private boolean indexed = false;
   
   public Turret() {
@@ -67,7 +90,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     turretRotator.configNominalOutputForward(0.0);
     turretRotator.configNominalOutputReverse(0.0);
 
-    // Set current limits
+    // Set current limits to 10 amps maximum.
     turretRotator.configContinuousCurrentLimit(10);
 
     turretRotator.selectProfileSlot(0, 0);
@@ -86,26 +109,26 @@ public class Turret extends SubsystemBase implements TurretInterface {
     if (turretRotator.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR! Reverse Turret Limit Switch not configured.");
     }
-    if (turretRotator.configClearPositionOnLimitR(true, 30) != ErrorCode.OK) {
+    // Configure to zero encoder on positive limit position:
+    if (turretRotator.configClearPositionOnLimitF(true, 30) != ErrorCode.OK) {
       throw new RuntimeException("ERROR! Turret Postion limit is NOT set.");
     } 
     SmartDashboard.putBoolean("Turret Indexed = ", false);
   }
   
-  // Right = reverse limit direction
-  // Left = foward limit direection
   @Override
   public void periodic() {
     /// Sample States
     turretAngle = ticksToPosition(turretRotator.getSelectedSensorPosition());
     turretVelocity = ticksToVelocity(turretRotator.getSelectedSensorVelocity());
+    turretCurrent = turretRotator.getStatorCurrent();
     turretTemperature = turretRotator.getTemperature();
     timestamp = System.currentTimeMillis();
-    leftLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
-    leftLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
+    reverseLimitSwitch = turretRotator.isRevLimitSwitchClosed() == 1;
+    forwardLimitSwitch = turretRotator.isFwdLimitSwitchClosed() == 1;
 
     /// Detect Indexing Event
-    if (leftLimitSwitch == true) {
+    if (forwardLimitSwitch == true) {
       SmartDashboard.putBoolean("Turret Indexed = ", true);
       indexed = true;
     }
@@ -114,6 +137,7 @@ public class Turret extends SubsystemBase implements TurretInterface {
     SmartDashboard.putNumber("Turret Angle", turretAngle);
     SmartDashboard.putNumber("Turret Velocity", turretVelocity);
     SmartDashboard.putNumber("Turret Output Power", turretRotator.getMotorOutputPercent());
+    SmartDashboard.putNumber("Turrent Current", turretCurrent);
 
     if (turretRotator.getControlMode() == ControlMode.MotionMagic) {
       SmartDashboard.putNumber("Turret Target", turretRotator.getClosedLoopTarget(0));
@@ -156,34 +180,42 @@ public class Turret extends SubsystemBase implements TurretInterface {
     if (velocityMode) {
       configPositionMode();
     }
+
+    // Clamp to valid limits: Don't allow a command outside this range.
+    if (azimuth > getMaxPosition())
+      azimuth = getMaxPosition();
+
+    if (azimuth < getMinPosition())
+      azimuth = getMinPosition();
   
     // Set position for trajectory generator:
-    System.out.println("setPosition is happening");
+    System.out.println("Turret: setPosition() called ");
     System.out.println(positionToTicks(azimuth));
-    double feedForward = 0.0; // This allows arbitrary FF to be injected if needed.
-    // ** DemandType.ArbitraryFeedForward, feedForward);
     turretRotator.set(ControlMode.MotionMagic, positionToTicks(azimuth));
     return true;
   }
 
   /**
    * Return the maximum turret angle in radians.
-   * our zero is the index offset (the limit switch)
+   * our encoder zero is the index offset (the forward switch),
+   * which is the maximum angle physically possible.
+   * 
    * @return Maximum turret angle in radians.
    */
   @Override
   public double getMaxPosition() {
-    return indexOffset + range;
+    return indexOffset;
   }
 
   /**
    * Return the minimum turret angle in radians.
-   * opposite of our index offset, assuming left = forward
+   * opposite of our index offset, moving in reverse from the positive angle.
+   * 
    * @return Minimum turret angle in radians.
    */
   @Override
   public double getMinPosition() {
-    return indexOffset;
+    return indexOffset - range;
   }
 
   /**
@@ -203,7 +235,6 @@ public class Turret extends SubsystemBase implements TurretInterface {
       configVelocityMode();
     }
 
-    // Multiplying speed by 10 because it's ticks/100ms, so 10*ticks/sec
     turretRotator.set(ControlMode.Velocity, velocityToTicks(angular_rate));
     return isIndexed();
   }
@@ -238,6 +269,11 @@ public class Turret extends SubsystemBase implements TurretInterface {
   @Override
   public double getVelocity() {
     return turretVelocity;
+  }
+
+  @Override
+  public double getCurrent() {
+    return turretCurrent;
   }
   
   /**

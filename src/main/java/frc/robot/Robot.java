@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.autoCommands.autoDriveForward;
 import frc.robot.commands.*;
@@ -84,9 +85,9 @@ public class Robot extends TimedRobot {
     shooterControls = new ShooterControls(shooter);
     registerSubsystem((SubsystemBase) shooter, shooterControls);
     
-    // turret = new Turret();
-    // turretControls = new TurretControls(turret);
-    // registerSubsystem((SubsystemBase) turret, turretControls);
+    turret = new Turret();
+    turretControls = new TurretControls(turret);
+    registerSubsystem((SubsystemBase) turret, turretControls);
 
     bling = new Bling();
     blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
@@ -99,8 +100,7 @@ public class Robot extends TimedRobot {
 
     chooser = new SendableChooser<Command>();
     
-    chooser.setDefaultOption("Drive Forward 2 meters", new autoDriveForward(drivetrain, 3, 2));
-    chooser.addOption("Drive Forward 2 feet", new autoDriveForward(drivetrain, 3, 0.6096));
+    chooser.setDefaultOption("Drive Forward", new autoDriveForward(drivetrain, 0.5, 0.33));
     // chooser.addOption("Drive To Point", new autoDriveToPoint(0, 0, 5, 5));
     // chooser.addOption("Shoot while alligned with target", new autoShootingAlignedWithTarget());
     // chooser.addOption("Shoot from middle of the field", new autoShootingMidOfField());
@@ -142,11 +142,22 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    (new ShooterIndex(shooter)).schedule(false);
+    // (new ShooterIndex(shooter).alongWith(new TurretIndex(turret))).andThen(new ExperimentalInterpolatorAiming(turret, shooter, drivetrain, Units.feetToMeters(12.0))).schedule(false);
     if (chooser.getSelected() != null) {
-      SmartDashboard.putString("Auto State", "Auto Inited");
-      chooser.getSelected().schedule();
+      (new ShooterIndex(shooter)).alongWith(
+        new TurretIndex(turret), chooser.getSelected()
+      ).andThen(
+        new PointTurret(turret, -Math.PI, 0.1)
+      ).andThen(
+        new ExperimentalInterpolatorAiming(turret, shooter, drivetrain, Units.feetToMeters(10))
+      ).schedule(false);        
     }
+    // (new ShooterIndex(shooter)).schedule(false);
+    // (new TurretIndex(turret)).schedule(false);
+    // if (chooser.getSelected() != null) {
+    //   SmartDashboard.putString("Auto State", "Auto Inited");
+    //   chooser.getSelected().schedule();
+    // }
   }
   
   /**
@@ -154,14 +165,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    if(chooser.getSelected() != null){
-      chooser.getSelected().schedule();
-    }
+    // if(chooser.getSelected() != null){
+    //   chooser.getSelected().schedule();
+    // }
   }
 
   @Override
   public void teleopInit() {
-    (new ShooterIndex(shooter)).schedule(false);
+    CommandScheduler.getInstance().cancelAll();
+    driveControls.schedule();
+    (new TurretIndex(turret)).andThen(turretControls).schedule();
   }
 
   /**
