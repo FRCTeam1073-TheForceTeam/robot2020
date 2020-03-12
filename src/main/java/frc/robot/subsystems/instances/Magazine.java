@@ -8,6 +8,7 @@
 package frc.robot.subsystems.instances;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -43,11 +44,15 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor.configFactoryDefault();
     magMotor.setSafetyEnabled(false);
     magMotor.setNeutralMode(NeutralMode.Brake);
-
+    magMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     magMotor.config_kP(0, P);
     magMotor.config_kI(0, I);
     magMotor.config_kD(0, D);
     magMotor.config_kF(0, F);
+    magMotor.configMaxIntegralAccumulator(0, 400);
+    magMotor.setSelectedSensorPosition(0);
+    magMotor.setIntegralAccumulator(0);
+    magMotor.configClosedloopRamp(0.2);
   }
 
   /**
@@ -58,7 +63,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   @Override
   public void setVelocity(double speed) {
     System.out.println("SETTING MAG VELOCITY");
-    speed = speed / (0.0254 * 2 * Math.PI);
+    speed = speed / (0.0254 * 2.0 * Math.PI);
     magMotor.set(ControlMode.Velocity, speed);
   }
 
