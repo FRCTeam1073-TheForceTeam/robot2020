@@ -20,13 +20,14 @@ public class Collector extends SubsystemBase implements CollectorInterface {
   private WPI_TalonSRX collectorMotor;
   private Solenoid collectorSolenoidOut, collectorSolenoidIn;
   
+  lastTimestamp = System.currentTimeMillis();
   
   public Collector() {
     this.collectorSolenoidOut = new Solenoid(1, 6);
     this.collectorSolenoidIn = new Solenoid(1, 0);
-
     this.collectorMotor = new WPI_TalonSRX(27);
     this.collectorMotor.configFactoryDefault();
+    collectorMotor.configContinuousCurrentLimit(10);
     this.collectorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
@@ -51,6 +52,8 @@ public class Collector extends SubsystemBase implements CollectorInterface {
     }
 
   }
+
+  
   @Override
   public void collect(){
     run(0.7, CollectorDirection.IN);
