@@ -26,9 +26,10 @@ public class BaseShooterTester extends TimedRobot {
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
+   *
    */
 
-  
+
   public static CommandBase shooterControls;
   public static ShooterInterface shooter;
 
