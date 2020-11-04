@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Hi, I am Connor and I like Robots
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
