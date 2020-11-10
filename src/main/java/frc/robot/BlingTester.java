@@ -28,11 +28,11 @@ public class BlingTester extends TimedRobot {
 
   public static Bling bling;
   public static BlingControls blingControls;
-  public static Drivetrain drivetrain;
-  public static DriveControls driveControls;
-  public static MagazineInterface magazine;
-  public static MagazineControls magazineControls;
-  public static CollectorInterface collector;
+  // public static Drivetrain drivetrain;
+  // public static DriveControls driveControls;
+  // public static MagazineInterface magazine;
+  // public static MagazineControls magazineControls;
+  // public static CollectorInterface collector;
   
   // public static SendableChooser<Command> chooser;
   
@@ -42,16 +42,17 @@ public class BlingTester extends TimedRobot {
   public void robotInit() {
     OI.init();
 
-    drivetrain = new Drivetrain();
-    driveControls = new DriveControls(drivetrain, drivetrain);
-    registerSubsystem((SubsystemBase) drivetrain, driveControls);
+    // drivetrain = new Drivetrain();
+    // driveControls = new DriveControls(drivetrain, drivetrain);
+    // registerSubsystem((SubsystemBase) drivetrain, driveControls);
 
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine, collector);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
+    // magazine = new Magazine();
+    // magazineControls = new MagazineControls(magazine, collector);
+    // registerSubsystem((SubsystemBase) magazine, magazineControls);
 
     bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
+    blingControls = new BlingControls(bling, null, null, null);
+    // blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
     registerSubsystem((SubsystemBase) bling, blingControls);
   }
 

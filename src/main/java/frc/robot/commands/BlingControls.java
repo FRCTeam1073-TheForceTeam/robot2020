@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,7 +62,7 @@ public class BlingControls extends CommandBase {
     leds_from_middle = 0;
     move = 0;
     gameDataBlinkCount = 0;
-    SmartDashboard.putBoolean("Winch", winch.isWinchEngaged());
+    // SmartDashboard.putBoolean("Winch", winch.isWinchEngaged());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -75,6 +75,8 @@ public class BlingControls extends CommandBase {
     if (burst_done == 0) {
       // burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
       // bling.setPatternRGBAll(0, 0, 0);
+
+      bling.setPatternRGBAll(255, 0, 0);
     } else {
       if (gameData.equals("R") && gameDataBlinkCount < 5) {
         blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
@@ -92,16 +94,17 @@ public class BlingControls extends CommandBase {
         // TODO: Add other bling commands
           
         // The first two LEDs turn white if the winch is engaged
-        if (winch.isWinchEngaged()) {
-          bling.rangeRGB(0, 2, 255, 255, 255);
-        } else {
-          bling.rangeRGB(0, 2, 0, 0, 0);
-        }
+        // if (winch.isWinchEngaged()) {
+        //   bling.rangeRGB(0, 2, 255, 255, 255);
+        // } else {
+        //   bling.rangeRGB(0, 2, 0, 0, 0);
+        // }
 
         // Changes the number and color of LEDS 3-9 based on the battery voltage
         batteryBling(2, 6, 8.0, 12.5);
 
-        magazineBallCountBling(8, 252, 227, 0);
+        // magazineBallCountBling(8, 252, 227, 0);
+
       }
     }
   }
