@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
@@ -273,6 +274,11 @@ public class BlingControls extends CommandBase {
     } else {
       bling.rangeRGB(min_LEDs, num_LEDs, 0, 0, 0);
     }
+  }
+
+  public void setByColor(int min_LEDs, int num_LEDs, Color color) {
+    
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -5,6 +5,7 @@ package frc.robot.subsystems.instances;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.BlingInterface;
 
@@ -103,6 +104,14 @@ public class Bling extends SubsystemBase implements BlingInterface {
   }
   public AddressableLEDBuffer getM_LEDBuffer() {
     return m_ledBuffer;
+  }
+
+  public void setLedsColor(int minLED, int numLEDs, Color color) {
+    // //String hex = hexCode(63);
+    // for (int i = 0; i < numLEDs; i++)  {
+
+    //   m_ledBuffer.setHSV(i, color);
+    // }
   }
 
   public void LEDRainbow() {
