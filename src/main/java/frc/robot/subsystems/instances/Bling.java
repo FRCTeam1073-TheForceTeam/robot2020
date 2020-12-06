@@ -108,14 +108,21 @@ public class Bling extends SubsystemBase implements BlingInterface {
     return m_ledBuffer;
   }
 
-  public void setLedsColor(int minLED, int numLEDs, Color color) {
-    // int hex[];
-    // hex = new int[3];
-    final float[] getRGBColorComponents(float[] null);
-    // getRGBColorComponents(color, hex);
-    for (int i = 0; i < numLEDs; i++)  {
+  public void setLEDsColor(int minLED, int numLEDs, Color color) {
+    // TODO: Figure out why purple and green won't work
+    int r = (int) color.red;
+    int g = (int) color.green;
+    int b = (int) color.blue;
 
-      m_ledBuffer.setHSV(i, color);
+    if ((r <= 1 && g <= 1 && b <= 1) && (color.red != 0 && color.green != 0 && color.blue != 0)) {
+      r = (int) color.red * 255;
+      g = (int) color.green * 255;
+      b = (int) color.blue * 255;
+    }
+
+    for (int i = 0; i < numLEDs; i++)  {
+      m_ledBuffer.setRGB(minLED + i, r, g, b);
+      m_led.setData(m_ledBuffer);
     }
   }
 

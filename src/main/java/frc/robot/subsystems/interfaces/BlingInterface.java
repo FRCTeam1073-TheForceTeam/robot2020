@@ -1,6 +1,7 @@
 package frc.robot.subsystems.interfaces;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color;
 
 public interface BlingInterface {
     public void setPatternRGBAll(int r, int g, int b);
@@ -14,4 +15,5 @@ public interface BlingInterface {
     public AddressableLEDBuffer getM_LEDBuffer();
     public void LEDRainbow();
     public void setLEDData();
+	public void setLEDsColor(int minLED, int numLEDs, Color color);
 }

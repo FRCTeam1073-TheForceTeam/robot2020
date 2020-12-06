@@ -7,10 +7,12 @@
 
 package frc.robot.commands;
 
+// import java.awt.Color.*;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
@@ -72,41 +74,48 @@ public class BlingControls extends CommandBase {
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     match_time = DriverStation.getInstance().getMatchTime();
 
-    if (burst_done == 0) {
-      // burst(bling.getM_LEDBuffer().getLength(), 0, 0, 255);
-      // bling.setPatternRGBAll(0, 0, 0);
+    // bling.setLEDsColor(0, 1, Color.kRed);
+    // bling.setLEDsColor(1, 1, Color.kOrange);
+    // bling.setLEDsColor(2, 1, Color.kYellow);
+    // bling.setLEDsColor(3, 3, Color.kYellow);
+    // bling.setLEDsColor(4, 1, Color.kAliceBlue);
+    // bling.setLEDsColor(5, 1, Color.kDarkTurquoise);
 
-      bling.setPatternRGBAll(255, 0, 0);
-    } else {
-      if (gameData.equals("R") && gameDataBlinkCount < 5) {
-        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
+    // if (burst_done == 0) {
+    //   // burst(bling.getM_LEDBuffer().getLength)(), 0, 0, 255);
+    //   // bling.setPatternRGBAll(0, 0, 0);
 
-      } else if (gameData.equals("G") && gameDataBlinkCount < 5) {
-        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 255, 0);
+    //   bling.setPatternRGBAll(255, 0, 0);
+    // } else {
+    //   if (gameData.equals("R") && gameDataBlinkCount < 5) {
+    //     blinkyLights(0, bling.getM_LEDBuffer().getLength(), 255, 0, 0);
 
-      } else if (gameData.equals("B") && gameDataBlinkCount < 5) {
-        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
+    //   } else if (gameData.equals("G") && gameDataBlinkCount < 5) {
+    //     blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 255, 0);
 
-      } else if (gameData.equals("Y") && gameDataBlinkCount < 5) {
-        blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
+    //   } else if (gameData.equals("B") && gameDataBlinkCount < 5) {
+    //     blinkyLights(0, bling.getM_LEDBuffer().getLength(), 0, 0, 255);
 
-      } else {
-        // TODO: Add other bling commands
+    //   } else if (gameData.equals("Y") && gameDataBlinkCount < 5) {
+    //     blinkyLights(0, bling.getM_LEDBuffer().getLength(), 252, 227, 0);
+
+    //   } else {
+    //     // TODO: Add other bling commands
           
-        // The first two LEDs turn white if the winch is engaged
-        // if (winch.isWinchEngaged()) {
-        //   bling.rangeRGB(0, 2, 255, 255, 255);
-        // } else {
-        //   bling.rangeRGB(0, 2, 0, 0, 0);
-        // }
+    //     // The first two LEDs turn white if the winch is engaged
+    //     // if (winch.isWinchEngaged()) {
+    //     //   bling.rangeRGB(0, 2, 255, 255, 255);
+    //     // } else {
+    //     //   bling.rangeRGB(0, 2, 0, 0, 0);
+    //     // }
 
-        // Changes the number and color of LEDS 3-9 based on the battery voltage
-        batteryBling(2, 6, 8.0, 12.5);
+    //     // Changes the number and color of LEDS 3-9 based on the battery voltage
+    //     batteryBling(2, 6, 8.0, 12.5);
 
-        // magazineBallCountBling(8, 252, 227, 0);
+    //     // magazineBallCountBling(8, 252, 227, 0);
 
-      }
-    }
+    //   }
+    // }
   }
 
   // burst() lights LEDs from the middle out  
@@ -277,11 +286,6 @@ public class BlingControls extends CommandBase {
     } else {
       bling.rangeRGB(min_LEDs, num_LEDs, 0, 0, 0);
     }
-  }
-
-  public void setByColor(int min_LEDs, int num_LEDs, Color color) {
-    
-    
   }
 
   // Called once the command ends or is interrupted.
