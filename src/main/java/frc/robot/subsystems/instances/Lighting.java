@@ -38,6 +38,7 @@ public class Lighting extends OpenMVBase implements LightingInterface{
      */
     @Override
     public void setLEDLevel(double illumLevel){
+      System.out.println("LIGHTING SET "+illumLevel);
       if (illumLevel < 0){
         illumLevel = 0;
       }

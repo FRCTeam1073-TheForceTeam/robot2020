@@ -30,7 +30,6 @@ public class CollectorControls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
   }
 
   boolean isRaised = true;
@@ -39,10 +38,10 @@ public class CollectorControls extends CommandBase {
   @Override
   public void execute() {
     if (OI.operatorController.getBButton()) {
-      collect.lower();
+      // collect.lower();
       isRaised = false;
     } else {
-      collect.raise();
+      // collect.raise();
       isRaised = true;
     }
 
@@ -54,7 +53,7 @@ public class CollectorControls extends CommandBase {
     //   isRaised = false;
     // }
 
-    if (isRaised == false) {
+    if (!isRaised) {
       collect.collect();
     } else {
       collect.stop();

@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
    */
 
   public static DriveControls driveControls;
+  public static Lighting lighting;
+  public static OMVPortTracker portTrackerCamera;
   public static Drivetrain drivetrainInstance;
   public static DrivetrainInterface drivetrain;
   public static WinchInterface winch;
@@ -49,6 +52,7 @@ public class Robot extends TimedRobot {
   public static ShuffleboardWidgets widgets;
   public static Bling bling;
   public static BlingControls blingControls;
+  public static LightingControls lightingControls;
   public static CommandBase driveAuto;
   public static SendableChooser<Command> chooser;
   
@@ -65,10 +69,20 @@ public class Robot extends TimedRobot {
     driveControls = new DriveControls(drivetrain, winch);
     registerSubsystem((SubsystemBase) drivetrainInstance, driveControls);
 
-    collector = new Collector();
-    collectorControls = new CollectorControls(collector);
-    registerSubsystem((SubsystemBase) collector, collectorControls);
+          collector = new Collector();
+          collectorControls = new CollectorControls(collector);
+          registerSubsystem((SubsystemBase) collector, collectorControls);
     
+
+          lighting = new Lighting(0);
+          lighting.register();
+          lightingControls=new LightingControls(lighting);
+          registerSubsystem((SubsystemBase)lighting,lightingControls );
+
+          portTrackerCamera = new OMVPortTracker(8);
+          portTrackerCamera.register();
+      
+          
     // hook = new Hook();
     // hookControls = new HookControls(hook);
     // registerSubsystem((SubsystemBase) hook, hookControls);
@@ -77,24 +91,24 @@ public class Robot extends TimedRobot {
     // liftControls = new LiftControls(lift, winch);
     // registerSubsystem((SubsystemBase) lift, liftControls);
     
-    magazine = new Magazine();
-    magazineControls = new MagazineControls(magazine, collector);
-    registerSubsystem((SubsystemBase) magazine, magazineControls);
-    
-    shooter = new Shooter();
-    shooterControls = new ShooterControls(shooter);
-    registerSubsystem((SubsystemBase) shooter, shooterControls);
-    
-    turret = new Turret();
-    turretControls = new TurretControls(turret);
-    registerSubsystem((SubsystemBase) turret, turretControls);
+          magazine = new Magazine();
+          magazineControls = new MagazineControls(magazine, collector);
+          registerSubsystem((SubsystemBase) magazine, magazineControls);
+          
+          shooter = new Shooter();
+          shooterControls = new ShooterControls(shooter);
+          registerSubsystem((SubsystemBase) shooter, shooterControls);
+          
+          turret = new Turret();
+          turretControls = new TurretControls(turret);
+          registerSubsystem((SubsystemBase) turret, (new TurretIndex(turret)).andThen(turretControls));
 
-    bling = new Bling();
-    blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
-    registerSubsystem((SubsystemBase) bling, blingControls);
+          bling = new Bling();
+          blingControls = new BlingControls(bling, (WinchInterface)drivetrain, magazine, null);
+          registerSubsystem((SubsystemBase) bling, blingControls);
 
-    widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
-    widgets.register();
+          widgets = new ShuffleboardWidgets(drivetrain, turret, shooter, magazine, lift, (WinchInterface) drivetrain);
+          widgets.register();
     
     //driveAuto = autoTurn.auto90left(drivetrain);
 
@@ -130,6 +144,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    lighting.setLEDLevel(0.5);
   }
   
   @Override
@@ -149,8 +164,8 @@ public class Robot extends TimedRobot {
       ).andThen(
         new PointTurret(turret, -Math.PI, 0.1)
       ).andThen(
-        new ExperimentalInterpolatorAiming(turret, shooter, drivetrain, Units.feetToMeters(10))
-      ).schedule(false);        
+        new ExperimentalInterpolatorAiming(turret, shooter, drivetrain, Units.feetToMeters(10), (LightingInterface) lighting)
+      ).schedule(false);
     }
     // (new ShooterIndex(shooter)).schedule(false);
     // (new TurretIndex(turret)).schedule(false);
@@ -174,7 +189,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
     driveControls.schedule();
-    (new TurretIndex(turret)).andThen(turretControls).schedule();
+    lighting.setLEDLevel(0.5);
+          // (new TurretIndex(turret)).andThen(turretControls).schedule();
   }
 
   /**

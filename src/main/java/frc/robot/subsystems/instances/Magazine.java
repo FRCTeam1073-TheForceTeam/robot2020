@@ -36,9 +36,9 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor = new WPI_TalonSRX(26);
     cellCount = 0;
     // Initializes a four digital inputs with channels
-        entrance = new DigitalInput(0);
-        goingIn = new DigitalInput(1);
-        exit = new DigitalInput(2);
+    entrance = new DigitalInput(0);
+    goingIn = new DigitalInput(1);
+    exit = new DigitalInput(2);
 
     magMotor.configFactoryDefault();
     magMotor.setSafetyEnabled(false);
@@ -50,6 +50,11 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
     magMotor.config_kF(0, F);
   }
 
+  @Override
+  public void periodic(){
+    SmartDashboard.putNumber("TEST_VALUE_MAG", magMotor.get());
+  }
+
   /**
    * sets the magazine speed in meters per second of the conveyor belts
    * 
@@ -59,6 +64,7 @@ public class Magazine extends SubsystemBase implements MagazineInterface {
   public void setVelocity(double speed) {
     System.out.println("SETTING MAG VELOCITY");
     speed = speed / (0.0254 * 2 * Math.PI);
+
     magMotor.set(ControlMode.Velocity, speed);
   }
 

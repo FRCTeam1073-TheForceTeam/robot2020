@@ -129,9 +129,9 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     // hoodIndexer = hood.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
     hoodEncoder = hood.getEncoder(EncoderType.kHallSensor, hoodEncoderTPR);
     hoodEncoder.setPosition(0);
-    hoodEncoder2 = hood.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
-    hoodEncoder2.setPosition(0);
-    hoodEncoder2.setInverted(true);
+    // hoodEncoder2 = hood.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
+    // hoodEncoder2.setPosition(0);
+    // hoodEncoder2.setInverted(true);
     hoodController = new CANPIDController(hood);
     hoodController.setFeedbackDevice(hoodEncoder);
     hoodController.setP(hoodP);
@@ -170,6 +170,7 @@ public class Shooter extends SubsystemBase implements ShooterInterface, ControlP
     temperatures[0] = shooterFlywheel1.getTemperature();
     temperatures[1] = shooterFlywheel2.getTemperature();
     hoodAngle = hoodEncoder.getPosition() * 2 * Math.PI;
+    SmartDashboard.putNumber("TEST_HDNC", hoodEncoder.getPosition());
     lastTimestamp = System.currentTimeMillis();
     flywheelVelocity = shooterFlywheel1.getSelectedSensorVelocity() * 2 * Math.PI * 10 / flywheelTicksPerRevolution;
 

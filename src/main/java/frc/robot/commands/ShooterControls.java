@@ -9,12 +9,12 @@ package frc.robot.commands;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Utility;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.interfaces.ShooterInterface;
@@ -40,18 +40,30 @@ public class ShooterControls extends CommandBase {
   double pow = 0.0;
   double pow2 = 1;
   double value = 0;
+  double shooterGear = 0;
+  final double maxGear = 7;
+  double hoodAngleAccumulator = 0;
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(OI.operatorController.getStartButton()){
-      shooter.setFlywheelSpeed(-1.301 * (4000.0  * 2.0 * Math.PI) / 60.0);
-      shooter.setHoodAngle((1.259 * 2.0 * Math.PI) / Shooter.kMotorRadiansPerHoodRadian + shooter.getMinHoodAngle());
-    }
-    else if(deadzone(OI.operatorController.getTriggerAxis(Hand.kRight)) == 0){
+    // if(OI.operatorController.getStartButton()){
+    //   shooter.setFlywheelSpeed(-1.301 * (4000.0  * 2.0 * Math.PI) / 60.0);
+    //   shooter.setHoodAngle((1.259 * 2.0 * Math.PI) / Shooter.kMotorRadiansPerHoodRadian + shooter.getMinHoodAngle());
+    // }
+    if(deadzone(OI.operatorController.getTriggerAxis(Hand.kRight)) == 0){
       if(OI.operatorController.getBumper(Hand.kLeft)) shooter.setFlywheelSpeed(0);
       else{
-        speed = -1.301 * deadzone(OI.operatorController.getTriggerAxis(Hand.kLeft) * 670.0);
+        if(OI.operatorController.getBumperPressed(Hand.kLeft)&&OI.operatorController.getStartButton()){
+          shooterGear=Math.min(shooterGear+1,maxGear);
+        }
+        if(OI.operatorController.getBackButtonPressed()){
+          shooterGear=Math.max(shooterGear-1,0);
+        }
+        if(OI.operatorController.getBackButtonPressed()&&OI.operatorController.getStartButton()){
+          shooterGear=0;
+        }
+        speed = -1.301 * deadzone((shooterGear / maxGear) * 670.0);
         shooter.setFlywheelSpeed(speed);
       }
     }
@@ -80,10 +92,11 @@ public class ShooterControls extends CommandBase {
 
 
     // shooter.setHoodPower(0.1 * OI.driverController.getRawAxis(1));
-    
+    hoodAngleAccumulator += (deadzone(OI.operatorController.getRawAxis(5)) / 30.0);
+    hoodAngleAccumulator = Utility.clip(hoodAngleAccumulator, -1, 1);
     
     shooter.setHoodAngle((shooter.getMaxHoodAngle() + shooter.getMinHoodAngle()) * 0.5
-    + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * OI.operatorController.getRawAxis(5));
+        + (shooter.getMaxHoodAngle() - shooter.getMinHoodAngle()) * 0.5 * hoodAngleAccumulator);
 
     // value = pow2 * pow * OI.operatorController.getRawAxis(1);
     // shooter.setFlywheelSpeed(value * shooter.getMaximumFlywheelSpeed());

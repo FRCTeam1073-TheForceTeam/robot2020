@@ -209,6 +209,9 @@ public class Drivetrain extends SubsystemBase implements DrivetrainInterface, Wi
         SmartDashboard.putNumber("Left Set Power", leftRotationalSpeed);
         leftMotorLeader.set(ControlMode.Velocity, leftRotationalSpeed);
         rightMotorLeader.set(ControlMode.Velocity, rightRotationalSpeed);
+        System.out.print(leftRotationalSpeed);
+        System.out.print("\t");
+        System.out.println(rightRotationalSpeed);
         leftPower = leftRotationalSpeed;
         rightPower = rightRotationalSpeed;
 

@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
@@ -29,9 +30,13 @@ public class LightingControls extends CommandBase {
   public void initialize() {
   }
 
+  boolean bright = false;
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    bright^=OI.driverController.getBumperPressed(Hand.kLeft);
+    lighting.setLEDLevel(0.5 + (bright ? 0 : 0.5));
   }
 
   // Called once the command ends or is interrupted.

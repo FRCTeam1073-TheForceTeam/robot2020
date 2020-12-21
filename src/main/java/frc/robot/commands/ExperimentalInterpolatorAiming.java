@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.components.InterpolatorTable;
 import frc.robot.components.InterpolatorTable.InterpolatorTableEntry;
 import frc.robot.subsystems.interfaces.DrivetrainInterface;
+import frc.robot.subsystems.interfaces.LightingInterface;
 import frc.robot.subsystems.interfaces.ShooterInterface;
 import frc.robot.subsystems.interfaces.TurretInterface;
 
@@ -41,15 +42,17 @@ public class ExperimentalInterpolatorAiming extends CommandBase {
   TurretInterface turret;
   ShooterInterface shooter;
   DrivetrainInterface drivetrain;
+  LightingInterface lighting;
   /**
    * Creates a new ExperimentalInterpolatorAiming.
    */
-  public ExperimentalInterpolatorAiming(TurretInterface turret_, ShooterInterface shooter_, DrivetrainInterface drivetrain_, double distance_) {
+  public ExperimentalInterpolatorAiming(TurretInterface turret_, ShooterInterface shooter_, DrivetrainInterface drivetrain_, double distance_,LightingInterface lighting_) {
     baseDistance = distance_;
     distance = 0;
     turret = turret_;
     shooter = shooter_;
     drivetrain = drivetrain_;
+    lighting = lighting_;
     addRequirements((SubsystemBase) turret, (SubsystemBase) shooter);
     hoodAngleTable = new InterpolatorTable(
       new InterpolatorTableEntry(Units.feetToMeters(4.0), 0.0),
@@ -79,6 +82,7 @@ public class ExperimentalInterpolatorAiming extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.resetRobotOdometry();
+    lighting.setLEDLevel(0.5);
   }
 
 
@@ -104,6 +108,7 @@ public class ExperimentalInterpolatorAiming extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    lighting.setLEDLevel(0);
   }
 
   // Returns true when the command should end.

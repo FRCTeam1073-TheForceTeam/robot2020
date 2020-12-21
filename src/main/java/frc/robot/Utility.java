@@ -16,4 +16,8 @@ public class Utility {
     public static double deadzone(double rawAxisValue) {
         return deadzone(rawAxisValue, Constants.CONTROLLER_DEADZONE);
     }
+
+    public static double clip(double num, double min, double max) {
+        return Math.max(min, Math.min(max, num));
+    }
 }

@@ -113,7 +113,7 @@ public class DriveControls extends CommandBase {
             arcadeCompute();
             // passes the final axis values into the drivetrain
             // drivetrain.setPower(limit(addMultiplier(leftOutput)), -limit(addMultiplier(rightOutput)));
-            drivetrain.setVelocity(forward * 1.0, rotation);
+            drivetrain.setVelocity(forward * 5.0, 5.0*rotation);
         }
 
 

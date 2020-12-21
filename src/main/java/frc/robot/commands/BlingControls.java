@@ -41,7 +41,8 @@ public class BlingControls extends CommandBase {
   /**
    * Creates a new BlingControls.
    */
-  public BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_,
+  public 
+  BlingControls(BlingInterface bling_, WinchInterface winch_, MagazineInterface magazine_,
     AdvancedTrackerInterface portTracker_) {
     addRequirements((SubsystemBase)bling_);
     this.bling = bling_;
